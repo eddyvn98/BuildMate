@@ -14,7 +14,10 @@ Implemented evidence:
 - 6.8 Eq. (5)-(6): multi-floor load-reduction factors φ3/φ4.
 - 7.1-7.2 / Table 1: permanent-load provenance and reliability factors for structural self-weight/soil.
 - 10.2.2 Eq. (10): standard wind pressure Wk=(0.852W0)k(ze)cGf.
+- 10.2.5 / Table 9: terrain/height factor k(ze), including permitted linear interpolation.
+- 10.2.7.2: Gf=0.85 for rigid structures with T1≤1s.
 - 10.2.3 with QCVN 02:2022/BXD 5.2.2/Table 5.1: W0 comes from the official wind-pressure zone, not a BuildMate default.
+- QCVN 02 Table 5.1 HCMC rows: all HCMC districts/cities including Thu Duc are zone II except Cu Chi, which is zone I.
 - 8.3.1 / Table 4: townhouse-relevant A1/A2/H uniformly distributed live loads.
 - 8.3.3: reduced characteristic live load η = 0.35.
 - 8.3.5(a): γf = 1.3 for distributed loads in 8.3.1.

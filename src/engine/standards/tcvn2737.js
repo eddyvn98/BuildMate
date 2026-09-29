@@ -187,3 +187,57 @@ export function standardWindPressure({windZone,kZe,aerodynamicCoefficient,gustFa
     inputs:{windZone:w0.zone,w0DaNm2:w0.valueDaNm2,gammaT:0.852,kZe:Number(kZe),aerodynamicCoefficient:Number(aerodynamicCoefficient),gustFactor:Number(gustFactor),coefficientSources},
   });
 }
+
+
+const TERRAIN_K_TABLE=Object.freeze({
+  A:[[5,1.05],[10,1.18],[15,1.27],[20,1.33],[30,1.43],[40,1.50],[50,1.56],[60,1.61],[80,1.69],[100,1.76],[150,1.89],[200,1.99],[250,1.99],[300,1.99],[350,1.99],[400,1.99]],
+  B:[[5,0.87],[10,1.00],[15,1.09],[20,1.16],[30,1.26],[40,1.34],[50,1.40],[60,1.46],[80,1.55],[100,1.63],[150,1.77],[200,1.88],[250,1.97],[300,1.97],[350,1.97],[400,1.97]],
+  C:[[5,0.59],[10,0.72],[15,0.81],[20,0.88],[30,0.98],[40,1.07],[50,1.14],[60,1.20],[80,1.30],[100,1.39],[150,1.56],[200,1.69],[250,1.80],[300,1.90],[350,1.98],[400,1.98]],
+});
+
+export function terrainPressureFactor({terrain,zeM}) {
+  const rows=TERRAIN_K_TABLE[String(terrain).toUpperCase()];
+  if (!rows) throw new RangeError('terrain must be A, B or C');
+  const z=Number(zeM);
+  if (!(z>0&&z<=400)) throw new RangeError('zeM must be >0 and <=400 m for implemented Table 9 range');
+  const first=rows[0],last=rows.at(-1);
+  if (z<=first[0]) return terrainKResult(terrain,z,first[1]);
+  if (z>=last[0]) return terrainKResult(terrain,z,last[1]);
+  for (let i=1;i<rows.length;i+=1) {
+    const [z2,k2]=rows[i],[z1,k1]=rows[i-1];
+    if (z<=z2) {
+      const k=k1+(k2-k1)*(z-z1)/(z2-z1);
+      return terrainKResult(terrain,z,round(k,5));
+    }
+  }
+}
+
+export function rigidStructureGustFactor(firstNaturalPeriodS) {
+  const t=Number(firstNaturalPeriodS);
+  if (!(t>0)) throw new RangeError('firstNaturalPeriodS must be > 0');
+  if (t>1) throw new RangeError('TCVN 2737 clause 10.2.7.2 rigid shortcut applies only when T1 <= 1 s');
+  return {
+    value:0.85,firstNaturalPeriodS:t,level:'engineering-review',
+    reference:standardRef({standard:'TCVN 2737:2023',clause:'10.2.7.2',formula:'Gf=0.85 for rigid structures with T1≤1s',sourceUrl:FULL_TEXT}),
+  };
+}
+
+export function hcmWindZone({district}) {
+  const normalized=String(district ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/đ/g,'d').trim();
+  if (!normalized) throw new TypeError('district is required');
+  const isCuChi=/\bcu chi\b/.test(normalized);
+  return {
+    zone:isCuChi?'I':'II',
+    valueDaNm2:isCuChi?65:95,
+    locality:{province:'Thành phố Hồ Chí Minh',district:String(district)},
+    level:'engineering-review',
+    reference:standardRef({standard:'QCVN 02:2022/BXD',clause:'5.2.3-5.2.4, Table 5.1 — Thành phố Hồ Chí Minh',sourceUrl:'https://moc.gov.vn/Images/editor/files/Quy%20Chu%E1%BA%A9n/BXD_02-2022-TT-BXD_26092022%281%29.pdf',note:'All HCMC cities/districts including Thu Duc except Cu Chi are zone II; Cu Chi is zone I.'}),
+  };
+}
+
+function terrainKResult(terrain,zeM,value) {
+  return {
+    value,terrain:String(terrain).toUpperCase(),zeM:Number(zeM),level:'engineering-review',
+    reference:standardRef({standard:'TCVN 2737:2023',clause:'10.2.5, Table 9',sourceUrl:FULL_TEXT,note:'Linear interpolation is permitted for intermediate equivalent heights.'}),
+  };
+}
