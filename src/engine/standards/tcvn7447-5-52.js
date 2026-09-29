@@ -104,3 +104,52 @@ export function chooseMinimumPvcCopperSection({designCurrentA,method,loadedCondu
   }
   return {blocked:true,reason:'No implemented section satisfies design current; expand table/profile'};
 }
+
+
+const AIR_TEMP_FACTORS=Object.freeze({
+  PVC:{10:1.22,15:1.17,20:1.12,25:1.06,30:1.00,35:0.94,40:0.87,45:0.79,50:0.61,55:0.50},
+  XLPE:{10:1.15,15:1.12,20:1.08,25:1.04,30:1.00,35:0.96,40:0.91,45:0.87,50:0.82,55:0.76,60:0.71,65:0.65,70:0.58,75:0.50,80:0.41},
+});
+
+const SOIL_TEMP_FACTORS=Object.freeze({
+  PVC:{10:1.10,15:1.05,20:1.00,25:0.95,30:0.89,35:0.84,40:0.77,45:0.71,50:0.63,55:0.55,60:0.45},
+  XLPE:{10:1.07,15:1.04,20:1.00,25:0.96,30:0.93,35:0.89,40:0.85,45:0.80,50:0.76,55:0.71,60:0.65,65:0.60,70:0.53,75:0.46,80:0.38},
+});
+
+const SOIL_THERMAL_RESISTIVITY=Object.freeze({
+  duct:{0.5:1.28,0.7:1.20,1:1.18,1.5:1.10,2:1.05,2.5:1.00,3:0.96},
+  direct:{0.5:1.88,0.7:1.62,1:1.50,1.5:1.28,2:1.12,2.5:1.00,3:0.90},
+});
+
+export function ambientAirTemperatureFactor({temperatureC,insulation='PVC'}) {
+  const table=AIR_TEMP_FACTORS[insulation];
+  if (!table) throw new RangeError('insulation must be PVC or XLPE');
+  const factor=table[Number(temperatureC)];
+  if (factor==null) throw new RangeError('temperatureC must match an implemented Table B.52.14 row');
+  return {
+    factor,temperatureC:Number(temperatureC),insulation,level:'engineering-review',
+    reference:standardRef({standard:'TCVN 7447-5-52:2010',clause:'Appendix B, Table B.52.14',sourceUrl:TEXT,note:'Ambient-air correction factor relative to 30 °C reference.'}),
+  };
+}
+
+export function soilTemperatureFactor({temperatureC,insulation='PVC'}) {
+  const table=SOIL_TEMP_FACTORS[insulation];
+  if (!table) throw new RangeError('insulation must be PVC or XLPE');
+  const factor=table[Number(temperatureC)];
+  if (factor==null) throw new RangeError('temperatureC must match an implemented Table B.52.15 row');
+  return {
+    factor,temperatureC:Number(temperatureC),insulation,level:'engineering-review',
+    reference:standardRef({standard:'TCVN 7447-5-52:2010',clause:'Appendix B, Table B.52.15',sourceUrl:TEXT,note:'Soil-temperature correction factor relative to 20 °C reference.'}),
+  };
+}
+
+export function soilThermalResistivityFactor({thermalResistivityCmPerW,burial='duct'}) {
+  const table=SOIL_THERMAL_RESISTIVITY[burial];
+  if (!table) throw new RangeError('burial must be duct or direct');
+  const factor=table[Number(thermalResistivityCmPerW)];
+  if (factor==null) throw new RangeError('thermalResistivityCmPerW must match an implemented Table B.52.16 row');
+  return {
+    factor,thermalResistivityCmPerW:Number(thermalResistivityCmPerW),burial,level:'engineering-review',
+    reference:standardRef({standard:'TCVN 7447-5-52:2010',clause:'Appendix B, Table B.52.16',sourceUrl:TEXT,note:'Correction factor for soil thermal resistivity relative to 2.5 °C·m/W.'}),
+  };
+}

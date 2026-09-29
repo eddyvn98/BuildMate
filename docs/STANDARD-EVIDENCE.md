@@ -142,3 +142,9 @@ Implemented evidence:
 - Appendix C / Table C.52.2: D1/D2 copper current-carrying capacities for PVC/XLPE, two/three loaded conductors.
 - Table C.52.3 item 1: grouping factors for bundled/enclosed circuits.
 - Other installation methods and correction tables remain explicit coverage gaps.
+
+
+Additional TCVN 7447-5-52 evidence:
+- Table B.52.14: air-temperature correction factors for PVC/XLPE.
+- Table B.52.15: soil-temperature correction factors for PVC/XLPE.
+- Table B.52.16: soil thermal-resistivity correction factors for buried cables.
