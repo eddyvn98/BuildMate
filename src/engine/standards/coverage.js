@@ -6,8 +6,8 @@ export const STANDARD_CLAUSE_COVERAGE=Object.freeze([
   },
   {
     issue:5,standard:'TCVN 5574:2018',
-    implemented:['6.1.4/Table 7 concrete Rb/Rbt subset','6.1.5/Table 10 concrete Eb subset','6.2.2/Table 13 rebar Rs/Rsc subset','6.2.2/Table 14 rebar Rsw subset','6.2.3.3 rebar Es','8.1.2 equations (33)-(35) rectangular flexure','8.1.3.2 Eq.(88)','8.1.3.3.1 Eq.(92)-(96) simplified shear branch','8.2.2.1.3 Eq.(155)/Table 17 crack limits','8.2.2.3.1 Eq.(166) crack width','10.3.2 minimum clear bar spacing','10.3.3.1 minimum longitudinal reinforcement','10.3.4.3 transverse reinforcement spacing','10.3.4.4 compression-bar restraint spacing'],
-    pending:['remaining material classes/condition factors','T/I sections','full inclined-section search','columns/second-order','deflection curvature workflow','cover requirements','anchorage/lap-length calculation','full reference-case review'],
+    implemented:['6.1.4/Table 7 concrete Rb/Rbt subset','6.1.5/Table 10 concrete Eb subset','6.2.2/Table 13 rebar Rs/Rsc subset','6.2.2/Table 14 rebar Rsw subset','6.2.3.3 rebar Es','8.1.2 equations (33)-(35) rectangular flexure','8.1.3.2 Eq.(88)','8.1.3.3.1 Eq.(92)-(96) simplified shear branch','8.2.2.1.3 Eq.(155)/Table 17 crack limits','8.2.2.3.1 Eq.(166) crack width','10.3.2 minimum clear bar spacing','10.3.3.1 minimum longitudinal reinforcement','10.3.4.3 transverse reinforcement spacing','10.3.4.4 compression-bar restraint spacing','10.3.6.2 lap-splice alpha2 and minimum lap length'],
+    pending:['remaining material classes/condition factors','T/I sections','full inclined-section search','columns/second-order','deflection curvature workflow','cover requirements','base anchorage length L0,an calculation from 10.3.5.5','full reference-case review'],
   },
   {
     issue:6,standard:'TCVN 9362:2012 + TCVN 10304:2025',

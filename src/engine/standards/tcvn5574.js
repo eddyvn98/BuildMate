@@ -241,3 +241,54 @@ export function compressionBarRestraintSpacing({
     reference:standardRef({standard:'TCVN 5574:2018',clause:'10.3.4.4',formula:`s≤${multiple}d and s≤${absolute}mm for selected case`,sourceUrl:FULL_TEXT}),
   };
 }
+
+
+export function minimumLapLength({
+  barDiameterMm,baseAnchorageLengthMm,alpha2,hasSupplementaryAnchorage=false
+}) {
+  requirePositive('barDiameterMm',barDiameterMm);
+  requirePositive('baseAnchorageLengthMm',baseAnchorageLengthMm);
+  requirePositive('alpha2',alpha2);
+  if (Number(barDiameterMm)>40) throw new RangeError('TCVN 5574:2018 clause 10.3.6.2 lap splice applies to bars with diameter <= 40 mm');
+  let calculated=0.4*Number(alpha2)*Number(baseAnchorageLengthMm);
+  if (hasSupplementaryAnchorage) calculated*=0.7;
+  const minimum=Math.max(calculated,20*Number(barDiameterMm),250);
+  return {
+    minimumLapLengthMm:round(minimum,2),
+    components:{calculatedMm:round(calculated,2),twentyDiametersMm:20*Number(barDiameterMm),absoluteMinimumMm:250},
+    barDiameterMm:Number(barDiameterMm),alpha2:Number(alpha2),hasSupplementaryAnchorage,
+    level:'engineering-review',
+    reference:standardRef({
+      standard:'TCVN 5574:2018',
+      clause:'10.3.6.2',
+      formula:'Llap >= max(0.4·alpha2·L0,an, 20ds, 250 mm); supplementary anchorage may reduce lap length by no more than 30%',
+      sourceUrl:FULL_TEXT,
+    }),
+    warning:'baseAnchorageLengthMm (L0,an) and alpha2 must be determined from the applicable anchorage/splice provisions; this function does not infer them.',
+  };
+}
+
+export function lapSpliceAlpha2({
+  stress='tension',splicePercent
+}) {
+  const p=Number(splicePercent);
+  if (!(p>=0&&p<=100)) throw new RangeError('splicePercent must be 0..100');
+  if (stress==='tension') {
+    if (p<=50) return lapAlphaResult(1,p,stress,'up to 50% ribbed tension bars in one design section');
+    const value=1+(p-50)*(1/50);
+    return lapAlphaResult(round(value,4),p,stress,'linear interpolation from alpha2=1 at 50% to 2.0 at 100%');
+  }
+  if (stress==='compression') {
+    if (p<=50) return lapAlphaResult(1,p,stress,'up to 50% compression bars in one design section');
+    const value=1+(p-50)*(0.2/50);
+    return lapAlphaResult(round(value,4),p,stress,'linear interpolation from alpha2=1 at 50% to 1.2 at 100%');
+  }
+  throw new RangeError('stress must be tension or compression');
+}
+
+function lapAlphaResult(value,splicePercent,stress,note) {
+  return {
+    value,splicePercent,stress,level:'engineering-review',
+    reference:standardRef({standard:'TCVN 5574:2018',clause:'10.3.6.2',sourceUrl:FULL_TEXT,note}),
+  };
+}

@@ -42,6 +42,7 @@ Implemented evidence:
 - 10.3.3.1: minimum longitudinal reinforcement ratio.
 - 10.3.4.3: transverse-reinforcement spacing by shear requirement.
 - 10.3.4.4: transverse restraint spacing for longitudinal compression bars.
+- 10.3.6.2: lap splice limited to bars ≤40 mm; alpha2 interpolation by splice percentage and minimum lap length max(0.4 alpha2 L0,an, 20ds, 250 mm).
 - The engine rejects Eq. (34) when ξ > ξR rather than silently applying the wrong branch.
 
 ## TCVN 9362:2012 — Foundation soils
