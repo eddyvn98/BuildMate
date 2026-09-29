@@ -70,9 +70,13 @@ Official status/source: https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN
 
 Implemented evidence:
 - 3.5 / Table 2: fixture-unit equivalents, individual fixture flows and connection diameters.
+- 6.3: required pressure at the highest/most remote fixture.
 - 6.5: domestic steel-pipe velocity limits.
 - 6.6 / Table 8: pipe diameter lookup for total fixture equivalent units N ≤ 20.
 - 6.7 / Eq. (2), Tables 9-10: housing design flow q = 0.2 α √N + K N.
+- 7.1: booster pumping required when external-network pressure is insufficient.
+- 7.7: pump design flow basis with/without storage tank.
+- 8.1 note 2: individual pressure-tank volume not over 20-25 m³.
 
 ## TCVN 7957:2023 — External drainage
 
@@ -81,6 +85,8 @@ Official status/source: https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN
 Implemented evidence:
 - 5.3.2: Manning velocity equation.
 - Table 9: Manning n values by conduit/channel material.
+- 5.3.4 / Table 10: minimum drain diameters.
+- 5.3.11: minimum 0.02 slope for rainwater-inlet connection to sewer.
 
 ## Remaining rule
 

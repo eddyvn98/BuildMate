@@ -21,8 +21,8 @@ export const STANDARD_CLAUSE_COVERAGE=Object.freeze([
   },
   {
     issue:8,standard:'TCVN 4513:1988 + TCVN 7957:2023',
-    implemented:['TCVN 4513 3.5/Table 2 fixture-unit schedule','TCVN 4513 6.5 velocity limits','TCVN 4513 6.6/Table 8','TCVN 4513 6.7 Eq.(2)/Tables 9-10','TCVN 7957 5.3.2/Table 9 Manning'],
-    pending:['pressure-loss network workflow','pump selection clauses','self-cleansing/minimum slope rules by diameter','complete reference cases'],
+    implemented:['TCVN 4513 3.5/Table 2 fixture-unit schedule','TCVN 4513 6.3 pressure requirement','TCVN 4513 6.5 velocity limits','TCVN 4513 6.6/Table 8','TCVN 4513 6.7 Eq.(2)/Tables 9-10','TCVN 4513 7.1 booster requirement','TCVN 4513 7.7 pump flow basis','TCVN 4513 8.1 tank limit','TCVN 7957 5.3.2/Table 9 Manning','TCVN 7957 5.3.4/Table 10 minimum diameters','TCVN 7957 5.3.11 rain-inlet connection slope'],
+    pending:['pressure-loss network workflow','pump head/curve acceptance criteria','full self-cleansing velocity table by diameter/fill ratio','complete reference cases'],
   },
 ]);
 

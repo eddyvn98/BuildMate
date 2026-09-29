@@ -80,3 +80,39 @@ export function checkDomesticSteelPipeVelocity({velocityMps,segmentType}) {
     reference:standardRef({standard:'TCVN 4513:1988',clause:'6.5',sourceUrl:FULL_TEXT,note:'Domestic steel-pipe velocity: mains/risers 1.5-2 m/s; fixture branches not over 2.5 m/s.'}),
   };
 }
+
+
+export function requireBoosterPump({availablePressureM,requiredPressureM}) {
+  if (!(Number(availablePressureM)>=0)) throw new RangeError('availablePressureM must be >= 0');
+  if (!(Number(requiredPressureM)>0)) throw new RangeError('requiredPressureM must be > 0');
+  const required=Number(availablePressureM)<Number(requiredPressureM);
+  return {
+    boosterRequired:required,availablePressureM:Number(availablePressureM),requiredPressureM:Number(requiredPressureM),
+    level:'engineering-review',
+    reference:standardRef({standard:'TCVN 4513:1988',clause:'6.3 and 7.1',sourceUrl:FULL_TEXT,note:'Network must ensure required pressure at the highest/most remote fixture; booster station is required when external pressure is insufficient.'}),
+  };
+}
+
+export function pumpDesignFlowBasis({hasStorageTank,hourlyMaximumFlowM3h=null,secondDesignFlowLps=null}) {
+  if (hasStorageTank) {
+    if (!(Number(hourlyMaximumFlowM3h)>0)) throw new RangeError('hourlyMaximumFlowM3h is required with storage tank');
+    return {
+      basis:'maximum-hour-flow',designFlowM3h:Number(hourlyMaximumFlowM3h),level:'engineering-review',
+      reference:standardRef({standard:'TCVN 4513:1988',clause:'7.7',sourceUrl:FULL_TEXT,note:'Domestic/production pump with storage tank is sized from maximum hourly flow.'}),
+    };
+  }
+  if (!(Number(secondDesignFlowLps)>0)) throw new RangeError('secondDesignFlowLps is required without storage tank');
+  return {
+    basis:'second-design-flow',designFlowLps:Number(secondDesignFlowLps),level:'engineering-review',
+    reference:standardRef({standard:'TCVN 4513:1988',clause:'7.7',sourceUrl:FULL_TEXT,note:'Pump without storage tank is sized from design flow per second.'}),
+  };
+}
+
+export function pressureTankCapacityLimit(volumeM3) {
+  if (!(Number(volumeM3)>0)) throw new RangeError('volumeM3 must be > 0');
+  return {
+    volumeM3:Number(volumeM3),pass:Number(volumeM3)<=25,splitRequired:Number(volumeM3)>25,
+    level:'engineering-review',
+    reference:standardRef({standard:'TCVN 4513:1988',clause:'8.1 note 2',formula:'individual pressure tank volume ≤ 20-25 m³',sourceUrl:FULL_TEXT}),
+  };
+}

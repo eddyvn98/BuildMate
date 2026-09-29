@@ -33,3 +33,30 @@ export function manningNForMaterial(material) {
 export const TCVN7957_METADATA={standard:'TCVN 7957:2023',statusSource:SOURCE,textSource:TEXT};
 function requirePositive(n,v){if(!(Number(v)>0))throw new RangeError(`${n} must be > 0`);}
 function round(v,d=4){const f=10**d;return Math.round(v*f)/f;}
+
+
+export function minimumDrainDiameter({system,location}) {
+  const rows={
+    sanitary:{site:150,street:200},
+    storm:{site:300,street:400},
+    combined:{site:300,street:400},
+    sludge:{site:150,street:null},
+  };
+  const row=rows[system];
+  if (!row) throw new RangeError('system must be sanitary, storm, combined or sludge');
+  if (!['site','street'].includes(location)) throw new RangeError('location must be site or street');
+  const value=row[location];
+  if (value==null) return {blocked:true,reason:'No minimum diameter specified for this case in Table 10'};
+  return {
+    minimumDiameterMm:value,system,location,level:'engineering-review',
+    reference:standardRef({standard:'TCVN 7957:2023',clause:'5.3.4, Table 10',sourceUrl:TEXT}),
+  };
+}
+
+export function checkRainInletConnectionSlope(slope) {
+  if (!(Number(slope)>=0)) throw new RangeError('slope must be >= 0');
+  return {
+    slope:Number(slope),minimumSlope:0.02,pass:Number(slope)>=0.02,level:'engineering-review',
+    reference:standardRef({standard:'TCVN 7957:2023',clause:'5.3.11',formula:'i ≥ 0.02 for connection from rainwater inlet to sewer',sourceUrl:TEXT}),
+  };
+}
