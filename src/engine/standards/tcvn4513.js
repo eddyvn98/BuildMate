@@ -160,3 +160,62 @@ export function fixturePressureCheck({availableHeadM,fixtureType='general'}) {
     reference:standardRef({standard:'TCVN 4513:1988',clause:'3.8-3.9',sourceUrl:FULL_TEXT,note:'Minimum free head by fixture and maximum 60 m working head for domestic sanitary fixtures.'}),
   };
 }
+
+
+const STEEL_CAST_IRON_A_LPS=Object.freeze({
+  10:32.95,15:8.809,20:1.643,25:0.4367,32:0.09386,40:0.04453,
+  50:0.01108,70:0.002993,80:0.001168,100:0.000267,125:0.00008623,150:0.00003395,
+});
+
+export function table14ResistanceA(diameterMm) {
+  const A=STEEL_CAST_IRON_A_LPS[Number(diameterMm)];
+  if (A==null) throw new RangeError('Implemented TCVN 4513 Table 14 L/s lookup covers DN10..DN150 listed values');
+  return {
+    value:A,diameterMm:Number(diameterMm),flowUnit:'L/s',level:'engineering-review',
+    reference:standardRef({standard:'TCVN 4513:1988',clause:'6.14, Table 14(a)',sourceUrl:FULL_TEXT,note:'Unit resistance A for steel/cast-iron water pipe when q is expressed in L/s.'}),
+  };
+}
+
+export function pipeFrictionHead({diameterMm,flowLps,lengthM}) {
+  if (!(Number(lengthM)>=0)) throw new RangeError('lengthM must be >= 0');
+  const resistance=table14ResistanceA(diameterMm);
+  const gradient=steelCastIronFrictionGradient({resistanceA:resistance.value,flowLps});
+  return standardResult({
+    value:round(gradient.value*Number(lengthM),4),unit:'m',formulaId:'TCVN4513-1988-6.14-head',
+    reference:gradient.reference,
+    inputs:{diameterMm:Number(diameterMm),flowLps:Number(flowLps),lengthM:Number(lengthM),A:resistance.value},
+  });
+}
+
+export function requiredPumpDuty({
+  designFlow,flowUnit='m3/h',staticHeadM,frictionHeadM,localLossM,residualHeadM
+}) {
+  for (const [n,v] of Object.entries({designFlow,staticHeadM,frictionHeadM,localLossM,residualHeadM})) {
+    if (!(Number(v)>=0)) throw new RangeError(`${n} must be >= 0`);
+  }
+  if (!(Number(designFlow)>0)) throw new RangeError('designFlow must be > 0');
+  const requiredHeadM=Number(staticHeadM)+Number(frictionHeadM)+Number(localLossM)+Number(residualHeadM);
+  return {
+    designFlow:Number(designFlow),flowUnit,requiredHeadM:round(requiredHeadM,3),level:'engineering-review',
+    references:[
+      standardRef({standard:'TCVN 4513:1988',clause:'6.3, 6.14, 6.16',sourceUrl:FULL_TEXT,note:'Required pressure includes elevation/residual requirement and hydraulic losses.'}),
+      standardRef({standard:'TCVN 4513:1988',clause:'7.1-7.2, 7.7',sourceUrl:FULL_TEXT,note:'Booster need, operating scheme and design-flow basis.'}),
+    ],
+  };
+}
+
+export function checkPumpCandidate({duty,pumpFlow,pumpHeadM,manufacturerCurveSource}) {
+  if (!duty?.designFlow||!(duty.requiredHeadM>=0)) throw new TypeError('valid duty is required');
+  if (!(Number(pumpFlow)>0)||!(Number(pumpHeadM)>0)) throw new RangeError('pumpFlow and pumpHeadM must be > 0');
+  if (!manufacturerCurveSource) throw new TypeError('manufacturerCurveSource is required');
+  const flowPass=Number(pumpFlow)>=Number(duty.designFlow);
+  const headPass=Number(pumpHeadM)>=Number(duty.requiredHeadM);
+  return {
+    pass:flowPass&&headPass,flowPass,headPass,
+    required:{flow:duty.designFlow,flowUnit:duty.flowUnit,headM:duty.requiredHeadM},
+    candidate:{flow:Number(pumpFlow),headM:Number(pumpHeadM),manufacturerCurveSource:String(manufacturerCurveSource)},
+    level:'engineering-review',
+    references:duty.references,
+    warning:'Final pump selection must verify the manufacturer Q-H curve at the actual duty point, efficiency/NPSH and operating arrangement; nominal catalog maxima are not sufficient.',
+  };
+}

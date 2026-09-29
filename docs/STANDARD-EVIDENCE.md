@@ -93,7 +93,8 @@ Implemented evidence:
 - 6.6 / Table 8: pipe diameter lookup for total fixture equivalent units N ≤ 20.
 - 3.8-3.9: minimum fixture free-head requirements and 60 m maximum working head.
 - 6.7 / Eq. (2), Tables 9-10: housing design flow q = 0.2 α √N + K N.
-- 6.14 / Table 14: steel/cast-iron friction gradient i=Aq².
+- 6.14 / Table 14(a): DN10-DN150 steel/cast-iron resistance A lookup for L/s and friction gradient i=Aq².
+- 6.3/6.14/6.16 + 7.1/7.2/7.7: pump duty point assembled from required pressure and losses; candidate acceptance requires a manufacturer Q-H curve source.
 - 6.16: local-loss allowance as a prescribed percentage of longitudinal friction loss.
 - 7.1: booster pumping required when external-network pressure is insufficient.
 - 7.7: pump design flow basis with/without storage tank.
