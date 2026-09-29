@@ -118,3 +118,63 @@ export function rebarDesignProperties(steelClass) {
     ],
   };
 }
+
+
+const CRACK_LIMITS=Object.freeze({
+  commonBars:{longTermMm:0.3,shortTermMm:0.4},
+  highStrengthBars:{longTermMm:0.2,shortTermMm:0.3},
+  smallSevenWireStrand:{longTermMm:0.1,shortTermMm:0.2},
+  watertightness:{longTermMm:0.2,shortTermMm:0.3},
+});
+
+export function crackWidth({
+  phi1,phi2,phi3,psiS,sigmaSMpa,EsMpa,crackSpacingMm
+}) {
+  for (const [n,v] of Object.entries({phi1,phi2,phi3,psiS,sigmaSMpa,EsMpa,crackSpacingMm})) requirePositive(n,v);
+  const width=Number(phi1)*Number(phi2)*Number(phi3)*Number(psiS)*(Number(sigmaSMpa)/Number(EsMpa))*Number(crackSpacingMm);
+  return standardResult({
+    value:round(width,4),unit:'mm',formulaId:'TCVN5574-2018-Eq166',
+    reference:standardRef({standard:'TCVN 5574:2018',clause:'8.2.2.3.1, equation (166)',formula:'acrc=φ1·φ2·φ3·ψs·(σs/Es)·Ls',sourceUrl:FULL_TEXT}),
+    inputs:{phi1:Number(phi1),phi2:Number(phi2),phi3:Number(phi3),psiS:Number(psiS),sigmaSMpa:Number(sigmaSMpa),EsMpa:Number(EsMpa),crackSpacingMm:Number(crackSpacingMm)},
+  });
+}
+
+export function crackWidthLimit({reinforcementGroup='commonBars',duration='longTerm'}) {
+  const row=CRACK_LIMITS[reinforcementGroup];
+  if (!row) throw new RangeError('Unsupported TCVN 5574 Table 17 reinforcementGroup');
+  const key=duration==='longTerm'?'longTermMm':duration==='shortTerm'?'shortTermMm':null;
+  if (!key) throw new RangeError('duration must be longTerm or shortTerm');
+  return {
+    limitMm:row[key],reinforcementGroup,duration,level:'engineering-review',
+    reference:standardRef({standard:'TCVN 5574:2018',clause:'8.2.2.1.3, equation (155), Table 17',formula:'acrc ≤ acrc,u',sourceUrl:FULL_TEXT}),
+  };
+}
+
+export function checkCrackWidth({calculatedMm,reinforcementGroup='commonBars',duration='longTerm'}) {
+  requireNonNegative('calculatedMm',calculatedMm);
+  const limit=crackWidthLimit({reinforcementGroup,duration});
+  return {...limit,calculatedMm:Number(calculatedMm),pass:Number(calculatedMm)<=limit.limitMm};
+}
+
+export function minimumLongitudinalReinforcement({
+  memberType='flexural',bMm,h0Mm,slenderness=null
+}) {
+  requirePositive('bMm',bMm); requirePositive('h0Mm',h0Mm);
+  let percent;
+  if (memberType==='flexural'||memberType==='eccentricTension') {
+    percent=0.1;
+  } else if (memberType==='eccentricCompression') {
+    if (!(Number(slenderness)>=0)) throw new RangeError('slenderness is required for eccentricCompression');
+    const lambda=Number(slenderness);
+    if (lambda<=17) percent=0.1;
+    else if (lambda>=87) percent=0.25;
+    else percent=0.1+(lambda-17)*(0.15/70);
+  } else {
+    throw new RangeError('memberType must be flexural, eccentricTension or eccentricCompression');
+  }
+  const area=Number(bMm)*Number(h0Mm)*percent/100;
+  return {
+    minimumRatioPercent:round(percent,4),minimumAreaMm2:round(area,2),level:'engineering-review',
+    reference:standardRef({standard:'TCVN 5574:2018',clause:'10.3.3.1',formula:'μs=(As/(b h0))·100%; minimum 0.1% for flexure/eccentric tension and interpolation to 0.25% for eccentric compression slenderness',sourceUrl:FULL_TEXT}),
+  };
+}

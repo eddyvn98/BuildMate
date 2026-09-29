@@ -33,6 +33,9 @@ Implemented evidence:
 - Eq. (35): concrete compression-zone depth for the Eq. (34) branch.
 - 8.1.3.2 Eq. (88): concrete strip shear limit.
 - 8.1.3.3.1 Eq. (92)-(96): transverse-reinforcement force per length and simplified shear checks.
+- 8.2.2.1.3 Eq. (155) / Table 17: crack-width acceptance limits.
+- 8.2.2.3.1 Eq. (166): direct crack-width equation from sourced coefficients/stress/spacing.
+- 10.3.3.1: minimum longitudinal reinforcement ratio.
 - The engine rejects Eq. (34) when ξ > ξR rather than silently applying the wrong branch.
 
 ## TCVN 9362:2012 — Foundation soils
@@ -52,6 +55,7 @@ Official status/source: https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN
 Implemented evidence:
 - 7.1.7 Eq. (4): deformation check s ≤ su.
 - 7.2.1 Eq. (5)-(6): end-bearing pile characteristic resistance branch.
+- 7.2.2: driven/pressed friction-pile capacity as sourced toe resistance plus sourced shaft resistance by soil layer; no qb/fi/factor inference.
 
 ## TCVN 9206:2012 — Electrical equipment in dwellings/public buildings
 

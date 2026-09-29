@@ -6,13 +6,13 @@ export const STANDARD_CLAUSE_COVERAGE=Object.freeze([
   },
   {
     issue:5,standard:'TCVN 5574:2018',
-    implemented:['6.1.4/Table 7 concrete Rb/Rbt subset','6.1.5/Table 10 concrete Eb subset','6.2.2/Table 13 rebar Rs/Rsc subset','6.2.2/Table 14 rebar Rsw subset','6.2.3.3 rebar Es','8.1.2 equations (33)-(35) rectangular flexure','8.1.3.2 Eq.(88)','8.1.3.3.1 Eq.(92)-(96) simplified shear branch'],
-    pending:['remaining material classes/condition factors','T/I sections','full inclined-section search','columns/second-order','SLS/crack/deflection','detailing','full reference-case review'],
+    implemented:['6.1.4/Table 7 concrete Rb/Rbt subset','6.1.5/Table 10 concrete Eb subset','6.2.2/Table 13 rebar Rs/Rsc subset','6.2.2/Table 14 rebar Rsw subset','6.2.3.3 rebar Es','8.1.2 equations (33)-(35) rectangular flexure','8.1.3.2 Eq.(88)','8.1.3.3.1 Eq.(92)-(96) simplified shear branch','8.2.2.1.3 Eq.(155)/Table 17 crack limits','8.2.2.3.1 Eq.(166) crack width','10.3.3.1 minimum longitudinal reinforcement'],
+    pending:['remaining material classes/condition factors','T/I sections','full inclined-section search','columns/second-order','deflection curvature workflow','anchorage/lap and spacing/cover detailing','full reference-case review'],
   },
   {
     issue:6,standard:'TCVN 9362:2012 + TCVN 10304:2025',
-    implemented:['TCVN 9362 4.6.6 Eq.(14)','TCVN 9362 4.6.18','TCVN 9362 4.6.19','TCVN 9362 Appendix D D.1-D.2','TCVN 10304 7.1.7 Eq.(4)','TCVN 10304 7.2.1 Eq.(5)-(6) end-bearing pile'],
-    pending:['settlement calculation mechanics from Appendix C','friction pile clauses','group effects','CPT/SPT/static-test workflows','full reference-case review'],
+    implemented:['TCVN 9362 4.6.6 Eq.(14)','TCVN 9362 4.6.18','TCVN 9362 4.6.19','TCVN 9362 Appendix D D.1-D.2','TCVN 10304 7.1.7 Eq.(4)','TCVN 10304 7.2.1 Eq.(5)-(6) end-bearing pile','TCVN 10304 7.2.2 driven/pressed friction pile capacity from explicit sourced qb/fi/factors'],
+    pending:['settlement calculation mechanics from Appendix C','group effects','CPT/SPT/static-test table ingestion','full reference-case review'],
   },
   {
     issue:7,standard:'QCVN 12:2014/BXD + TCVN 9206:2012 + TCVN 7447-4-41:2010 + TCVN 7447-5-52:2010 + TCVN 7447-5-54:2015',
