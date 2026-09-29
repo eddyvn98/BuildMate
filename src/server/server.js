@@ -1,10 +1,11 @@
 import http from 'node:http';
 import { MemoryStore } from './store.js';
 import { BuildMateService } from './service.js';
+import { JsonFileStore } from './file-store.js';
 import { createHandler } from './router.js';
 
 export function createBuildMateServer(options={}) {
-  const store=options.store ?? new MemoryStore(options.seed);
+  const store=options.store ?? (process.env.DATA_FILE ? new JsonFileStore(process.env.DATA_FILE) : new MemoryStore(options.seed));
   const service=options.service ?? new BuildMateService(store);
   const authSecret=options.authSecret ?? process.env.AUTH_SECRET ?? 'development-only-change-me';
   return http.createServer(createHandler({service,store,authSecret}));

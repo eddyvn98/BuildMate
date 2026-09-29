@@ -1,0 +1,22 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    environment:
+      AUTH_SECRET: "${AUTH_SECRET:-change-me}"
+      DATA_FILE: /data/buildmate.json
+    volumes:
+      - buildmate-data:/data
+    ports:
+      - "3000:3000"
+
+volumes:
+  buildmate-data:

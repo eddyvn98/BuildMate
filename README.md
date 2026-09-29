@@ -39,6 +39,14 @@ npm run check
 npm test
 ```
 
+## Backend API
+
+```bash
+AUTH_SECRET=replace-me DATA_FILE=./data/buildmate.json npm run start:api
+```
+
+The API listens on port `3000` by default. When `DATA_FILE` is set, projects, immutable calculation runs and document metadata survive restarts.
+
 ## Docker
 
 ```bash
@@ -47,6 +55,14 @@ docker run --rm -p 8080:80 buildmate
 ```
 
 Open `http://localhost:8080`; health check is `/healthz`.
+
+For the static web + persistent API together:
+
+```bash
+AUTH_SECRET=replace-me docker compose up --build
+```
+
+The API is then available on `http://localhost:3000` and persists data in the `buildmate-data` volume.
 
 ## Important engineering status
 
