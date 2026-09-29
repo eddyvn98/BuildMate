@@ -67,6 +67,10 @@ function requirePositive(name, value) {
   if (!(Number(value) > 0)) throw new RangeError(`${name} must be > 0`);
 }
 
+function requireNonNegative(name, value) {
+  if (!(Number(value) >= 0)) throw new RangeError(`${name} must be >= 0`);
+}
+
 function requireRatio(name, value) {
   if (!(Number(value) > 0 && Number(value) <= 1)) throw new RangeError(`${name} must be > 0 and <= 1`);
 }
