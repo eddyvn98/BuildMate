@@ -3,9 +3,9 @@ import assert from 'node:assert/strict';
 import { minimumLapLength,lapSpliceAlpha2 } from '../src/engine/standards/tcvn5574.js';
 
 test('TCVN 5574 lap splice alpha2 follows 10.3.6.2 interpolation',()=>{
-  assert.equal(lapSpliceAlpha2({stress:'tension',splicePercent:50}).value,1);
+  assert.equal(lapSpliceAlpha2({stress:'tension',splicePercent:50}).value,1.2);
   assert.equal(lapSpliceAlpha2({stress:'tension',splicePercent:100}).value,2);
-  assert.equal(lapSpliceAlpha2({stress:'tension',splicePercent:75}).value,1.5);
+  assert.equal(lapSpliceAlpha2({stress:'tension',splicePercent:75}).value,1.6);
   assert.equal(lapSpliceAlpha2({stress:'compression',splicePercent:100}).value,1.2);
 });
 
