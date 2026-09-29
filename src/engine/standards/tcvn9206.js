@@ -44,3 +44,13 @@ export function checkVoltageDropAgainstTcvn9206({dropPercent,loadType,mode='norm
 
 function traced(value,clause,note){return {value,level:'engineering-review',reference:standardRef({standard:'TCVN 9206:2012',clause,sourceUrl:FULL_TEXT,note})};}
 export const TCVN9206_METADATA={standard:'TCVN 9206:2012',statusSource:SOURCE,fullTextSource:FULL_TEXT};
+
+
+export function residentialPowerFactor(value) {
+  const pf=Number(value);
+  if (!(pf>=0.8&&pf<=0.85)) throw new RangeError('TCVN 9206:2012 clause 5.8 residential power factor must be 0.80..0.85');
+  return {
+    value:pf,level:'engineering-review',
+    reference:standardRef({standard:'TCVN 9206:2012',clause:'5.8',formula:'cosφ = 0.80..0.85 for residential network calculation',sourceUrl:FULL_TEXT}),
+  };
+}

@@ -39,3 +39,35 @@ export const TCVN5574_METADATA={standard:'TCVN 5574:2018',statusSource:SOURCE,fu
 function requirePositive(n,v){if(!(Number(v)>0))throw new RangeError(`${n} must be > 0`);}
 function requireNonNegative(n,v){if(!(Number(v)>=0))throw new RangeError(`${n} must be >= 0`);}
 function round(v,d=4){const f=10**d;return Math.round(v*f)/f;}
+
+
+export function rectangularShearCheck({
+  designShearKn,bMm,h0Mm,RbMpa,RbtMpa,RswMpa,AswMm2,stirrupSpacingMm
+}) {
+  for (const [n,v] of Object.entries({bMm,h0Mm,RbMpa,RbtMpa})) requirePositive(n,v);
+  requireNonNegative('designShearKn',designShearKn);
+  requireNonNegative('RswMpa',RswMpa);
+  requireNonNegative('AswMm2',AswMm2);
+  requirePositive('stirrupSpacingMm',stirrupSpacingMm);
+
+  const concreteStripCapacityKn=0.3*Number(RbMpa)*Number(bMm)*Number(h0Mm)/1000;
+  const qsw=Number(RswMpa)*Number(AswMm2)/Number(stirrupSpacingMm);
+  const qswMin=0.25*Number(RbtMpa)*Number(bMm);
+  const stirrupsCounted=qsw>=qswMin;
+  const qb1Kn=0.5*Number(RbtMpa)*Number(bMm)*Number(h0Mm)/1000;
+  const qsw1Kn=(stirrupsCounted?qsw:0)*Number(h0Mm)/1000;
+  const simplifiedCapacityKn=qb1Kn+qsw1Kn;
+
+  return {
+    designShearKn:Number(designShearKn),
+    concreteStrip:{capacityKn:round(concreteStripCapacityKn),pass:Number(designShearKn)<=concreteStripCapacityKn},
+    transverseReinforcement:{qswNPerMm:round(qsw),minimumQswNPerMm:round(qswMin),counted:stirrupsCounted},
+    simplifiedInclinedSection:{capacityKn:round(simplifiedCapacityKn),qb1Kn:round(qb1Kn),qsw1Kn:round(qsw1Kn),pass:Number(designShearKn)<=simplifiedCapacityKn},
+    level:'engineering-review',
+    references:[
+      standardRef({standard:'TCVN 5574:2018',clause:'8.1.3.2, equation (88)',formula:'Q ≤ 0.3 Rb b h0',sourceUrl:FULL_TEXT}),
+      standardRef({standard:'TCVN 5574:2018',clause:'8.1.3.3.1, equations (92)-(96)',formula:'qsw=Rsw Asw/sw; Q1≤Qb,1+Qsw,1; Qb,1=0.5Rbtbh0; Qsw,1=qswh0; qsw≥0.25Rbtb',sourceUrl:FULL_TEXT}),
+    ],
+    warnings:stirrupsCounted?[]:['Transverse reinforcement does not satisfy equation (96), so Qsw is not counted in this simplified check.'],
+  };
+}

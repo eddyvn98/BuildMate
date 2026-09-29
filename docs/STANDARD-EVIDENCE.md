@@ -22,6 +22,8 @@ Implemented evidence:
 - 8.1.2, Eq. (33): M ≤ Mu.
 - Eq. (34): rectangular flexural resistance.
 - Eq. (35): concrete compression-zone depth for the Eq. (34) branch.
+- 8.1.3.2 Eq. (88): concrete strip shear limit.
+- 8.1.3.3.1 Eq. (92)-(96): transverse-reinforcement force per length and simplified shear checks.
 - The engine rejects Eq. (34) when ξ > ξR rather than silently applying the wrong branch.
 
 ## TCVN 9362:2012 — Foundation soils
@@ -47,6 +49,7 @@ Official status/source: https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN
 Implemented evidence:
 - 4.5: voltage-loss limits by load/mode.
 - 5.11 / Table 8: distribution-board coincidence factor by circuit count.
+- 5.8: residential calculation power factor 0.80 to 0.85.
 - 5.12 / Table 9: coincidence factor by circuit function.
 
 ## TCVN 7447-5-54:2015 — Earthing/protective conductors
@@ -62,6 +65,8 @@ Implemented evidence:
 Official status/source: https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+4513%3A1988
 
 Implemented evidence:
+- 3.5 / Table 2: fixture-unit equivalents, individual fixture flows and connection diameters.
+- 6.5: domestic steel-pipe velocity limits.
 - 6.6 / Table 8: pipe diameter lookup for total fixture equivalent units N ≤ 20.
 - 6.7 / Eq. (2), Tables 9-10: housing design flow q = 0.2 α √N + K N.
 

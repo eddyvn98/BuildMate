@@ -3,6 +3,24 @@ const SOURCE='https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+4513%3A19
 const FULL_TEXT='https://icci.vn/download/452/aHR0cHM6Ly9pY2NpLnZuL3N0b3JhZ2UvdXBsb2Fkcy9kb2N1bWVudC8xNi90Y3ZuLTQ1MTMtMTk4OC5wZGY%3D';
 
 const ALPHA=Object.freeze({100:2.2,125:2.16,150:2.15,200:2.14,250:2.05,300:2.0,350:1.9,400:1.85});
+export const FIXTURE_UNITS=Object.freeze({
+  slopSinkTap:{units:1,flowLps:0.2,diameterMm:[10,15]},
+  washBasinTap:{units:0.33,flowLps:0.07,diameterMm:[10,15]},
+  urinalTap:{units:0.17,flowLps:0.035,diameterMm:[10,15]},
+  urinalFlushingPipePerM:{units:0.3,flowLps:0.06,diameterMm:[10,15]},
+  wcFlushValve:{units:[6,7],flowLps:[1.2,1.4],diameterMm:[25,32]},
+  wcCistern:{units:0.5,flowLps:0.1,diameterMm:[10,15]},
+  bathtubMixerCentralHotWater:{units:1.5,flowLps:0.3,diameterMm:15},
+  bathtubMixerElectricHeater:{units:1,flowLps:0.2,diameterMm:15},
+  laundrySinkTap:{units:1,flowLps:0.2,diameterMm:15},
+  bidet:{units:0.35,flowLps:0.07,diameterMm:[10,15]},
+  groupShower:{units:1,flowLps:0.2,diameterMm:15},
+  dwellingShower:{units:0.67,flowLps:0.14,diameterMm:15},
+  poolShower:{units:1,flowLps:0.2,diameterMm:15},
+  hotWaterTap:{units:0.17,flowLps:0.035,diameterMm:[10,15]},
+  laboratorySlopSinkTap:{units:0.5,flowLps:0.1,diameterMm:[10,15]},
+  roomWashBasinTap:{units:1,flowLps:0.2,diameterMm:15},
+});
 
 export function housingDesignFlow({fixtureEquivalentUnits,litersPerPersonDay}) {
   const N=Number(fixtureEquivalentUnits);
@@ -31,3 +49,34 @@ export function smallFixturePipeDiameter(fixtureEquivalentUnits) {
 
 export const TCVN4513_METADATA={standard:'TCVN 4513:1988',statusSource:SOURCE,fullTextSource:FULL_TEXT};
 function round(v,d=3){const f=10**d;return Math.round(v*f)/f;}
+
+
+export function fixtureUnitSchedule(items) {
+  if (!Array.isArray(items)||items.length===0) throw new TypeError('items are required');
+  let total=0;
+  const rows=items.map((item)=>{
+    const fixture=FIXTURE_UNITS[item.type];
+    if (!fixture) throw new RangeError(`Unsupported TCVN 4513 Table 2 fixture: ${item.type}`);
+    if (Array.isArray(fixture.units)) throw new RangeError(`${item.type} has a TCVN range and requires an explicit selected fixture-unit value`);
+    const count=Number(item.count);
+    if (!(count>0)) throw new RangeError('fixture count must be > 0');
+    const units=count*fixture.units;
+    total+=units;
+    return {type:item.type,count,unitEquivalent:fixture.units,totalEquivalent:round(units,3),flowLps:fixture.flowLps,connectionDiameterMm:fixture.diameterMm};
+  });
+  return {
+    totalEquivalent:round(total,3),items:rows,level:'engineering-review',
+    reference:standardRef({standard:'TCVN 4513:1988',clause:'3.5, Table 2',sourceUrl:FULL_TEXT,note:'Fixture-unit equivalents, fixture flow and connection-pipe diameter.'}),
+  };
+}
+
+export function checkDomesticSteelPipeVelocity({velocityMps,segmentType}) {
+  if (!(Number(velocityMps)>=0)) throw new RangeError('velocityMps must be >= 0');
+  const max=segmentType==='main-riser'?2:segmentType==='fixture-branch'?2.5:null;
+  if (max==null) throw new RangeError('segmentType must be main-riser or fixture-branch');
+  return {
+    velocityMps:Number(velocityMps),maximumMps:max,pass:Number(velocityMps)<=max,
+    level:'engineering-review',
+    reference:standardRef({standard:'TCVN 4513:1988',clause:'6.5',sourceUrl:FULL_TEXT,note:'Domestic steel-pipe velocity: mains/risers 1.5-2 m/s; fixture branches not over 2.5 m/s.'}),
+  };
+}
