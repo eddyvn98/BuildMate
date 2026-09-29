@@ -10,6 +10,8 @@ Implemented evidence:
 - 6.3: long-term variable-load combination factors.
 - 6.4: basic-combination short-term factors.
 - 6.5: special-combination short-term factors.
+- 6.7 Eq. (3)-(4): one-floor tributary-area load-reduction factors φ1/φ2.
+- 6.8 Eq. (5)-(6): multi-floor load-reduction factors φ3/φ4.
 - 8.3.1 / Table 4: townhouse-relevant A1/A2/H uniformly distributed live loads.
 - 8.3.3: reduced characteristic live load η = 0.35.
 - 8.3.5(a): γf = 1.3 for distributed loads in 8.3.1.
@@ -33,6 +35,8 @@ Official status/source: https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN
 Implemented evidence:
 - 4.6.18: preliminary sizing basis using conventional resistance R0.
 - 4.6.19: eccentric-foundation edge pressure ≤ 1.2R and corner pressure ≤ 1.5R.
+- 4.6.6 Eq. (14): calculated deformation S ≤ allowable Su.
+- Appendix D, D.2 Eq. (D.1)-(D.2): conventional resistance adjustment for width/depth within the Appendix D applicability envelope.
 
 ## TCVN 10304:2025 — Pile foundations
 

@@ -1,8 +1,8 @@
 export const STANDARD_CLAUSE_COVERAGE=Object.freeze([
   {
     issue:4,standard:'TCVN 2737:2023',
-    implemented:['6.3','6.4','6.5','8.3.1/Table 4 residential subset','8.3.3','8.3.5(a)'],
-    pending:['permanent-load source tables for project materials','wind/natural-condition project profile','area-reduction clauses 6.7-6.8','full reference-case review'],
+    implemented:['6.3','6.4','6.5','6.7 Eq.(3)-(4)','6.8 Eq.(5)-(6)','8.3.1/Table 4 residential subset','8.3.3','8.3.5(a)'],
+    pending:['permanent-load source tables for project materials','wind/natural-condition project profile','full reference-case review'],
   },
   {
     issue:5,standard:'TCVN 5574:2018',
@@ -11,8 +11,8 @@ export const STANDARD_CLAUSE_COVERAGE=Object.freeze([
   },
   {
     issue:6,standard:'TCVN 9362:2012 + TCVN 10304:2025',
-    implemented:['TCVN 9362 4.6.18','TCVN 9362 4.6.19','TCVN 10304 7.1.7 Eq.(4)','TCVN 10304 7.2.1 Eq.(5)-(6) end-bearing pile'],
-    pending:['settlement profile','friction pile clauses','group effects','CPT/SPT/static-test workflows','full reference-case review'],
+    implemented:['TCVN 9362 4.6.6 Eq.(14)','TCVN 9362 4.6.18','TCVN 9362 4.6.19','TCVN 9362 Appendix D D.1-D.2','TCVN 10304 7.1.7 Eq.(4)','TCVN 10304 7.2.1 Eq.(5)-(6) end-bearing pile'],
+    pending:['settlement calculation mechanics from Appendix C','friction pile clauses','group effects','CPT/SPT/static-test workflows','full reference-case review'],
   },
   {
     issue:7,standard:'TCVN 9206:2012 + TCVN 7447-5-54:2015',

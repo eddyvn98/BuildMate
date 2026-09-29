@@ -64,3 +64,50 @@ export const TCVN2737_METADATA={standard:'TCVN 2737:2023',statusSource:SOURCE,fu
 
 function requireNonNegative(name,v){if(!(Number(v)>=0))throw new RangeError(`${name} must be >= 0`);}
 function round(v,d=4){const f=10**d;return Math.round(v*f)/f;}
+
+
+export function singleFloorAreaReduction({areaM2,category}) {
+  if (!(Number(areaM2)>0)) throw new RangeError('areaM2 must be > 0');
+  const A=Number(areaM2);
+  let factor=1;
+  let formula='';
+  let clause='';
+  if (category==='A-B') {
+    factor=A>9?Math.max(0.6,0.4+0.6/Math.sqrt(A/9)):1;
+    formula='φ1=0.4+0.6/√(A/A1) ≥ 0.6; A1=9m²';
+    clause='6.7(a), equation (3)';
+  } else if (category==='C-D') {
+    factor=A>36?Math.max(0.6,0.5+0.5/Math.sqrt(A/36)):1;
+    formula='φ2=0.5+0.5/√(A/A2) ≥ 0.6; A2=36m²';
+    clause='6.7(b), equation (4)';
+  } else {
+    throw new RangeError('category must be A-B or C-D');
+  }
+  return {
+    factor:round(factor,5),areaM2:A,category,level:'engineering-review',
+    reference:standardRef({standard:'TCVN 2737:2023',clause,formula,sourceUrl:FULL_TEXT}),
+  };
+}
+
+export function multiFloorAreaReduction({singleFloorFactor,floorCount,category}) {
+  const phi=Number(singleFloorFactor);
+  const n=Number(floorCount);
+  if (!(phi>0&&phi<=1)) throw new RangeError('singleFloorFactor must be >0 and <=1');
+  if (!Number.isInteger(n)||n<2) throw new RangeError('floorCount must be integer >=2');
+  let factor,formula,clause;
+  if (category==='A-B') {
+    factor=Math.max(0.5,0.4+(phi-0.4)/Math.sqrt(n));
+    formula='φ3=0.4+(φ1-0.4)/√n ≥ 0.5';
+    clause='6.8(a), equation (5)';
+  } else if (category==='C-D') {
+    factor=Math.max(0.5,0.5+(phi-0.5)/Math.sqrt(n));
+    formula='φ4=0.5+(φ2-0.5)/√n ≥ 0.5';
+    clause='6.8(b), equation (6)';
+  } else {
+    throw new RangeError('category must be A-B or C-D');
+  }
+  return {
+    factor:round(factor,5),floorCount:n,category,level:'engineering-review',
+    reference:standardRef({standard:'TCVN 2737:2023',clause,formula,sourceUrl:FULL_TEXT}),
+  };
+}
