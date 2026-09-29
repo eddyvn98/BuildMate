@@ -61,6 +61,8 @@ export function createProject(overrides = {}) {
       coolingWPerM2: field(150, FIELD_STATES.ASSUMED, 'buildmate', 'Suất lạnh lập kế hoạch, không phải thiết kế HVAC'),
     },
     alternatives: [],
+    designVersions: [],
+    actuals: { entries: [] },
     createdAt: now,
     updatedAt: now,
   };
@@ -84,6 +86,10 @@ export function setField(project, path, value, state = FIELD_STATES.CONFIRMED, s
   cursor[key] = { ...(cursor[key] ?? {}), value, state, source };
   clone.updatedAt = new Date().toISOString();
   return clone;
+}
+
+export function renameProject(project, name) {
+  return { ...project, name: name.trim() || 'Nhà mới', updatedAt: new Date().toISOString() };
 }
 
 export function readValue(project, path, fallback = null) {
