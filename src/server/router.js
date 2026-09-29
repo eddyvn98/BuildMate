@@ -1,0 +1,51 @@
+import { bearerUser } from './auth.js';
+
+export function createHandler({service,store,authSecret}) {
+  return async function handler(req,res) {
+    try {
+      const url=new URL(req.url,'http://localhost');
+      if (url.pathname==='/healthz') return json(res,200,{ok:true});
+      const userId=bearerUser(req,authSecret);
+      const body=await readJson(req);
+      const parts=url.pathname.split('/').filter(Boolean);
+
+      if (req.method==='POST' && url.pathname==='/api/projects') return json(res,201,service.createProject(userId,body));
+      if (req.method==='GET' && url.pathname==='/api/projects') return json(res,200,service.listProjects(userId));
+      if (req.method==='GET' && url.pathname==='/api/price-books') {
+        return json(res,200,store.listPriceBooks({province:url.searchParams.get('province'),effectiveDate:url.searchParams.get('effectiveDate')}));
+      }
+      if (req.method==='POST' && url.pathname==='/api/import') return json(res,201,service.importProject(userId,body));
+
+      if (parts[0]!=='api' || parts[1]!=='projects' || !parts[2]) return json(res,404,{error:'not found'});
+      const projectId=parts[2];
+      if (parts.length===3 && req.method==='GET') return json(res,200,service.getProject(userId,projectId));
+      if (parts.length===3 && req.method==='PATCH') return json(res,200,service.patchProject(userId,projectId,body));
+      if (parts[3]==='versions' && req.method==='POST') return json(res,201,service.createVersion(userId,projectId,body.label));
+      if (parts[3]==='versions' && req.method==='GET') return json(res,200,service.listVersions(userId,projectId));
+      if (parts[3]==='intake' && parts[4]==='interpret' && req.method==='POST') return json(res,200,service.interpret(userId,projectId,body.text));
+      if (parts[3]==='calculate' && req.method==='POST') return json(res,201,service.calculate(userId,projectId,body));
+      if (parts[3]==='runs' && parts[4] && req.method==='GET') return json(res,200,service.getRun(userId,projectId,parts[4]));
+      if (parts[3]==='price-overrides' && req.method==='POST') return json(res,200,service.addPriceOverrides(userId,projectId,body));
+      if (parts[3]==='actual-costs' && parts.length===4 && req.method==='POST') return json(res,201,service.addActualCost(userId,projectId,body));
+      if (parts[3]==='actual-costs' && parts[4] && req.method==='DELETE') return json(res,200,service.deleteActualCost(userId,projectId,parts[4]));
+      if (parts[3]==='documents' && req.method==='POST') return json(res,201,service.addDocument(userId,projectId,body));
+      if (parts[3]==='documents' && req.method==='GET') return json(res,200,store.listDocuments(userId,projectId));
+      if (parts[3]==='reports' && parts[4] && req.method==='GET') return json(res,200,service.report(userId,projectId,parts[4]));
+      return json(res,404,{error:'not found'});
+    } catch (error) {
+      return json(res,error.statusCode ?? 500,{error:error.message ?? 'internal error'});
+    }
+  };
+}
+
+async function readJson(req) {
+  if (req.method==='GET' || req.method==='DELETE') return {};
+  let text=''; for await (const chunk of req) text+=chunk;
+  if (!text) return {};
+  try { return JSON.parse(text); } catch { const e=new Error('Invalid JSON'); e.statusCode=400; throw e; }
+}
+
+function json(res,status,payload) {
+  res.writeHead(status,{'content-type':'application/json; charset=utf-8'});
+  res.end(JSON.stringify(payload));
+}
