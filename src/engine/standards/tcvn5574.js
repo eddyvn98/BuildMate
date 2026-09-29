@@ -360,3 +360,38 @@ export function anchorageAlpha1({stress='tension',prestressed=false}) {
   if (value==null) throw new RangeError('stress must be tension or compression');
   return {value,level:'engineering-review',reference:standardRef({standard:'TCVN 5574:2018',clause:'10.3.5.5',sourceUrl:FULL_TEXT,note:'Straight ribbed/nonprestressed anchorage or hooked/plain case without supplementary anchorage'})};
 }
+
+
+export function minimumConcreteCover({
+  environment='indoorNormal',barDiameterMm,
+  reinforcementRole='loadBearing',precast=false
+}) {
+  requirePositive('barDiameterMm',barDiameterMm);
+  const base={
+    indoorNormal:20,
+    indoorHighHumidity:25,
+    outdoor:30,
+    soilWithBlinding:40,
+  }[environment];
+  if (base==null) throw new RangeError('Unsupported TCVN 5574 Table 19 environment');
+  if (!['loadBearing','constructive'].includes(reinforcementRole)) throw new RangeError('reinforcementRole must be loadBearing or constructive');
+
+  let tableMinimum=base;
+  if (precast) tableMinimum-=5;
+  if (reinforcementRole==='constructive') tableMinimum-=5;
+  const minimum=Math.max(tableMinimum,Number(barDiameterMm),10);
+
+  return {
+    minimumCoverMm:minimum,
+    components:{tableBaseMm:base,precastReductionMm:precast?5:0,constructiveReductionMm:reinforcementRole==='constructive'?5:0,barDiameterMm:Number(barDiameterMm),absoluteMinimumMm:10},
+    environment,reinforcementRole,precast,
+    level:'engineering-review',
+    reference:standardRef({
+      standard:'TCVN 5574:2018',
+      clause:'10.3.1.2, Table 19',
+      formula:'c_min = max(adjusted Table 19 value, bar diameter, 10 mm)',
+      sourceUrl:FULL_TEXT,
+    }),
+    warning:'Additional durability/fire/exposure requirements from other applicable standards may govern and must be checked separately.',
+  };
+}
