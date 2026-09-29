@@ -137,6 +137,7 @@ Implemented evidence:
 Official status/source: https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+7447-5-52%3A2010
 
 Implemented evidence:
+- Appendix B / Tables B.52.2 and B.52.4: copper/PVC current-carrying capacities for installation methods B1/B2/C, two/three loaded conductors.
 - Appendix C / Table C.52.2: D1/D2 copper current-carrying capacities for PVC/XLPE, two/three loaded conductors.
 - Table C.52.3 item 1: grouping factors for bundled/enclosed circuits.
 - Other installation methods and correction tables remain explicit coverage gaps.
