@@ -1,3 +1,4 @@
+import { STANDARD_CLAUSE_COVERAGE } from '../engine/standards/coverage.js';
 import { bearerUser } from './auth.js';
 
 export function createHandler({service,store,authSecret}) {
@@ -5,6 +6,7 @@ export function createHandler({service,store,authSecret}) {
     try {
       const url=new URL(req.url,'http://localhost');
       if (url.pathname==='/healthz') return json(res,200,{ok:true});
+      if (req.method==='GET' && url.pathname==='/api/standards/coverage') return json(res,200,STANDARD_CLAUSE_COVERAGE);
       const userId=bearerUser(req,authSecret);
       const body=await readJson(req);
       const parts=url.pathname.split('/').filter(Boolean);
