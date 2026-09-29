@@ -113,3 +113,65 @@ export function checkSettlementLimit({settlementMm,allowableMm,allowableSource})
     reference:standardRef({standard:'TCVN 9362:2012',clause:'4.6.6 equation (14); allowable deformation per 4.6.21-4.6.27/Table 16 as applicable',formula:'S≤Su',sourceUrl:FULL_TEXT}),
   };
 }
+
+
+const ALPHA_M=[0,0.4,0.8,1.2,1.6,2.0,2.4,2.8,3.2,3.6,4.0];
+const ALPHA_N=[1,1.4,1.8,2.4,3.2,5];
+const ALPHA_RECT=Object.freeze([
+  [1.000,1.000,1.000,1.000,1.000,1.000],
+  [0.960,0.972,0.975,0.976,0.977,0.977],
+  [0.800,0.848,0.866,0.875,0.879,0.881],
+  [0.606,0.682,0.717,0.740,0.749,0.754],
+  [0.449,0.532,0.578,0.612,0.630,0.639],
+  [0.336,0.414,0.463,0.505,0.529,0.545],
+  [0.257,0.325,0.374,0.419,0.449,0.470],
+  [0.201,0.260,0.304,0.350,0.383,0.410],
+  [0.160,0.210,0.251,0.294,0.329,0.360],
+  [0.130,0.173,0.209,0.250,0.283,0.320],
+  [0.108,0.145,0.176,0.214,0.248,0.285],
+]);
+
+export function rectangularStressInfluenceAlpha({m,n}) {
+  const mm=Number(m),nn=Number(n);
+  if (!(mm>=0&&mm<=4)) throw new RangeError('implemented TCVN 9362 Table C.1 interpolation is limited to 0 <= m <= 4.0');
+  if (!(nn>=1&&nn<=5)) throw new RangeError('implemented rectangular Table C.1 interpolation is limited to 1 <= n=l/b <= 5');
+  const mi=bracket(ALPHA_M,mm),ni=bracket(ALPHA_N,nn);
+  const m1=ALPHA_M[mi],m2=ALPHA_M[Math.min(mi+1,ALPHA_M.length-1)];
+  const n1=ALPHA_N[ni],n2=ALPHA_N[Math.min(ni+1,ALPHA_N.length-1)];
+  const q11=ALPHA_RECT[mi][ni];
+  const q12=ALPHA_RECT[mi][Math.min(ni+1,ALPHA_N.length-1)];
+  const q21=ALPHA_RECT[Math.min(mi+1,ALPHA_M.length-1)][ni];
+  const q22=ALPHA_RECT[Math.min(mi+1,ALPHA_M.length-1)][Math.min(ni+1,ALPHA_N.length-1)];
+  const tm=m2===m1?0:(mm-m1)/(m2-m1);
+  const tn=n2===n1?0:(nn-n1)/(n2-n1);
+  const top=q11+(q12-q11)*tn;
+  const bottom=q21+(q22-q21)*tn;
+  const alpha=top+(bottom-top)*tm;
+  return {
+    value:round(alpha,5),m:mm,n:nn,level:'engineering-review',
+    reference:standardRef({standard:'TCVN 9362:2012',clause:'Appendix C, Table C.1',sourceUrl:FULL_TEXT,note:'Bilinear interpolation within verified rectangular-footing table rows m=0..4 and n=1..5.'}),
+  };
+}
+
+export function additionalVerticalPressure({foundationWidthM,foundationLengthM,depthBelowBaseM,baseAdditionalPressureKpa}) {
+  requirePositive('foundationWidthM',foundationWidthM);
+  requirePositive('foundationLengthM',foundationLengthM);
+  requireNonNegative('depthBelowBaseM',depthBelowBaseM);
+  requireNonNegative('baseAdditionalPressureKpa',baseAdditionalPressureKpa);
+  const b=Math.min(Number(foundationWidthM),Number(foundationLengthM));
+  const l=Math.max(Number(foundationWidthM),Number(foundationLengthM));
+  const m=2*Number(depthBelowBaseM)/b;
+  const n=l/b;
+  const alpha=rectangularStressInfluenceAlpha({m,n});
+  return standardResult({
+    value:round(alpha.value*Number(baseAdditionalPressureKpa),3),unit:'kPa',formulaId:'TCVN9362-2012-C1-pressure',
+    reference:standardRef({standard:'TCVN 9362:2012',clause:'Appendix C, C.1 stress distribution with Table C.1 alpha',formula:'p0z = alpha * p0',sourceUrl:FULL_TEXT}),
+    inputs:{foundationWidthM:b,foundationLengthM:l,depthBelowBaseM:Number(depthBelowBaseM),baseAdditionalPressureKpa:Number(baseAdditionalPressureKpa),m:round(m,4),n:round(n,4),alpha:alpha.value},
+  });
+}
+
+function bracket(axis,value) {
+  if (value===axis.at(-1)) return axis.length-1;
+  for (let i=0;i<axis.length-1;i+=1) if (value>=axis[i]&&value<=axis[i+1]) return i;
+  return 0;
+}
