@@ -6,6 +6,7 @@ import { estimateQuantities } from './quantity.js';
 import { engineeringGates, validatePlanningInputs } from './validation.js';
 import { buildAlternatives } from './alternatives.js';
 import { analyzeBudgetFit } from './optimizer.js';
+import { runEngineeringPreview } from './engineering-preview.js';
 
 export function runPlanningWorkflow(project) {
   const issues = validatePlanningInputs(project);
@@ -22,9 +23,13 @@ export function runPlanningWorkflow(project) {
   const targetVnd = Number(readValue(project, 'budget.totalVnd', 0));
   const alternatives = buildAlternatives(budgets, targetVnd || null);
   const budgetFit = analyzeBudgetFit({ targetVnd, estimatedVnd: preferred.total });
+  const planningResults = { areas, quantities, budgets, alternatives, budgetFit, cashflow, preferredScenario: preferred.key };
+  const engineering = runEngineeringPreview(project, planningResults);
 
   return {
-    status: 'ready', issues, gates: engineeringGates(project),
-    results: { areas, quantities, budgets, alternatives, budgetFit, cashflow, preferredScenario: preferred.key },
+    status: 'ready',
+    issues,
+    gates: engineeringGates(project),
+    results: { ...planningResults, engineering },
   };
 }
