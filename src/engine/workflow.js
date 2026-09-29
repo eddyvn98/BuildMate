@@ -6,6 +6,8 @@ import { estimateQuantities } from './quantity.js';
 import { engineeringGates, validatePlanningInputs } from './validation.js';
 import { buildAlternatives } from './alternatives.js';
 import { analyzeBudgetFit } from './optimizer.js';
+import { runEngineeringPreview } from './engineering-preview.js';
+import { buildProjectPriceBook } from './project-price-book.js';
 
 export function runPlanningWorkflow(project) {
   const issues = validatePlanningInputs(project);
@@ -16,15 +18,35 @@ export function runPlanningWorkflow(project) {
   const areas = calculateAreas(project);
   const bathrooms = Math.max(1, Math.ceil(Number(readValue(project, 'household.bedrooms', 3)) / 2));
   const quantities = estimateQuantities({ floorAreaM2: areas.floorArea.value, bathrooms });
-  const budgets = calculateBudget({ floorAreaM2: areas.floorArea.value, quantities });
+  const priceBook = buildProjectPriceBook(project);
+  const budgets = calculateBudget({ floorAreaM2: areas.floorArea.value, quantities, priceBook });
   const preferred = budgets.find((scenario) => scenario.key === readValue(project, 'design.finishLevel', 'balanced')) ?? budgets[1];
   const cashflow = buildCashflow(preferred.total);
   const targetVnd = Number(readValue(project, 'budget.totalVnd', 0));
   const alternatives = buildAlternatives(budgets, targetVnd || null);
   const budgetFit = analyzeBudgetFit({ targetVnd, estimatedVnd: preferred.total });
+  const planningResults = {
+    areas,
+    quantities,
+    priceBook: {
+      id: priceBook.id,
+      locality: priceBook.locality,
+      effectiveDate: priceBook.effectiveDate,
+      sourceLabel: priceBook.sourceLabel,
+      overrides: priceBook.overrides ?? {},
+    },
+    budgets,
+    alternatives,
+    budgetFit,
+    cashflow,
+    preferredScenario: preferred.key,
+  };
+  const engineering = runEngineeringPreview(project, planningResults);
 
   return {
-    status: 'ready', issues, gates: engineeringGates(project),
-    results: { areas, quantities, budgets, alternatives, budgetFit, cashflow, preferredScenario: preferred.key },
+    status: 'ready',
+    issues,
+    gates: engineeringGates(project),
+    results: { ...planningResults, engineering },
   };
 }

@@ -1,15 +1,28 @@
 # BuildMate
 
-BuildMate is a Vietnam-focused townhouse planning and construction calculation assistant for homeowners.
+BuildMate is a Vietnam-focused townhouse planning, calculation and construction-control assistant for homeowners.
 
-## V1 goals
+The product is designed around one hard boundary:
 
-- Guide non-technical homeowners from needs to a structured project brief.
-- Keep assumptions explicit: confirmed, assumed, suggested, missing, or blocked.
-- Generate multiple budget scenarios without trading away safety.
-- Use deterministic calculation modules for numbers; AI only interprets, explains, and proposes.
-- Trace every calculated result back to inputs, formulas, coefficients, and source metadata.
-- Support Vietnam locality-aware pricing through replaceable price datasets.
+> AI interprets and explains. Deterministic, versioned engines produce BuildMate numbers.
+
+## Current V2
+
+- Multiple house projects in one browser.
+- Guided natural-language intake + editable fields.
+- Confirmed / suggested / assumed / missing / blocked data states.
+- Planning area and indicative quantity takeoff.
+- Economy / balanced / comfort budgets.
+- User price overrides with source and effective date.
+- Safe budget optimization that never cuts locked safety scope.
+- Construction-stage cash flow.
+- Engineering preview for structure, foundations, electrical, water and HVAC.
+- Simple 2D functional block plan.
+- Saved design versions.
+- Actual construction cost tracking.
+- JSON backup/import, HTML report and BOQ CSV export.
+- Current Vietnam standards registry with construction-ready gates.
+- Automated tests, syntax checks and Docker packaging.
 
 ## Run locally
 
@@ -22,11 +35,28 @@ Open `http://localhost:4173`.
 ## Test
 
 ```bash
-node --test
+npm run check
+npm test
 ```
 
-## Current scope
+## Docker
 
-V1 implements guided intake, project assumptions, planning-area calculation, indicative quantity takeoff, budget scenarios, stage cash flow, trace output, and engineering gates. Construction-grade structural/MEP design is intentionally gated until the required inputs and verified standard-specific modules are available.
+```bash
+docker build -t buildmate .
+docker run --rm -p 8080:80 buildmate
+```
 
-See `docs/PRD.md`, `docs/ARCHITECTURE.md`, `docs/CALCULATION-SAFETY.md`, and `docs/ROADMAP.md`.
+Open `http://localhost:8080`; health check is `/healthz`.
+
+## Important engineering status
+
+V2 is software-complete as a planning/engineering-review prototype. It intentionally does **not** mark structural or MEP modules construction-ready until exact standard clauses/formulas, project inputs, reference cases and qualified review are completed.
+
+See:
+
+- `docs/PRD.md`
+- `docs/ARCHITECTURE.md`
+- `docs/ENGINEERING-MODULES.md`
+- `docs/STANDARDS-REGISTRY.md`
+- `docs/RELEASE-STATUS.md`
+- `docs/API-CONTRACT.md`

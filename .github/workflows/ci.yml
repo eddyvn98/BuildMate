@@ -1,7 +1,7 @@
 name: CI
 on:
   push:
-    branches: [main, feat/buildmate-v1]
+    branches: [main, "feat/buildmate-*"]
   pull_request:
     branches: [main]
 
@@ -13,4 +13,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - run: npm run check
       - run: npm test
+      - run: docker build -t buildmate-ci .

@@ -6,6 +6,10 @@ export function addActual(ledger, entry) {
   return { entries: [...ledger.entries, normalizeEntry(entry)] };
 }
 
+export function removeActual(ledger, entryId) {
+  return { entries: ledger.entries.filter((entry) => entry.id !== entryId) };
+}
+
 export function summarizeActuals(ledger, budgetVnd) {
   const actualVnd = ledger.entries.reduce((sum, entry) => sum + entry.amountVnd, 0);
   const committedVnd = ledger.entries.filter((entry) => entry.status === 'committed').reduce((sum, entry) => sum + entry.amountVnd, 0);
