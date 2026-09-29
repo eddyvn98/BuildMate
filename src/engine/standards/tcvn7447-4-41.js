@@ -26,3 +26,38 @@ export function checkDisconnectionTime(input) {
 }
 
 export const TCVN7447_4_41_METADATA={standard:'TCVN 7447-4-41:2010',statusSource:STATUS,textSource:TEXT};
+
+
+export function checkTnFaultLoop({loopImpedanceOhm,tripCurrentA,uoV,tripCurrentSource}) {
+  const Zs=Number(loopImpedanceOhm),Ia=Number(tripCurrentA),Uo=Number(uoV);
+  if (!(Zs>0)||!(Ia>0)||!(Uo>0)) throw new RangeError('loopImpedanceOhm, tripCurrentA and uoV must be > 0');
+  if (!tripCurrentSource) throw new TypeError('tripCurrentSource is required');
+  const left=Zs*Ia;
+  return {
+    pass:left<=Uo,
+    loopImpedanceOhm:Zs,tripCurrentA:Ia,uoV:Uo,leftVoltageV:round(left),
+    tripCurrentSource:String(tripCurrentSource),
+    level:'engineering-review',
+    reference:standardRef({standard:'TCVN 7447-4-41:2010',clause:'411.4.4',formula:'Zs·Ia ≤ Uo',sourceUrl:TEXT}),
+  };
+}
+
+export function checkTtRcdEarthResistance({earthResistanceOhm,rcdRatedResidualCurrentA,uoV,currentA,actualTimeS=null}) {
+  const RA=Number(earthResistanceOhm),Idn=Number(rcdRatedResidualCurrentA);
+  if (!(RA>0)||!(Idn>0)) throw new RangeError('earthResistanceOhm and rcdRatedResidualCurrentA must be > 0');
+  const touchVoltage=RA*Idn;
+  const voltagePass=touchVoltage<=50;
+  let time=null;
+  if (actualTimeS!=null) {
+    time=checkDisconnectionTime({system:'TT',uoV,currentA,actualTimeS});
+  }
+  return {
+    pass:voltagePass&&(time?.pass ?? true),
+    earthResistanceOhm:RA,rcdRatedResidualCurrentA:Idn,touchVoltageV:round(touchVoltage),voltageLimitV:50,
+    voltagePass,time,
+    level:'engineering-review',
+    reference:standardRef({standard:'TCVN 7447-4-41:2010',clause:'411.5.3',formula:'RA·IΔn ≤ 50 V, plus required disconnection time',sourceUrl:TEXT}),
+  };
+}
+
+function round(v,d=4){const f=10**d;return Math.round(v*f)/f;}

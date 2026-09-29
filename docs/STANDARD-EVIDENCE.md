@@ -156,3 +156,8 @@ Additional TCVN 7447-5-52 evidence:
 - Table B.52.14: air-temperature correction factors for PVC/XLPE.
 - Table B.52.15: soil-temperature correction factors for PVC/XLPE.
 - Table B.52.16: soil thermal-resistivity correction factors for buried cables.
+
+
+Additional TCVN 7447-4-41 evidence:
+- 411.4.4: TN automatic-disconnection loop condition Zs·Ia ≤ Uo; Ia must come from the protective-device characteristic for the required time.
+- 411.5.3: TT system with RCD must satisfy RA·IΔn ≤ 50 V and the applicable disconnection time.
