@@ -1,4 +1,4 @@
-import { standardRef } from './common.js';
+import { standardRef, standardResult } from './common.js';
 const SOURCE='https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+9362%3A2012';
 const FULL_TEXT='https://tcvn.info/data/2017/08/285481_tcvn9362-2012.pdf';
 
