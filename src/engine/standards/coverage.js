@@ -11,8 +11,8 @@ export const STANDARD_CLAUSE_COVERAGE=Object.freeze([
   },
   {
     issue:6,standard:'TCVN 9362:2012 + TCVN 10304:2025',
-    implemented:['TCVN 9362 4.6.6 Eq.(14)','TCVN 9362 4.6.18','TCVN 9362 4.6.19','TCVN 9362 Appendix D D.1-D.2','TCVN 10304 7.1.7 Eq.(4)','TCVN 10304 7.2.1 Eq.(5)-(6) end-bearing pile','TCVN 10304 7.2.2 driven/pressed friction pile capacity from explicit sourced qb/fi/factors'],
-    pending:['settlement calculation mechanics from Appendix C','group effects','CPT/SPT/static-test table ingestion','full reference-case review'],
+    implemented:['TCVN 9362 4.6.6 Eq.(14)','TCVN 9362 Appendix C C.1.6 layer-summation settlement','TCVN 9362 4.6.18','TCVN 9362 4.6.19','TCVN 9362 Appendix D D.1-D.2','TCVN 10304 7.1.7 Eq.(4)','TCVN 10304 7.2.1 Eq.(5)-(6) end-bearing pile','TCVN 10304 7.2.2 driven/pressed friction pile capacity from explicit sourced qb/fi/factors'],
+    pending:['Appendix C stress-distribution coefficient table/interpolation to derive pi in-app','pile group effects','CPT/SPT/static-test table ingestion','full reference-case review'],
   },
   {
     issue:7,standard:'QCVN 12:2014/BXD + TCVN 9206:2012 + TCVN 7447-4-41:2010 + TCVN 7447-5-52:2010 + TCVN 7447-5-54:2015',

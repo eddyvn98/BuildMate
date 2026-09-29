@@ -76,3 +76,40 @@ export function checkFoundationDeformation({calculated,allowable,kind='settlemen
     reference:standardRef({standard:'TCVN 9362:2012',clause:'4.6.6, equation (14)',formula:'S ≤ Su',sourceUrl:FULL_TEXT}),
   };
 }
+
+
+export function layerSummationSettlement({layers,beta=0.8}) {
+  if (!Array.isArray(layers)||layers.length===0) throw new TypeError('layers are required');
+  if (Number(beta)!==0.8) throw new RangeError('TCVN 9362:2012 Appendix C.1.6 uses beta = 0.8');
+  let settlementM=0;
+  const detail=layers.map((layer,i)=>{
+    const p=Number(layer.averageAdditionalPressureKpa);
+    const h=Number(layer.thicknessM);
+    const E=Number(layer.deformationModulusKpa);
+    if (!(p>=0)) throw new RangeError(`layers[${i}].averageAdditionalPressureKpa must be >= 0`);
+    if (!(h>0)) throw new RangeError(`layers[${i}].thicknessM must be > 0`);
+    if (!(E>0)) throw new RangeError(`layers[${i}].deformationModulusKpa must be > 0`);
+    if (!layer.pressureSource) throw new TypeError(`layers[${i}].pressureSource is required`);
+    if (!layer.modulusSource) throw new TypeError(`layers[${i}].modulusSource is required`);
+    const s=0.8*p*h/E;
+    settlementM+=s;
+    return {...layer,settlementMm:round(s*1000,4)};
+  });
+  return standardResult({
+    value:round(settlementM*1000,3),unit:'mm',formulaId:'TCVN9362-2012-C.1.6',
+    reference:standardRef({standard:'TCVN 9362:2012',clause:'Appendix C, C.1.6',formula:'S=β·Σ(pi·hi/Ei), β=0.8',sourceUrl:FULL_TEXT}),
+    inputs:{beta:0.8,layers:detail},
+    warnings:['pi must be the average additional vertical pressure for each layer derived according to Appendix C stress distribution; Ei must come from the geotechnical investigation/test basis.'],
+  });
+}
+
+export function checkSettlementLimit({settlementMm,allowableMm,allowableSource}) {
+  requireNonNegative('settlementMm',settlementMm);
+  requirePositive('allowableMm',allowableMm);
+  if (!allowableSource) throw new TypeError('allowableSource is required');
+  return {
+    settlementMm:Number(settlementMm),allowableMm:Number(allowableMm),pass:Number(settlementMm)<=Number(allowableMm),
+    allowableSource:String(allowableSource),level:'engineering-review',
+    reference:standardRef({standard:'TCVN 9362:2012',clause:'4.6.6 equation (14); allowable deformation per 4.6.21-4.6.27/Table 16 as applicable',formula:'S≤Su',sourceUrl:FULL_TEXT}),
+  };
+}

@@ -52,6 +52,7 @@ Implemented evidence:
 - 4.6.18: preliminary sizing basis using conventional resistance R0.
 - 4.6.19: eccentric-foundation edge pressure ≤ 1.2R and corner pressure ≤ 1.5R.
 - 4.6.6 Eq. (14): calculated deformation S ≤ allowable Su.
+- Appendix C, C.1.6: layer-summation settlement S=0.8Σ(pi hi/Ei), with pi and Ei required as sourced geotechnical/stress-distribution inputs.
 - Appendix D, D.2 Eq. (D.1)-(D.2): conventional resistance adjustment for width/depth within the Appendix D applicability envelope.
 
 ## TCVN 10304:2025 — Pile foundations
