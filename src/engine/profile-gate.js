@@ -10,6 +10,7 @@ export function createEngineeringProfile(input) {
     clauseMap:Array.isArray(input.clauseMap) ? structuredClone(input.clauseMap) : [],
     referenceCases:Array.isArray(input.referenceCases) ? structuredClone(input.referenceCases) : [],
     independentReviews:Array.isArray(input.independentReviews) ? structuredClone(input.independentReviews) : [],
+    pendingGaps:Array.isArray(input.pendingGaps) ? structuredClone(input.pendingGaps) : [],
     status:String(input.status ?? 'reference-confirmed'),
   };
 }
@@ -21,6 +22,7 @@ export function assessProfileReadiness(profile) {
   if (!profile.applicability) blockers.push('applicability-missing');
   if (!Array.isArray(profile.clauseMap) || profile.clauseMap.length===0) blockers.push('clause-map-missing');
   if (!Array.isArray(profile.referenceCases) || profile.referenceCases.length===0) blockers.push('reference-cases-missing');
+  if ((profile.pendingGaps ?? []).length>0) blockers.push('standard-coverage-incomplete');
   const approved=(profile.independentReviews ?? []).some((review)=>review.outcome==='approved' && review.reviewer && review.reviewedAt);
   if (!approved) blockers.push('independent-review-missing');
   return {
