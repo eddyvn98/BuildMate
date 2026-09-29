@@ -75,3 +75,22 @@ function round(value, digits = 2) {
   const factor = 10 ** digits;
   return Math.round(value * factor) / factor;
 }
+
+
+export function calculateVoltageDrop({
+  currentA,lengthM,resistanceOhmPerKm,reactanceOhmPerKm=0,powerFactor=1,voltageV,phase='single'
+}) {
+  requirePositive('currentA',currentA); requirePositive('lengthM',lengthM); requireNonNegative('resistanceOhmPerKm',resistanceOhmPerKm);
+  requireNonNegative('reactanceOhmPerKm',reactanceOhmPerKm); requireRatio('powerFactor',powerFactor); requirePositive('voltageV',voltageV);
+  const sinPhi=Math.sqrt(Math.max(0,1-Number(powerFactor)**2));
+  const z=Number(resistanceOhmPerKm)*Number(powerFactor)+Number(reactanceOhmPerKm)*sinPhi;
+  const factor=phase==='three' ? Math.sqrt(3) : 2;
+  const dropV=factor*Number(currentA)*(Number(lengthM)/1000)*z;
+  return {dropV:round(dropV),dropPercent:round(dropV/Number(voltageV)*100),level:'engineering-review',formulaId:'phaseFactor*I*L*(R*cosphi+X*sinphi)'};
+}
+
+export function checkProtectionDisconnection({faultCurrentA,clearingTimeS,maxClearingTimeS,source}) {
+  requirePositive('faultCurrentA',faultCurrentA); requirePositive('clearingTimeS',clearingTimeS); requirePositive('maxClearingTimeS',maxClearingTimeS);
+  if (!source) throw new TypeError('source is required');
+  return {faultCurrentA:Number(faultCurrentA),clearingTimeS:Number(clearingTimeS),maxClearingTimeS:Number(maxClearingTimeS),pass:Number(clearingTimeS)<=Number(maxClearingTimeS),source:String(source),level:'engineering-review'};
+}

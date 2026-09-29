@@ -62,3 +62,29 @@ function round(value, digits = 2) {
   const factor = 10 ** digits;
   return Math.round(value * factor) / factor;
 }
+
+
+export function checkFoundationBearing({serviceLoadKn,areaM2,allowableBearingKpa,source}) {
+  requirePositive('serviceLoadKn',serviceLoadKn);
+  requirePositive('areaM2',areaM2);
+  requirePositive('allowableBearingKpa',allowableBearingKpa);
+  if (!source) throw new TypeError('source is required');
+  const appliedKpa=Number(serviceLoadKn)/Number(areaM2);
+  return {
+    appliedBearingKpa:round(appliedKpa),
+    allowableBearingKpa:Number(allowableBearingKpa),
+    utilization:round(appliedKpa/Number(allowableBearingKpa),4),
+    pass:appliedKpa<=Number(allowableBearingKpa),
+    source:String(source),
+    level:'engineering-review',
+    warning:'Settlement, eccentricity and geotechnical failure modes require the verified foundation profile and site investigation.',
+  };
+}
+
+export function checkFoundationEccentricity({resultantEccentricityM,foundationWidthM,limitRatio=1/6}) {
+  requireNonNegative('resultantEccentricityM',resultantEccentricityM);
+  requirePositive('foundationWidthM',foundationWidthM);
+  requirePositive('limitRatio',limitRatio);
+  const limitM=Number(foundationWidthM)*Number(limitRatio);
+  return {eccentricityM:Number(resultantEccentricityM),limitM:round(limitM),pass:Number(resultantEccentricityM)<=limitM,level:'engineering-review'};
+}

@@ -68,3 +68,24 @@ function round(value, digits = 1) {
   const factor = 10 ** digits;
   return Math.round(value * factor) / factor;
 }
+
+
+export function calculatePipeVelocity({flowLitersPerSecond,internalDiameterMm}) {
+  requirePositive('flowLitersPerSecond',flowLitersPerSecond);
+  requirePositive('internalDiameterMm',internalDiameterMm);
+  const flowM3s=Number(flowLitersPerSecond)/1000;
+  const diameterM=Number(internalDiameterMm)/1000;
+  const area=Math.PI*diameterM**2/4;
+  return {velocityMps:round(flowM3s/area,3),flowLitersPerSecond:Number(flowLitersPerSecond),internalDiameterMm:Number(internalDiameterMm),level:'engineering-review'};
+}
+
+export function calculateFullPipeManning({internalDiameterMm,slope,manningN}) {
+  requirePositive('internalDiameterMm',internalDiameterMm);
+  requirePositive('slope',slope);
+  requirePositive('manningN',manningN);
+  const d=Number(internalDiameterMm)/1000;
+  const area=Math.PI*d**2/4;
+  const hydraulicRadius=d/4;
+  const flowM3s=(1/Number(manningN))*area*hydraulicRadius**(2/3)*Number(slope)**0.5;
+  return {flowLitersPerSecond:round(flowM3s*1000,3),level:'engineering-review',formulaId:'Manning-full-pipe',warning:'Use only with project/profile values for slope and Manning n; this is not an automatic TCVN 7957 pipe selection.'};
+}
