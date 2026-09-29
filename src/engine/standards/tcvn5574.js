@@ -1,6 +1,6 @@
 import { standardRef, standardResult } from './common.js';
 const SOURCE='https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+5574%3A2018';
-const FULL_TEXT='https://kiemdinheverest.vn/storage/documents/November2019/03.TCVN5574_2018_917896.pdf';
+const FULL_TEXT='https://www.rds.com.vn/TCXD1/TCVN5574-2018.pdf';
 
 export function rectangularFlexuralCapacity({
   bMm,h0Mm,RbMpa,RsMpa,AsMm2,RscMpa=0,AsCompressionMm2=0,aPrimeMm=0,xiR,materialSource
@@ -69,5 +69,52 @@ export function rectangularShearCheck({
       standardRef({standard:'TCVN 5574:2018',clause:'8.1.3.3.1, equations (92)-(96)',formula:'qsw=Rsw Asw/sw; Q1≤Qb,1+Qsw,1; Qb,1=0.5Rbtbh0; Qsw,1=qswh0; qsw≥0.25Rbtb',sourceUrl:FULL_TEXT}),
     ],
     warnings:stirrupsCounted?[]:['Transverse reinforcement does not satisfy equation (96), so Qsw is not counted in this simplified check.'],
+  };
+}
+
+
+const CONCRETE=Object.freeze({
+  B15:{Rb:8.5,Rbt:0.75,Eb:24000},
+  B20:{Rb:11.5,Rbt:0.90,Eb:27500},
+  B25:{Rb:14.5,Rbt:1.05,Eb:30000},
+  B30:{Rb:17.0,Rbt:1.15,Eb:32500},
+  B35:{Rb:19.5,Rbt:1.30,Eb:34500},
+  B40:{Rb:22.0,Rbt:1.40,Eb:36000},
+  B45:{Rb:25.0,Rbt:1.50,Eb:37000},
+  B50:{Rb:27.5,Rbt:1.60,Eb:38000},
+  B55:{Rb:30.0,Rbt:1.70,Eb:39000},
+  B60:{Rb:33.0,Rbt:1.80,Eb:39500},
+});
+
+const REBAR=Object.freeze({
+  'CB240-T':{Rs:210,Rsc:210,Rsw:170,Es:200000},
+  'CB300-T':{Rs:260,Rsc:260,Rsw:210,Es:200000},
+  'CB300-V':{Rs:260,Rsc:260,Rsw:210,Es:200000},
+  'CB400-V':{Rs:350,Rsc:350,Rsw:280,Es:200000},
+  'CB500-V':{Rs:435,Rsc:435,Rsw:300,Es:200000},
+});
+
+export function concreteDesignProperties(strengthClass) {
+  const row=CONCRETE[strengthClass];
+  if (!row) throw new RangeError('Unsupported concrete class in implemented TCVN 5574 table subset');
+  return {
+    strengthClass,...row,unit:'MPa',level:'engineering-review',
+    references:[
+      standardRef({standard:'TCVN 5574:2018',clause:'6.1.4, Table 7',sourceUrl:FULL_TEXT,note:'Design strengths Rb and Rbt for ULS.'}),
+      standardRef({standard:'TCVN 5574:2018',clause:'6.1.5, Table 10',sourceUrl:FULL_TEXT,note:'Initial modulus of elasticity Eb.'}),
+    ],
+  };
+}
+
+export function rebarDesignProperties(steelClass) {
+  const row=REBAR[steelClass];
+  if (!row) throw new RangeError('Unsupported reinforcement class in implemented TCVN 5574 table subset');
+  return {
+    steelClass,...row,unit:'MPa',level:'engineering-review',
+    references:[
+      standardRef({standard:'TCVN 5574:2018',clause:'6.2.2, Table 13',sourceUrl:FULL_TEXT,note:'Design tensile/compressive strengths Rs/Rsc for ULS.'}),
+      standardRef({standard:'TCVN 5574:2018',clause:'6.2.2, Table 14',sourceUrl:FULL_TEXT,note:'Design transverse reinforcement strength Rsw.'}),
+      standardRef({standard:'TCVN 5574:2018',clause:'6.2.3.3',formula:'Es=2.0×10^5 MPa for reinforcing bars',sourceUrl:FULL_TEXT}),
+    ],
   };
 }

@@ -21,6 +21,10 @@ Implemented evidence:
 Official status/source: https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+5574%3A2018
 
 Implemented evidence:
+- 6.1.4 / Table 7: common concrete design strengths Rb/Rbt.
+- 6.1.5 / Table 10: common concrete elastic modulus Eb.
+- 6.2.2 / Tables 13-14: common reinforcement Rs/Rsc/Rsw.
+- 6.2.3.3: Es = 2.0×10^5 MPa for reinforcing bars.
 - 8.1.2, Eq. (33): M ≤ Mu.
 - Eq. (34): rectangular flexural resistance.
 - Eq. (35): concrete compression-zone depth for the Eq. (34) branch.

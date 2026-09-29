@@ -6,8 +6,8 @@ export const STANDARD_CLAUSE_COVERAGE=Object.freeze([
   },
   {
     issue:5,standard:'TCVN 5574:2018',
-    implemented:['8.1.2 equations (33)-(35) rectangular flexure','8.1.3.2 Eq.(88)','8.1.3.3.1 Eq.(92)-(96) simplified shear branch'],
-    pending:['material tables/profile','T/I sections','full inclined-section search','columns/second-order','SLS/crack/deflection','detailing','full reference-case review'],
+    implemented:['6.1.4/Table 7 concrete Rb/Rbt subset','6.1.5/Table 10 concrete Eb subset','6.2.2/Table 13 rebar Rs/Rsc subset','6.2.2/Table 14 rebar Rsw subset','6.2.3.3 rebar Es','8.1.2 equations (33)-(35) rectangular flexure','8.1.3.2 Eq.(88)','8.1.3.3.1 Eq.(92)-(96) simplified shear branch'],
+    pending:['remaining material classes/condition factors','T/I sections','full inclined-section search','columns/second-order','SLS/crack/deflection','detailing','full reference-case review'],
   },
   {
     issue:6,standard:'TCVN 9362:2012 + TCVN 10304:2025',
