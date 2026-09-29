@@ -85,3 +85,28 @@ Implemented evidence:
 ## Remaining rule
 
 Implemented clauses are not equivalent to a complete verified design profile. Items still listed in `src/engine/standards/coverage.js` stay blocked until their source clauses and reference cases are implemented and independently reviewed.
+
+
+## QCVN 12:2014/BXD — Mandatory building electrical requirements
+
+Official legal source: https://vbpl.vn/FileData/TW/Lists/vbpq/Attachments/111843/VanBanGoc_QC%2012-2014-BXD.pdf
+
+Implemented evidence:
+- 2.6.3.1 Eq. (3)-(4): overload protection must satisfy IB ≤ In ≤ Iz and I2 ≤ 1.45 Iz.
+- 2.6.5.1: prospective short-circuit current at relevant points must be determined by calculation or measurement.
+
+## TCVN 7447-4-41:2010 — Protection against electric shock
+
+Official status/source: https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+7447-4-41%3A2010
+
+Implemented evidence:
+- 411.3.2.2 / Table 41.1: maximum disconnection times for TN/TT final circuits ≤ 32 A.
+
+## TCVN 7447-5-52:2010 — Wiring systems
+
+Official status/source: https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+7447-5-52%3A2010
+
+Implemented evidence:
+- Appendix C / Table C.52.2: D1/D2 copper current-carrying capacities for PVC/XLPE, two/three loaded conductors.
+- Table C.52.3 item 1: grouping factors for bundled/enclosed circuits.
+- Other installation methods and correction tables remain explicit coverage gaps.
