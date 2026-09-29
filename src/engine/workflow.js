@@ -4,6 +4,8 @@ import { buildCashflow } from './cashflow.js';
 import { readValue } from './project.js';
 import { estimateQuantities } from './quantity.js';
 import { engineeringGates, validatePlanningInputs } from './validation.js';
+import { buildAlternatives } from './alternatives.js';
+import { analyzeBudgetFit } from './optimizer.js';
 
 export function runPlanningWorkflow(project) {
   const issues = validatePlanningInputs(project);
@@ -17,9 +19,12 @@ export function runPlanningWorkflow(project) {
   const budgets = calculateBudget({ floorAreaM2: areas.floorArea.value, quantities });
   const preferred = budgets.find((scenario) => scenario.key === readValue(project, 'design.finishLevel', 'balanced')) ?? budgets[1];
   const cashflow = buildCashflow(preferred.total);
+  const targetVnd = Number(readValue(project, 'budget.totalVnd', 0));
+  const alternatives = buildAlternatives(budgets, targetVnd || null);
+  const budgetFit = analyzeBudgetFit({ targetVnd, estimatedVnd: preferred.total });
 
   return {
     status: 'ready', issues, gates: engineeringGates(project),
-    results: { areas, quantities, budgets, cashflow, preferredScenario: preferred.key },
+    results: { areas, quantities, budgets, alternatives, budgetFit, cashflow, preferredScenario: preferred.key },
   };
 }

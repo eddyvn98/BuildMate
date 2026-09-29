@@ -6,6 +6,11 @@ import { estimateQuantities } from '../src/engine/quantity.js';
 import { calculateBudget } from '../src/engine/budget.js';
 import { buildCashflow } from '../src/engine/cashflow.js';
 import { runPlanningWorkflow } from '../src/engine/workflow.js';
+import { analyzeBudgetFit } from '../src/engine/optimizer.js';
+import { buildAlternatives } from '../src/engine/alternatives.js';
+import { overridePriceBook } from '../src/engine/price-book.js';
+import { createLedger, addActual, summarizeActuals } from '../src/engine/actuals.js';
+import { canIssueConstructionReady } from '../src/engine/standards.js';
 
 function readyProject() {
   let p = createProject({ id: 'test-project' });
@@ -51,4 +56,40 @@ test('cashflow reconciles exactly to total', () => {
   const flow = buildCashflow(total);
   assert.equal(flow.at(-1).accumulated, total);
   assert.equal(flow.reduce((sum, item) => sum + item.amount, 0), total);
+});
+
+test('budget optimizer only proposes approval-required non-safety tradeoffs', () => {
+  const fit = analyzeBudgetFit({ targetVnd: 2_400_000_000, estimatedVnd: 3_000_000_000 });
+  assert.ok(fit.actions.length > 0);
+  assert.ok(fit.actions.every((action) => action.requiresApproval));
+  assert.ok(fit.actions.every((action) => !action.category.includes('safety')));
+});
+
+test('alternatives preserve locked safety scope', () => {
+  const alternatives = buildAlternatives([
+    { key: 'economy', label: 'Tiết kiệm', total: 2_500_000_000 },
+    { key: 'balanced', label: 'Cân bằng', total: 3_000_000_000 },
+  ], 2_800_000_000);
+  assert.equal(alternatives[0].targetStatus, 'within-budget');
+  assert.equal(alternatives[1].targetStatus, 'over-budget');
+  assert.ok(alternatives.every((item) => item.lockedSafetyScope));
+});
+
+test('price override records provenance', () => {
+  const book = overridePriceBook({ id: 'base', items: { rebar: 17000 } }, { rebar: 16500 }, { sourceLabel: 'supplier quote' });
+  assert.equal(book.items.rebar, 16500);
+  assert.equal(book.overrides.rebar.source, 'supplier quote');
+});
+
+test('actual-cost ledger reports variance', () => {
+  let ledger = createLedger();
+  ledger = addActual(ledger, { id: 'a', amountVnd: 100_000_000, status: 'paid' });
+  ledger = addActual(ledger, { id: 'b', amountVnd: 50_000_000, status: 'committed' });
+  const summary = summarizeActuals(ledger, 500_000_000);
+  assert.equal(summary.actualVnd, 150_000_000);
+  assert.equal(summary.remainingVnd, 350_000_000);
+});
+
+test('unverified standards modules cannot issue construction-ready results', () => {
+  assert.equal(canIssueConstructionReady('rc-design'), false);
 });
