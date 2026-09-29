@@ -58,6 +58,23 @@ export function exportProjectsJson() {
   return JSON.stringify({ schema: 'buildmate-projects-v2', projects: listProjects() }, null, 2);
 }
 
+export function importProjectsJson(text) {
+  const parsed = safeParse(text);
+  if (parsed?.schema !== 'buildmate-projects-v2' || !Array.isArray(parsed.projects)) {
+    throw new Error('Không đúng định dạng BuildMate projects v2.');
+  }
+  const current = listProjects();
+  const merged = new Map(current.map((item) => [item.id, item]));
+  for (const raw of parsed.projects) {
+    const project = hydrateProject(raw);
+    merged.set(project.id, project);
+  }
+  const projects = [...merged.values()];
+  writeCollection(projects);
+  if (projects[0]) localStorage.setItem(ACTIVE_KEY, projects[0].id);
+  return projects.length;
+}
+
 function readCollection() {
   const parsed = safeParse(localStorage.getItem(COLLECTION_KEY));
   return Array.isArray(parsed) ? parsed : [];

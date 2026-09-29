@@ -19,6 +19,7 @@ export function buildProjectReport(project, workflow) {
       budgetScenarios: result.budgets.map(({ key, label, total }) => ({ key, label, totalVnd: total })),
       preferredScenario: result.preferredScenario,
     },
+    priceBook: result.priceBook,
     engineering: result.engineering,
     gates: workflow.gates,
     issues: workflow.issues,
@@ -46,6 +47,7 @@ export function reportToHtml(report) {
   <h1>${escapeHtml(report.project.name)}</h1><p>${escapeHtml(report.project.province || '')} ${escapeHtml(report.project.district || '')}</p>
   <p class="warn">BuildMate report contains planning/indicative outputs unless a module is explicitly marked verified. It is not automatically a construction drawing or signed engineering design.</p>
   <h2>Tổng quan</h2><p>Diện tích đất: <b>${report.overview.landAreaM2} m²</b> · Tổng sàn dự kiến: <b>${report.overview.floorAreaM2} m²</b></p>
+  <h2>Đơn giá</h2><p><b>${escapeHtml(report.priceBook.sourceLabel || '')}</b> · hiệu lực ${escapeHtml(report.priceBook.effectiveDate || '')}</p>
   <h2>Ngân sách</h2><table><thead><tr><th>Phương án</th><th>Tổng</th></tr></thead><tbody>${budgetRows}</tbody></table>
   <h2>Khối lượng sơ bộ</h2><table><thead><tr><th>Hạng mục</th><th>Giá trị</th><th>Đơn vị</th><th>Mức</th></tr></thead><tbody>${quantityRows}</tbody></table>
   <h2>Giả định</h2><ul>${assumptions}</ul>

@@ -1,20 +1,23 @@
+import { summarizeActuals } from '../engine/actuals.js';
 import { functionalPlan, money, number, statusBadge } from './render.js';
 
 export function shell({ project, projects, workflow }) {
   return `
     <header class="hero">
       <div><span class="eyebrow">BuildMate V2</span><h1>Xây nhà từ nhu cầu đến kiểm soát kỹ thuật</h1><p>AI làm rõ nhu cầu; engine deterministic chịu trách nhiệm con số và trace.</p></div>
-      <div class="hero-actions"><button id="new-project" class="ghost">Dự án mới</button><button id="export-json" class="ghost">Xuất JSON</button><button id="export-html">Báo cáo HTML</button></div>
+      <div class="hero-actions"><button id="new-project" class="ghost">Dự án mới</button><button id="import-json" class="ghost">Nhập JSON</button><input id="import-json-file" type="file" accept="application/json" hidden><button id="export-json" class="ghost">Xuất JSON</button><button id="export-csv" class="ghost">BOQ CSV</button><button id="export-html">Báo cáo HTML</button></div>
     </header>
     <main class="grid">
       <section class="card wide">${projectBar(project, projects)}</section>
-      <section class="card">${chatPanel(project)}</section>
+      <section class="card">${chatPanel()}</section>
       <section class="card">${projectForm(project)}</section>
       <section class="card wide">${resultsPanel(workflow)}</section>
       <section class="card wide">${engineeringPanel(workflow)}</section>
       <section class="card">${assumptionsPanel(workflow)}</section>
       <section class="card">${planPanel(project)}</section>
+      <section class="card wide">${pricingPanel(project, workflow)}</section>
       <section class="card wide">${versionsPanel(project)}</section>
+      <section class="card wide">${actualsPanel(project, workflow)}</section>
       <section class="card wide">${tracePanel(workflow)}</section>
     </main>`;
 }
@@ -25,7 +28,7 @@ function projectBar(project, projects) {
     <button id="delete-project" class="danger ghost">Xóa dự án</button></div>`;
 }
 
-function chatPanel(project) {
+function chatPanel() {
   return `<h2>Trợ lý làm rõ</h2><p class="question" id="next-question"></p>
     <form id="chat-form"><textarea id="chat-text" placeholder="Ví dụ: đất 4x16 ở TP.HCM, 5 người, 3 tỷ, có ô tô"></textarea><button>Phân tích thông tin</button></form>
     <p class="hint">Biết gì nhập nấy; phần còn thiếu sẽ được giữ trạng thái rõ ràng.</p>`;
@@ -57,6 +60,22 @@ function projectForm(p) {
   </div></details>`;
 }
 
+function pricingPanel(p, workflow) {
+  const book = workflow.results?.priceBook;
+  return `<div class="section-head"><div><h2>Đơn giá dự án</h2><p class="hint">Để trống để dùng profile demo; nhập báo giá thật để override và lưu nguồn.</p></div><div class="price-source">${book ? `${escapeHtml(book.sourceLabel)} · ${escapeHtml(book.effectiveDate)}` : ''}</div></div>
+    <div class="form-grid">
+      ${input('Nguồn báo giá', 'pricing.sourceLabel', p.pricing.sourceLabel)}
+      ${input('Ngày báo giá', 'pricing.effectiveDate', p.pricing.effectiveDate, 'date')}
+      ${input('Bê tông (VND/m³)', 'pricing.items.concrete', p.pricing.items.concrete, 'number')}
+      ${input('Thép (VND/kg)', 'pricing.items.rebar', p.pricing.items.rebar, 'number')}
+      ${input('Xây tường (VND/m²)', 'pricing.items.masonry', p.pricing.items.masonry, 'number')}
+      ${input('Tô trát (VND/m²)', 'pricing.items.plaster', p.pricing.items.plaster, 'number')}
+      ${input('Sơn (VND/m²)', 'pricing.items.paint', p.pricing.items.paint, 'number')}
+      ${input('Điểm điện (VND/điểm)', 'pricing.items.electrical', p.pricing.items.electrical, 'number')}
+      ${input('Điểm nước (VND/điểm)', 'pricing.items.plumbing', p.pricing.items.plumbing, 'number')}
+    </div>`;
+}
+
 function input(label, path, obj, type = 'text', min = '', max = '', step = '') {
   return `<label>${label}<input data-path="${path}" type="${type}" value="${obj.value ?? ''}" min="${min}" max="${max}" step="${step}">${statusBadge(obj.state)}</label>`;
 }
@@ -79,7 +98,7 @@ function engineeringPanel(workflow) {
   const eng = workflow.results?.engineering;
   if (!eng || eng.status !== 'ready') return '<h2>Kỹ thuật sơ bộ</h2><p class="hint">Cần đủ thông tin quy mô cơ bản.</p>';
   const m = eng.modules;
-  return `<h2>Kỹ thuật sơ bộ</h2><p class="hint">Các kết quả dưới đây phục vụ planning/engineering review; không tự động là hồ sơ thi công.</p>
+  return `<h2>Kỹ thuật sơ bộ</h2><p class="hint">Planning/engineering review; không tự động là hồ sơ thi công.</p>
     <div class="engineering-grid">
       ${engineeringCard('Kết cấu', m.structure.status, m.structure.gravity ? `${number(m.structure.gravity.value, 'kN')} tải đứng sơ bộ` : '')}
       ${engineeringCard('Móng nông', m.foundation.status, m.foundation.result ? `${number(m.foundation.result.value, 'm²')} diện tích chịu tải tương đương` : m.foundation.message)}
@@ -107,6 +126,15 @@ function versionsPanel(project) {
   const versions = project.designVersions ?? [];
   return `<div class="section-head"><div><h2>Phiên bản thiết kế</h2><p class="hint">Lưu checkpoint để so sánh quy mô và ngân sách.</p></div><button id="save-version">Lưu phương án hiện tại</button></div>
     <div class="version-list">${versions.length ? versions.map((v) => `<article><strong>${escapeHtml(v.label)}</strong><span>${v.inputs.storeys} tầng · ${v.summary.floorAreaM2} m²</span><b>${money(v.summary.estimatedBudgetVnd)}</b></article>`).join('') : '<p class="hint">Chưa lưu phương án nào.</p>'}</div>`;
+}
+
+function actualsPanel(project, workflow) {
+  const preferred = workflow.results?.budgets?.find((item) => item.key === workflow.results.preferredScenario);
+  const summary = summarizeActuals(project.actuals, preferred?.total ?? 0);
+  return `<div class="section-head"><div><h2>Thi công thực tế</h2><p class="hint">Theo dõi đã chi/đã cam kết so với phương án đang chọn.</p></div><div><b>${money(summary.actualVnd)}</b> / ${money(summary.budgetVnd)}</div></div>
+    <div class="actual-metrics">${metric('Đã thanh toán', money(summary.paidVnd))}${metric('Đã cam kết', money(summary.committedVnd))}${metric('Còn lại', money(summary.remainingVnd))}</div>
+    <form id="actual-form" class="actual-form"><input id="actual-description" placeholder="Hạng mục / hóa đơn" required><input id="actual-amount" type="number" min="1" placeholder="Số tiền" required><select id="actual-status"><option value="paid">Đã thanh toán</option><option value="committed">Đã cam kết</option></select><button>Thêm chi phí</button></form>
+    <div class="actual-list">${project.actuals.entries.length ? project.actuals.entries.map((item) => `<div><span><b>${escapeHtml(item.description || item.category)}</b><small>${escapeHtml(item.date)} · ${escapeHtml(item.status)}</small></span><strong>${money(item.amountVnd)}</strong><button class="ghost danger" data-remove-actual="${item.id}">Xóa</button></div>`).join('') : '<p class="hint">Chưa có chi phí thực tế.</p>'}</div>`;
 }
 
 function tracePanel(workflow) {

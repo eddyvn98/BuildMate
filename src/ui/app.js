@@ -1,10 +1,11 @@
 import { interpretHomeownerText, nextQuestion } from '../ai/intake.js';
+import { addActual, removeActual } from '../engine/actuals.js';
 import { addDesignVersion, createDesignVersion } from '../engine/design-versions.js';
 import { createProject, renameProject, setField } from '../engine/project.js';
 import { runPlanningWorkflow } from '../engine/workflow.js';
 import { downloadText } from '../report/download.js';
 import { buildProjectReport, quantitiesToCsv, reportToHtml } from '../report/project-report.js';
-import { activateProject, deleteProject, exportProjectsJson, listProjects, loadProject, saveProject } from '../storage.js';
+import { activateProject, deleteProject, exportProjectsJson, importProjectsJson, listProjects, loadProject, saveProject } from '../storage.js';
 import { shell } from './panels.js';
 
 let project = loadProject() ?? createAndSave();
@@ -43,11 +44,7 @@ function bindFieldInputs() {
 
 function bindActions() {
   el('chat-form')?.addEventListener('submit', onChat);
-  el('project-select')?.addEventListener('change', (event) => {
-    activateProject(event.target.value);
-    project = loadProject();
-    render();
-  });
+  el('project-select')?.addEventListener('change', (event) => switchProject(event.target.value));
   el('project-name')?.addEventListener('change', (event) => {
     project = renameProject(project, event.target.value);
     saveProject(project);
@@ -68,12 +65,34 @@ function bindActions() {
     saveProject(project);
     render();
   });
+  el('actual-form')?.addEventListener('submit', onActual);
+  document.querySelectorAll('[data-remove-actual]').forEach((button) => button.addEventListener('click', () => {
+    project = { ...project, actuals: removeActual(project.actuals, button.dataset.removeActual) };
+    saveProject(project);
+    render();
+  }));
+  bindImportExport();
+}
+
+function bindImportExport() {
   el('export-json')?.addEventListener('click', () => downloadText('buildmate-projects.json', exportProjectsJson(), 'application/json'));
   el('export-html')?.addEventListener('click', () => {
     if (!workflow.results) return;
     const report = buildProjectReport(project, workflow);
     downloadText(`${safeName(project.name)}-buildmate.html`, reportToHtml(report), 'text/html;charset=utf-8');
+  });
+  el('export-csv')?.addEventListener('click', () => {
+    if (!workflow.results) return;
+    const report = buildProjectReport(project, workflow);
     downloadText(`${safeName(project.name)}-boq.csv`, quantitiesToCsv(report), 'text/csv;charset=utf-8');
+  });
+  el('import-json')?.addEventListener('click', () => el('import-json-file').click());
+  el('import-json-file')?.addEventListener('change', async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    importProjectsJson(await file.text());
+    project = loadProject() ?? createAndSave();
+    render();
   });
 }
 
@@ -84,6 +103,27 @@ function onChat(event) {
   const parsed = interpretHomeownerText(text);
   for (const item of parsed.updates) project = setField(project, item.path, item.value);
   saveProject(project);
+  render();
+}
+
+function onActual(event) {
+  event.preventDefault();
+  const amountVnd = Number(el('actual-amount').value);
+  const description = el('actual-description').value.trim();
+  const status = el('actual-status').value;
+  if (!(amountVnd > 0) || !description) return;
+  project = {
+    ...project,
+    actuals: addActual(project.actuals, { amountVnd, description, status, category: 'construction' }),
+    updatedAt: new Date().toISOString(),
+  };
+  saveProject(project);
+  render();
+}
+
+function switchProject(id) {
+  activateProject(id);
+  project = loadProject();
   render();
 }
 
