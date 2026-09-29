@@ -1,53 +1,59 @@
 # Release Status
 
-## Software-complete prototype
+Status date: 2026-09-29
+Application version: 0.4.0
 
-BuildMate V2 is a deployable local-first web application with:
+## Deployable software
 
-- multi-project persistence;
-- homeowner intake;
-- explicit field states;
-- planning-area calculation;
-- indicative quantities;
-- project price overrides with provenance;
-- budget alternatives and safe budget-gap analysis;
-- cash-flow staging;
-- engineering preview workspace;
-- simple functional block plan;
-- design-version checkpoints;
+BuildMate now has two deployable surfaces:
+
+- static homeowner planning UI via Nginx;
+- authenticated Node.js backend API with optional JSON-file persistence.
+
+The repository includes Docker packaging for the web app and API plus a Compose stack with a persistent data volume.
+
+## Product and workflow capabilities
+
+- multi-project workspace and import/export;
+- homeowner intake with explicit information states;
+- deterministic planning-area, quantity, budget and cash-flow engines;
+- sourced project-specific price overrides;
+- design-version snapshots;
 - construction actual-cost ledger;
-- JSON project backup/restore;
-- HTML report and BOQ CSV export;
-- syntax checking and automated tests;
-- Docker/Nginx deployment packaging.
+- immutable backend calculation runs;
+- document metadata storage;
+- HTML reports and BOQ CSV export;
+- project-date/locality-aware planning-rule resolution;
+- QCVN 01:2021/BXD baseline through 2026-12-31 and QCVN 01:2026/BXD baseline from 2027-01-01.
 
-## Engineering modules implemented as review/planning primitives
+## Engineering-review primitives implemented
 
-- gravity load aggregation;
-- simple-beam mechanics primitive;
-- equivalent foundation bearing-area calculation from **supplied** allowable pressure;
-- conceptual pile count from **supplied** working pile capacity;
-- service-current calculation;
-- cable ampacity check from **supplied** ampacity;
-- PE adiabatic area from **supplied** fault current/time/k;
-- domestic water/storage planning;
-- pump-head arithmetic;
-- HVAC capacity planning;
-- productivity-based schedule duration.
+- sourced explicit load combinations;
+- sourced natural-condition inputs;
+- gravity-load aggregation and simple-beam mechanics;
+- RC demand/capacity verification against supplied capacities;
+- foundation equivalent-area, bearing-utilization and eccentricity checks;
+- conceptual pile count from supplied working capacity;
+- service-current and cable ampacity checks;
+- voltage-drop calculation;
+- protection clearing-time check;
+- PE adiabatic area from supplied fault current/time/k;
+- domestic water/storage and pump-head arithmetic;
+- pipe velocity and Manning full-pipe drainage flow;
+- HVAC planning capacity;
+- productivity-based duration.
 
-## Intentionally blocked from construction-ready status
+## Construction-ready gate
 
-BuildMate does not claim final design compliance for:
+No structural, foundation, electrical or water/drainage profile is marked construction-ready yet.
 
-- local parcel planning/legal approval;
-- load combinations and natural-condition actions;
-- RC member sizing/reinforcement/detailing;
-- shallow/pile foundation final design;
-- cable/CB/earthing final selection;
-- water/drainage pipe sizing;
-- HVAC equipment/system design;
-- fire-safety design.
+The code requires all of the following before a profile can pass:
 
-Why: public standard metadata confirms which documents are current, but full clause/formula implementation, licensed source access where needed, project-specific inputs, independent reference cases and qualified engineering review are still required.
+1. exact standard and version;
+2. applicability;
+3. source;
+4. verified clause/formula mapping and units;
+5. automated reference cases;
+6. recorded qualified independent review.
 
-The application enforces this distinction in its standard registry and gates rather than presenting a planning calculation as a signed design.
+Issues #4 through #8 remain open specifically for that verification work. The missing independent professional review is an external approval step, not something BuildMate should fabricate or auto-approve.

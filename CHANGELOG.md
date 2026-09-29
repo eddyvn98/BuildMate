@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.4.0 - 2026-09-29
+
+### Added
+
+- Authenticated backend API with per-user project ownership.
+- Immutable calculation runs and design-version endpoints.
+- Persistent JSON-backed server store for projects, runs and document metadata.
+- API persistence for sourced project price overrides and actual construction costs.
+- AI intake API that returns candidate updates only; deterministic workflow remains calculator of record.
+- Local-first project import path.
+- Locality-aware planning rules with project-date-driven QCVN 01:2021/BXD to QCVN 01:2026/BXD transition.
+- Engineering profile readiness gates for source/version, applicability, clause maps, reference cases and independent review.
+- Explicit sourced load-combination and natural-condition primitives.
+- RC demand/capacity review workflow without inferred material strengths/capacities.
+- Foundation bearing-utilization and eccentricity checks from explicit inputs.
+- Electrical voltage-drop and protection-disconnection checks.
+- Water pipe velocity and drainage Manning-flow primitives.
+- Static web + persistent API Docker Compose deployment.
+
+### Completed backlog
+
+- #9 locality-aware planning rules and QCVN 01 transition.
+- #10 backend, authentication and collaboration API boundary.
+
+### Engineering verification boundary
+
+Issues #4 through #8 remain open because construction-ready status requires exact standard clause/formula mapping, validated reference cases and qualified independent professional review. BuildMate now enforces those requirements in code instead of silently treating review primitives as final design.
+
 ## 0.3.0 - 2026-09-29
 
 ### Added
