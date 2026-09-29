@@ -1,8 +1,8 @@
 export const STANDARD_CLAUSE_COVERAGE=Object.freeze([
   {
     issue:4,standard:'TCVN 2737:2023',
-    implemented:['6.3','6.4','6.5','6.7 Eq.(3)-(4)','6.8 Eq.(5)-(6)','8.3.1/Table 4 residential subset','8.3.3','8.3.5(a)'],
-    pending:['permanent-load source tables for project materials','wind/natural-condition project profile','full reference-case review'],
+    implemented:['6.3','6.4','6.5','6.7 Eq.(3)-(4)','6.8 Eq.(5)-(6)','7.1-7.2/Table 1 permanent-load provenance and gamma_f','8.3.1/Table 4 residential subset','8.3.3','8.3.5(a)','10.2.2 Eq.(10) wind pressure','10.2.3 + QCVN 02:2022/BXD 5.2.2 wind-zone W0'],
+    pending:['full k(ze) terrain/height tables','full aerodynamic coefficient cases','gust-factor cases','complete QCVN 02 locality table ingestion','full reference-case review'],
   },
   {
     issue:5,standard:'TCVN 5574:2018',
