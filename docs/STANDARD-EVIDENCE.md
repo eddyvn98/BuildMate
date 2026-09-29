@@ -38,7 +38,10 @@ Implemented evidence:
 - 8.1.3.3.1 Eq. (92)-(96): transverse-reinforcement force per length and simplified shear checks.
 - 8.2.2.1.3 Eq. (155) / Table 17: crack-width acceptance limits.
 - 8.2.2.3.1 Eq. (166): direct crack-width equation from sourced coefficients/stress/spacing.
+- 10.3.2: minimum clear spacing between reinforcement bars.
 - 10.3.3.1: minimum longitudinal reinforcement ratio.
+- 10.3.4.3: transverse-reinforcement spacing by shear requirement.
+- 10.3.4.4: transverse restraint spacing for longitudinal compression bars.
 - The engine rejects Eq. (34) when ξ > ξR rather than silently applying the wrong branch.
 
 ## TCVN 9362:2012 — Foundation soils

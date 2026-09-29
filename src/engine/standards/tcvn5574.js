@@ -178,3 +178,66 @@ export function minimumLongitudinalReinforcement({
     reference:standardRef({standard:'TCVN 5574:2018',clause:'10.3.3.1',formula:'μs=(As/(b h0))·100%; minimum 0.1% for flexure/eccentric tension and interpolation to 0.25% for eccentric compression slenderness',sourceUrl:FULL_TEXT}),
   };
 }
+
+
+export function minimumClearBarSpacing({barDiameterMm,position='bottom',layerCount=1}) {
+  requirePositive('barDiameterMm',barDiameterMm);
+  if (!Number.isInteger(layerCount)||layerCount<1) throw new RangeError('layerCount must be integer >= 1');
+  let codeMinimum;
+  if (position==='bottom'&&layerCount<=2) codeMinimum=25;
+  else if (position==='top'&&layerCount<=2) codeMinimum=30;
+  else if ((position==='bottom'&&layerCount>=3)||position==='vertical') codeMinimum=50;
+  else throw new RangeError('Unsupported TCVN 5574 clause 10.3.2 position/layer case');
+  return {
+    minimumClearSpacingMm:Math.max(Number(barDiameterMm),codeMinimum),
+    barDiameterMm:Number(barDiameterMm),position,layerCount,codeMinimumMm:codeMinimum,
+    level:'engineering-review',
+    reference:standardRef({standard:'TCVN 5574:2018',clause:'10.3.2',formula:'clear spacing ≥ max(bar diameter, code minimum)',sourceUrl:FULL_TEXT}),
+  };
+}
+
+export function transverseReinforcementMaxSpacing({
+  effectiveDepthMm,concreteClass='B25',shearRequiresStirrups=true,memberHeightMm=300
+}) {
+  requirePositive('effectiveDepthMm',effectiveDepthMm);
+  requirePositive('memberHeightMm',memberHeightMm);
+  const highStrength=/^B(7[0-9]|8[0-9]|9[0-9]|100)$/.test(concreteClass);
+  let maxSpacing;
+  let clause;
+  if (shearRequiresStirrups) {
+    maxSpacing=Math.min(0.5*Number(effectiveDepthMm),highStrength?250:300);
+    clause='10.3.4.3 first paragraph';
+  } else {
+    const exempt=Number(memberHeightMm)<150;
+    if (exempt) {
+      return {
+        required:false,reason:'beam/rib height < 150 mm and concrete alone carries design shear',
+        level:'engineering-review',
+        reference:standardRef({standard:'TCVN 5574:2018',clause:'10.3.4.3',sourceUrl:FULL_TEXT}),
+      };
+    }
+    maxSpacing=Math.min(0.75*Number(effectiveDepthMm),highStrength?400:500);
+    clause='10.3.4.3 third paragraph';
+  }
+  return {
+    required:true,maximumSpacingMm:round(maxSpacing,2),effectiveDepthMm:Number(effectiveDepthMm),concreteClass,shearRequiresStirrups,
+    level:'engineering-review',
+    reference:standardRef({standard:'TCVN 5574:2018',clause,sourceUrl:FULL_TEXT}),
+  };
+}
+
+export function compressionBarRestraintSpacing({
+  longitudinalBarDiameterMm,compressionSteelRatioPercent=0,concreteClass='B25'
+}) {
+  requirePositive('longitudinalBarDiameterMm',longitudinalBarDiameterMm);
+  requireNonNegative('compressionSteelRatioPercent',compressionSteelRatioPercent);
+  const highStrength=/^B(7[0-9]|8[0-9]|9[0-9]|100)$/.test(concreteClass);
+  const highRatio=Number(compressionSteelRatioPercent)>1.5;
+  const multiple=highRatio?10:15;
+  const absolute=highRatio?(highStrength?250:300):(highStrength?400:500);
+  return {
+    maximumSpacingMm:Math.min(multiple*Number(longitudinalBarDiameterMm),absolute),
+    level:'engineering-review',
+    reference:standardRef({standard:'TCVN 5574:2018',clause:'10.3.4.4',formula:`s≤${multiple}d and s≤${absolute}mm for selected case`,sourceUrl:FULL_TEXT}),
+  };
+}
