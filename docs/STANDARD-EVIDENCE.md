@@ -84,7 +84,10 @@ Implemented evidence:
 - 6.3: required pressure at the highest/most remote fixture.
 - 6.5: domestic steel-pipe velocity limits.
 - 6.6 / Table 8: pipe diameter lookup for total fixture equivalent units N ≤ 20.
+- 3.8-3.9: minimum fixture free-head requirements and 60 m maximum working head.
 - 6.7 / Eq. (2), Tables 9-10: housing design flow q = 0.2 α √N + K N.
+- 6.14 / Table 14: steel/cast-iron friction gradient i=Aq².
+- 6.16: local-loss allowance as a prescribed percentage of longitudinal friction loss.
 - 7.1: booster pumping required when external-network pressure is insufficient.
 - 7.7: pump design flow basis with/without storage tank.
 - 8.1 note 2: individual pressure-tank volume not over 20-25 m³.
@@ -97,6 +100,9 @@ Implemented evidence:
 - 5.3.2: Manning velocity equation.
 - Table 9: Manning n values by conduit/channel material.
 - 5.3.4 / Table 10: minimum drain diameters.
+- 5.3.5 / Table 11: maximum design fill ratio by sewer diameter.
+- 5.3.6 / Table 12: minimum self-cleansing wastewater velocity by diameter.
+- 5.3.9: maximum wastewater/stormwater velocities by pipe material.
 - 5.3.11: minimum 0.02 slope for rainwater-inlet connection to sewer.
 
 ## Remaining rule

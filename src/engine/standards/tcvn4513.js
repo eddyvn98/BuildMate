@@ -116,3 +116,47 @@ export function pressureTankCapacityLimit(volumeM3) {
     reference:standardRef({standard:'TCVN 4513:1988',clause:'8.1 note 2',formula:'individual pressure tank volume ≤ 20-25 m³',sourceUrl:FULL_TEXT}),
   };
 }
+
+
+export function steelCastIronFrictionGradient({resistanceA,flowLps}) {
+  if (!(Number(resistanceA)>0)) throw new RangeError('resistanceA must be > 0 and sourced from TCVN 4513 Table 14/hydraulic table');
+  if (!(Number(flowLps)>0)) throw new RangeError('flowLps must be > 0');
+  const i=Number(resistanceA)*Number(flowLps)**2;
+  return standardResult({
+    value:round(i,6),unit:'m/m',formulaId:'TCVN4513-1988-6.14',
+    reference:standardRef({standard:'TCVN 4513:1988',clause:'6.14, Table 14',formula:'i=A·q²',sourceUrl:FULL_TEXT}),
+    inputs:{resistanceA:Number(resistanceA),flowLps:Number(flowLps)},
+    warnings:['A must be selected from the applicable TCVN 4513 hydraulic table for pipe diameter/material and flow-unit convention.'],
+  });
+}
+
+export function localLossAllowance({frictionHeadM,networkType}) {
+  if (!(Number(frictionHeadM)>=0)) throw new RangeError('frictionHeadM must be >= 0');
+  const factors={
+    domestic:0.30,
+    domesticFireCombined:0.20,
+    production:0.20,
+    productionFireCombined:0.15,
+    fireOnly:0.10,
+  };
+  const factor=factors[networkType];
+  if (factor==null) throw new RangeError('Unsupported TCVN 4513 clause 6.16 networkType');
+  return standardResult({
+    value:round(Number(frictionHeadM)*factor,4),unit:'m',formulaId:'TCVN4513-1988-6.16',
+    reference:standardRef({standard:'TCVN 4513:1988',clause:'6.16',formula:'local loss = prescribed percentage × friction loss',sourceUrl:FULL_TEXT}),
+    inputs:{frictionHeadM:Number(frictionHeadM),networkType,factor},
+  });
+}
+
+export function fixturePressureCheck({availableHeadM,fixtureType='general'}) {
+  if (!(Number(availableHeadM)>=0)) throw new RangeError('availableHeadM must be >= 0');
+  const minimum={general:1,wcFlushValve:3,drinkingBoiler:4,shower:4}[fixtureType];
+  if (minimum==null) throw new RangeError('Unsupported fixtureType');
+  return {
+    availableHeadM:Number(availableHeadM),minimumHeadM:minimum,maximumWorkingHeadM:60,
+    minimumPass:Number(availableHeadM)>=minimum,maximumPass:Number(availableHeadM)<=60,
+    pass:Number(availableHeadM)>=minimum&&Number(availableHeadM)<=60,
+    level:'engineering-review',
+    reference:standardRef({standard:'TCVN 4513:1988',clause:'3.8-3.9',sourceUrl:FULL_TEXT,note:'Minimum free head by fixture and maximum 60 m working head for domestic sanitary fixtures.'}),
+  };
+}

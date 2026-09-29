@@ -21,8 +21,8 @@ export const STANDARD_CLAUSE_COVERAGE=Object.freeze([
   },
   {
     issue:8,standard:'TCVN 4513:1988 + TCVN 7957:2023',
-    implemented:['TCVN 4513 3.5/Table 2 fixture-unit schedule','TCVN 4513 6.3 pressure requirement','TCVN 4513 6.5 velocity limits','TCVN 4513 6.6/Table 8','TCVN 4513 6.7 Eq.(2)/Tables 9-10','TCVN 4513 7.1 booster requirement','TCVN 4513 7.7 pump flow basis','TCVN 4513 8.1 tank limit','TCVN 7957 5.3.2/Table 9 Manning','TCVN 7957 5.3.4/Table 10 minimum diameters','TCVN 7957 5.3.11 rain-inlet connection slope'],
-    pending:['pressure-loss network workflow','pump head/curve acceptance criteria','full self-cleansing velocity table by diameter/fill ratio','complete reference cases'],
+    implemented:['TCVN 4513 3.5/Table 2 fixture-unit schedule','TCVN 4513 3.8-3.9 fixture pressure limits','TCVN 4513 6.3 pressure requirement','TCVN 4513 6.5 velocity limits','TCVN 4513 6.6/Table 8','TCVN 4513 6.7 Eq.(2)/Tables 9-10','TCVN 4513 6.14 friction gradient i=Aq²','TCVN 4513 6.16 local-loss allowances','TCVN 4513 7.1 booster requirement','TCVN 4513 7.7 pump flow basis','TCVN 4513 8.1 tank limit','TCVN 7957 5.3.2/Table 9 Manning','TCVN 7957 5.3.4/Table 10 minimum diameters','TCVN 7957 5.3.5/Table 11 maximum fill','TCVN 7957 5.3.6/Table 12 self-cleansing velocity','TCVN 7957 5.3.9 maximum velocity','TCVN 7957 5.3.11 rain-inlet connection slope'],
+    pending:['complete TCVN 4513 Table 14 resistance lookup by pipe size/unit convention','pump head/curve acceptance criteria and manufacturer curve ingestion','complete reference-case review'],
   },
 ]);
 
