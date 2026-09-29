@@ -4,6 +4,7 @@ import { estimateEquivalentFoundationArea, estimatePileCountConcept } from './en
 import { estimateCoolingCapacity } from './engineering/hvac.js';
 import { estimateBuildingGravityLoad } from './engineering/loads.js';
 import { estimateDomesticWater } from './engineering/water.js';
+import { engineeringProfileStatus } from './engineering-profiles.js';
 
 export function runEngineeringPreview(project, planningResults) {
   if (!planningResults?.areas?.floorArea?.value) return { status: 'blocked', modules: {} };
@@ -73,6 +74,7 @@ export function runEngineeringPreview(project, planningResults) {
 
   return {
     status: 'ready',
+    profiles: engineeringProfileStatus(),
     modules: {
       structure: { status: 'ready-indicative', gravity },
       foundation,

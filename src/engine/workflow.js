@@ -8,6 +8,7 @@ import { buildAlternatives } from './alternatives.js';
 import { analyzeBudgetFit } from './optimizer.js';
 import { runEngineeringPreview } from './engineering-preview.js';
 import { buildProjectPriceBook } from './project-price-book.js';
+import { resolvePlanningRules } from './planning-rules.js';
 
 export function runPlanningWorkflow(project) {
   const issues = validatePlanningInputs(project);
@@ -41,12 +42,23 @@ export function runPlanningWorkflow(project) {
     cashflow,
     preferredScenario: preferred.key,
   };
+  const projectDate = readValue(project, 'context.projectDate', project.createdAt?.slice(0, 10) ?? new Date().toISOString().slice(0, 10));
+  const planningRules = resolvePlanningRules({
+    projectDate,
+    locality: {
+      province: readValue(project, 'location.province', ''),
+      district: readValue(project, 'location.district', ''),
+      ward: readValue(project, 'location.ward', ''),
+      parcel: readValue(project, 'location.parcel', ''),
+    },
+    rules: project.planningRules ?? [],
+  });
   const engineering = runEngineeringPreview(project, planningResults);
 
   return {
     status: 'ready',
     issues,
     gates: engineeringGates(project),
-    results: { ...planningResults, engineering },
+    results: { ...planningResults, planningRules, engineering },
   };
 }

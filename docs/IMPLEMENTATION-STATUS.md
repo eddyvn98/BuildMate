@@ -1,7 +1,7 @@
 # Implementation Status
 
 Status date: 2026-09-29  
-Application version: 0.3.0
+Application version: 0.4.0
 
 ## Complete and usable now
 
@@ -43,3 +43,12 @@ The app does not label structural, foundation, electrical, water/drainage, HVAC,
 Tracked work: GitHub issues #4 through #10.
 
 This is a correctness boundary, not an unimplemented fallback: BuildMate must not replace missing geotechnical data, fault current, standard coefficients, local planning approvals or professional review with AI guesses.
+
+
+## v0.4.0 implementation update
+
+- Authenticated backend API with per-user ownership and immutable calculation runs.
+- Project/date-aware QCVN 01 baseline resolver with locality-specific sourced rules.
+- Engineering profile readiness gates require source/version, applicability, clause mapping, reference cases and independent review.
+- Additional deterministic review primitives for explicit load combinations, RC demand/capacity checks, foundation bearing/eccentricity, voltage drop/protection timing, pipe velocity and Manning flow.
+- No engineering profile is promoted to construction-ready without independent professional review.

@@ -15,9 +15,14 @@ export function createProject(overrides = {}) {
   const base = {
     id: crypto.randomUUID(),
     name: 'Nhà mới',
+    context: {
+      projectDate: field(now.slice(0, 10), FIELD_STATES.SUGGESTED, 'buildmate', 'Ngày cơ sở để chọn phiên bản quy chuẩn; xác nhận trước khi dùng hồ sơ pháp lý.'),
+    },
     location: {
       province: field('', FIELD_STATES.MISSING),
       district: field('', FIELD_STATES.MISSING),
+      ward: field('', FIELD_STATES.MISSING),
+      parcel: field('', FIELD_STATES.MISSING),
     },
     land: {
       widthM: field(null, FIELD_STATES.MISSING),
@@ -73,6 +78,7 @@ export function createProject(overrides = {}) {
         plumbing: field(null, FIELD_STATES.MISSING),
       },
     },
+    planningRules: [],
     alternatives: [],
     designVersions: [],
     actuals: { entries: [] },
