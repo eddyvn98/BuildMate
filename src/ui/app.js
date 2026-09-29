@@ -84,15 +84,22 @@ function selected(value) {
 
 function resultsPanel() {
   if (!workflow.results) return `<h2>Kết quả</h2><div class="alert">${workflow.issues.map((i) => i.message).join(' ')}</div>`;
-  const { areas, budgets, cashflow } = workflow.results;
+  const { areas, budgets, alternatives, budgetFit, cashflow } = workflow.results;
   return `<h2>Tổng quan tính toán</h2><div class="metrics">
     ${metric('Đất', number(areas.landArea.value, 'm²'))}${metric('Sàn dự kiến', number(areas.floorArea.value, 'm²'))}${metric('PA cân bằng', money(budgets[1].total))}${metric('Dự phòng đã gồm', '8%')}
-  </div><h3>3 phương án ngân sách</h3><div class="scenario-grid">${budgets.map((b) => `<article><strong>${b.label}</strong><span>${money(b.total)}</span></article>`).join('')}</div>
+  </div><h3>3 phương án ngân sách</h3><div class="scenario-grid">${alternatives.map((b) => `<article><strong>${b.name}</strong><span>${money(b.totalVnd)}</span><small>${b.targetStatus === 'over-budget' ? 'Vượt ngân sách mục tiêu' : b.targetStatus === 'within-budget' ? 'Trong ngân sách' : 'Chưa có ngân sách mục tiêu'}</small></article>`).join('')}</div>
+  ${budgetFitPanel(budgetFit)}
   <h3>Dòng tiền theo giai đoạn</h3><div class="cashflow">${cashflow.map((s) => `<div><span>${s.order}. ${s.name}</span><b>${money(s.amount)}</b></div>`).join('')}</div>`;
 }
 
 function metric(label, value) {
   return `<div class="metric"><span>${label}</span><strong>${value}</strong></div>`;
+}
+
+function budgetFitPanel(fit) {
+  if (fit.status === 'unknown') return '<h3>Tối ưu ngân sách</h3><p class="hint">Nhập ngân sách mục tiêu để BuildMate phân tích khoảng chênh.</p>';
+  if (fit.status === 'within-budget') return `<h3>Tối ưu ngân sách</h3><div class="budget-fit ok">Phương án đang trong ngân sách, còn ${money(fit.gapVnd)} biên dự phòng.</div>`;
+  return `<h3>Tối ưu ngân sách</h3><div class="budget-fit"><b>Chênh lệch: ${money(Math.abs(fit.gapVnd))}</b><p>BuildMate chỉ đề xuất cắt giảm các hạng mục được phép; an toàn kết cấu và yêu cầu bắt buộc bị khóa.</p>${fit.actions.map((a) => `<div class="action"><span>${a.label}</span><b>~${money(a.estimatedSavingVnd)}</b></div>`).join('')}</div>`;
 }
 
 function assumptionsPanel() {
