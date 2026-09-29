@@ -1,53 +1,56 @@
 # Roadmap
 
-## Checkpoint 1 - Foundation
+## Completed - v0.3.0 software prototype
 
-- PRD and product principles.
-- Layered architecture.
-- Calculation safety levels and engineering gates.
-- V1 roadmap and acceptance criteria.
+### Product foundation
 
-## Checkpoint 2 - Deterministic V1 engine
+- Product requirements and homeowner-first workflow.
+- Explicit information states and assumption handling.
+- Deterministic-engine / AI boundary.
+- Calculation trace and engineering safety levels.
 
-- Canonical project model.
-- Field states and validation.
-- Area calculation and trace.
+### Planning and cost
+
+- Land/floor-area calculations.
 - Indicative quantity takeoff.
-- Price book and budget scenarios.
-- Stage cash flow.
-- Unit tests.
+- Three budget scenarios.
+- Safe budget-gap optimization.
+- Construction-stage cash flow.
+- Sourced project price overrides.
 
-## Checkpoint 3 - Usable browser app
+### Engineering workspace
 
-- Guided homeowner intake.
-- Live project summary.
-- Assumption/missing-data panel.
-- Three budget alternatives.
-- Calculation trace drawer.
-- Simple functional 2D block plan.
-- Browser persistence.
+- Current-reference standards registry.
+- Gravity-load aggregation.
+- Simple beam mechanics primitive.
+- Equivalent shallow-foundation bearing-area preview from supplied soil input.
+- Conceptual pile count from supplied pile capacity.
+- Electrical service-current, ampacity-check and PE adiabatic primitives.
+- Water/storage and pump-head primitives.
+- HVAC planning load.
+- Productivity-based duration primitive.
 
-## Checkpoint 4 - Engineering expansion
+### Product lifecycle
 
-- Versioned standards registry.
-- Structural load model.
-- RC member calculation modules.
-- Foundation/geotechnical module.
-- Electrical, water, drainage, HVAC modules.
-- Independent reference tests and review workflow.
+- Multiple projects.
+- Design versions.
+- Actual construction spending/commitment ledger.
+- JSON backup/import.
+- HTML report and BOQ CSV export.
+- Docker/Nginx package and CI.
 
-## Checkpoint 5 - Data and collaboration
+## Verification backlog - construction-ready profiles
 
-- Backend and authentication.
-- Locality-aware price ingestion with provenance.
-- Product/brand catalog.
-- Exportable reports.
-- Project sharing and professional review.
+These are explicit engineering/review work items rather than hidden unfinished code:
 
-## Phase 2 - Construction execution
+- #4 Verify TCVN 2737:2023 load/action profile.
+- #5 Implement/review TCVN 5574:2018 RC design profile.
+- #6 Verify TCVN 9362:2012 and TCVN 10304:2025 foundation profiles.
+- #7 Verify electrical profile for QCVN 12, TCVN 9206 and TCVN 7447-5-54.
+- #8 Verify water/drainage profiles for TCVN 4513 and TCVN 7957:2023.
+- #9 Implement locality-aware planning rule ingestion and QCVN 01 transition.
+- #10 Add backend/auth/collaboration API.
 
-- Actual spending vs budget.
-- Contracts, invoices, variations.
-- Construction progress and milestones.
-- Inspection/checklists and photos.
-- Forecast-at-completion and overrun alerts.
+## Release rule
+
+A module may move to `construction-ready` only when its exact standard version, applicability, clause/formula mapping, units, reference cases and independent professional review are recorded. Until then BuildMate must continue to label the result planning/indicative/engineering-review.
