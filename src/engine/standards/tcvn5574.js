@@ -269,19 +269,22 @@ export function minimumLapLength({
 }
 
 export function lapSpliceAlpha2({
-  stress='tension',splicePercent
+  stress='tension',splicePercent,barSurface='ribbed'
 }) {
   const p=Number(splicePercent);
   if (!(p>=0&&p<=100)) throw new RangeError('splicePercent must be 0..100');
+  if (!['ribbed','plain'].includes(barSurface)) throw new RangeError('barSurface must be ribbed or plain');
+
   if (stress==='tension') {
-    if (p<=50) return lapAlphaResult(1,p,stress,'up to 50% ribbed tension bars in one design section');
-    const value=1+(p-50)*(1/50);
-    return lapAlphaResult(round(value,4),p,stress,'linear interpolation from alpha2=1 at 50% to 2.0 at 100%');
+    const threshold=barSurface==='ribbed'?50:25;
+    if (p<=threshold) return lapAlphaResult(1.2,p,stress,`base alpha2=1.2; permitted percentage threshold ${threshold}% for ${barSurface} tension bars`);
+    const value=1.2+(p-threshold)*(2.0-1.2)/(100-threshold);
+    return lapAlphaResult(round(value,4),p,stress,'linear interpolation to alpha2=2.0 at 100% tension bars spliced');
   }
   if (stress==='compression') {
-    if (p<=50) return lapAlphaResult(1,p,stress,'up to 50% compression bars in one design section');
-    const value=1+(p-50)*(0.2/50);
-    return lapAlphaResult(round(value,4),p,stress,'linear interpolation from alpha2=1 at 50% to 1.2 at 100%');
+    if (p<=50) return lapAlphaResult(0.9,p,stress,'base alpha2=0.9 for compression bars');
+    const value=0.9+(p-50)*(1.2-0.9)/50;
+    return lapAlphaResult(round(value,4),p,stress,'linear interpolation to alpha2=1.2 at 100% compression bars spliced');
   }
   throw new RangeError('stress must be tension or compression');
 }
@@ -291,4 +294,69 @@ function lapAlphaResult(value,splicePercent,stress,note) {
     value,splicePercent,stress,level:'engineering-review',
     reference:standardRef({standard:'TCVN 5574:2018',clause:'10.3.6.2',sourceUrl:FULL_TEXT,note}),
   };
+}
+
+
+export function bondStrength({RbtMpa,barType='hotRolledRibbed',diameterMm,prestressed=false}) {
+  requirePositive('RbtMpa',RbtMpa);
+  requirePositive('diameterMm',diameterMm);
+  let eta1;
+  if (prestressed) {
+    const map={coldRibbedWire:1.8,smooth7or19WireStrand:2.2,ribbed7WireStrand:2.4,hotRolledOrThermomechanical:2.5};
+    eta1=map[barType];
+  } else {
+    const map={plainBar:1.5,coldRibbed:2.0,hotRolledRibbed:2.5,thermomechanicalRibbed:2.5};
+    eta1=map[barType];
+  }
+  if (eta1==null) throw new RangeError('Unsupported barType for TCVN 5574 clause 10.3.5.4');
+  const eta2=prestressed?1:(Number(diameterMm)<=32?1:0.9);
+  const value=eta1*eta2*Number(RbtMpa);
+  return standardResult({
+    value:round(value,4),unit:'MPa',formulaId:'TCVN5574-2018-bond',
+    reference:standardRef({standard:'TCVN 5574:2018',clause:'10.3.5.4, equation following (255)',formula:'Rbond = eta1·eta2·Rbt',sourceUrl:FULL_TEXT}),
+    inputs:{RbtMpa:Number(RbtMpa),barType,diameterMm:Number(diameterMm),prestressed,eta1,eta2},
+  });
+}
+
+export function basicAnchorageLength({
+  barDiameterMm,RsMpa,RbtMpa,barType='hotRolledRibbed',prestressed=false
+}) {
+  requirePositive('barDiameterMm',barDiameterMm);
+  requirePositive('RsMpa',RsMpa);
+  const bond=bondStrength({RbtMpa,barType,diameterMm:barDiameterMm,prestressed});
+  const d=Number(barDiameterMm);
+  const As=Math.PI*d*d/4;
+  const us=Math.PI*d;
+  const length=Number(RsMpa)*As/(bond.value*us);
+  return standardResult({
+    value:round(length,2),unit:'mm',formulaId:'TCVN5574-2018-Eq255',
+    reference:standardRef({standard:'TCVN 5574:2018',clause:'10.3.5.4, equation (255)',formula:'L0,an = Rs·As / (Rbond·us)',sourceUrl:FULL_TEXT}),
+    inputs:{barDiameterMm:d,RsMpa:Number(RsMpa),RbtMpa:Number(RbtMpa),barType,prestressed,AsMm2:round(As,3),perimeterMm:round(us,3),RbondMpa:bond.value},
+  });
+}
+
+export function requiredAnchorageLength({
+  baseAnchorageLengthMm,barDiameterMm,alpha1,
+  calculatedSteelAreaMm2,effectiveSteelAreaMm2,
+  supplementaryAnchorageReduction=0
+}) {
+  for (const [n,v] of Object.entries({baseAnchorageLengthMm,barDiameterMm,alpha1,calculatedSteelAreaMm2,effectiveSteelAreaMm2})) requirePositive(n,v);
+  const reduction=Number(supplementaryAnchorageReduction);
+  if (!(reduction>=0&&reduction<=0.3)) throw new RangeError('supplementaryAnchorageReduction must be 0..0.30');
+  const raw=Number(alpha1)*Number(baseAnchorageLengthMm)*(Number(calculatedSteelAreaMm2)/Number(effectiveSteelAreaMm2));
+  const reduced=raw*(1-reduction);
+  const minimum=Math.max(reduced,15*Number(barDiameterMm),200,0.3*Number(baseAnchorageLengthMm));
+  return {
+    requiredAnchorageLengthMm:round(minimum,2),
+    components:{rawMm:round(raw,2),afterReductionMm:round(reduced,2),fifteenDiametersMm:15*Number(barDiameterMm),absoluteMinimumMm:200,thirtyPercentBaseMm:round(0.3*Number(baseAnchorageLengthMm),2)},
+    level:'engineering-review',
+    reference:standardRef({standard:'TCVN 5574:2018',clause:'10.3.5.5',formula:'Lan=alpha1·L0,an·As,cal/As,ef; actual >= max(15ds,200mm,0.3L0,an); permitted supplementary reduction <=30%',sourceUrl:FULL_TEXT}),
+  };
+}
+
+export function anchorageAlpha1({stress='tension',prestressed=false}) {
+  if (prestressed) return {value:1,level:'engineering-review',reference:standardRef({standard:'TCVN 5574:2018',clause:'10.3.5.5',sourceUrl:FULL_TEXT,note:'alpha1=1.0 for prestressed reinforcement'})};
+  const value=stress==='tension'?1:stress==='compression'?0.75:null;
+  if (value==null) throw new RangeError('stress must be tension or compression');
+  return {value,level:'engineering-review',reference:standardRef({standard:'TCVN 5574:2018',clause:'10.3.5.5',sourceUrl:FULL_TEXT,note:'Straight ribbed/nonprestressed anchorage or hooked/plain case without supplementary anchorage'})};
 }

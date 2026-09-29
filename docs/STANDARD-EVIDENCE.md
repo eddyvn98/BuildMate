@@ -42,7 +42,9 @@ Implemented evidence:
 - 10.3.3.1: minimum longitudinal reinforcement ratio.
 - 10.3.4.3: transverse-reinforcement spacing by shear requirement.
 - 10.3.4.4: transverse restraint spacing for longitudinal compression bars.
-- 10.3.6.2: lap splice limited to bars ≤40 mm; alpha2 interpolation by splice percentage and minimum lap length max(0.4 alpha2 L0,an, 20ds, 250 mm).
+- 10.3.5.4 Eq. (255): basic anchorage length L0,an=RsAs/(Rbond us), with Rbond=eta1 eta2 Rbt and explicit bar-surface/diameter factors.
+- 10.3.5.5: required anchorage length with alpha1, As,cal/As,ef and lower bounds 15ds, 200 mm, 0.3L0,an.
+- 10.3.6.2: lap splice limited to bars ≤40 mm; base alpha2=1.2 tension / 0.9 compression, percentage-dependent interpolation, and minimum lap length max(0.4 alpha2 L0,an, 20ds, 250 mm).
 - The engine rejects Eq. (34) when ξ > ξR rather than silently applying the wrong branch.
 
 ## TCVN 9362:2012 — Foundation soils
