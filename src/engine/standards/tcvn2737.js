@@ -241,3 +241,58 @@ function terrainKResult(terrain,zeM,value) {
     reference:standardRef({standard:'TCVN 2737:2023',clause:'10.2.5, Table 9',sourceUrl:FULL_TEXT,note:'Linear interpolation is permitted for intermediate equivalent heights.'}),
   };
 }
+
+
+export function rectangularBuildingWallPressureCoefficient({heightM,depthAlongWindM,zone}) {
+  if (!(Number(heightM)>0)||!(Number(depthAlongWindM)>0)) throw new RangeError('heightM and depthAlongWindM must be > 0');
+  const hd=Number(heightM)/Number(depthAlongWindM);
+  if (hd>5) throw new RangeError('TCVN 2737 Appendix F.4 Table F.4 profile is implemented only for h/d <= 5');
+  const z=String(zone).toUpperCase();
+  const fixed={A:-1.2,B:-0.8,C:-0.5};
+  if (z in fixed) return wallCeResult(fixed[z],hd,z,'Table F.4 constant zone coefficient');
+
+  if (!['D','E'].includes(z)) throw new RangeError('zone must be A, B, C, D or E');
+  const rows=z==='D'
+    ? [[0.25,0.7],[1,0.8],[5,0.8]]
+    : [[0.25,-0.3],[1,-0.5],[5,-0.7]];
+  const effectiveHd=Math.max(0.25,hd);
+  const value=linearTable(rows,effectiveHd);
+  return wallCeResult(round(value,4),hd,z,'Table F.4 coefficient with linear interpolation by h/d');
+}
+
+export function enclosedBuildingInternalPressureCoefficient({openingRatioPercent}) {
+  const mu=Number(openingRatioPercent);
+  if (!(mu>=0&&mu<=100)) throw new RangeError('openingRatioPercent must be 0..100');
+  if (mu<=5) {
+    return {
+      values:[-0.2,0.2],openingRatioPercent:mu,level:'engineering-review',
+      reference:standardRef({standard:'TCVN 2737:2023',clause:'Appendix F, F.12.1-F.12.2',formula:'mu <= 5%: ci = +/-0.2, select adverse sign',sourceUrl:FULL_TEXT}),
+    };
+  }
+  if (mu>=30) {
+    return {
+      values:[-0.5,0.8],openingRatioPercent:mu,level:'engineering-review',
+      reference:standardRef({standard:'TCVN 2737:2023',clause:'Appendix F, F.12.1-F.12.2',formula:'mu >= 30%: ci1=-0.5; ci2=0.8',sourceUrl:FULL_TEXT}),
+    };
+  }
+  return {
+    blocked:true,openingRatioPercent:mu,reason:'TCVN F.12 intermediate-opening case requires the applicable interpolation/case treatment; not inferred by BuildMate',
+    reference:standardRef({standard:'TCVN 2737:2023',clause:'Appendix F, F.12',sourceUrl:FULL_TEXT}),
+  };
+}
+
+function wallCeResult(value,hd,zone,note) {
+  return {
+    value,hOverD:round(hd,4),zone,level:'engineering-review',
+    reference:standardRef({standard:'TCVN 2737:2023',clause:'Appendix F, F.4.1.1, Table F.4',sourceUrl:FULL_TEXT,note}),
+  };
+}
+
+function linearTable(rows,x) {
+  if (x<=rows[0][0]) return rows[0][1];
+  for (let i=1;i<rows.length;i+=1) {
+    const [x2,y2]=rows[i],[x1,y1]=rows[i-1];
+    if (x<=x2) return y1+(y2-y1)*(x-x1)/(x2-x1);
+  }
+  return rows.at(-1)[1];
+}

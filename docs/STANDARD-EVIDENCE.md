@@ -16,6 +16,8 @@ Implemented evidence:
 - 10.2.2 Eq. (10): standard wind pressure Wk=(0.852W0)k(ze)cGf.
 - 10.2.5 / Table 9: terrain/height factor k(ze), including permitted linear interpolation.
 - 10.2.7.2: Gf=0.85 for rigid structures with T1≤1s.
+- Appendix F.4.1.1 / Table F.4: external pressure coefficients for vertical walls of rectangular buildings with h/d≤5.
+- Appendix F.12: internal-pressure endpoint cases for wall opening ratio ≤5% and ≥30%.
 - 10.2.3 with QCVN 02:2022/BXD 5.2.2/Table 5.1: W0 comes from the official wind-pressure zone, not a BuildMate default.
 - QCVN 02 Table 5.1 HCMC rows: all HCMC districts/cities including Thu Duc are zone II except Cu Chi, which is zone I.
 - 8.3.1 / Table 4: townhouse-relevant A1/A2/H uniformly distributed live loads.
