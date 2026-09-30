@@ -232,3 +232,11 @@ Standards coverage model:
 - `externalRequirements` records evidence that the standards themselves require from outside the deterministic engine: geotechnical tests, manufacturer curves, measurements, specialist wind/fire analysis where the standard directs it, and independent verification.
 - QCVN 02:2022/BXD locality handling is generalized through a sourced Table 5.1 registry. Every row is validated against the exact zone tuple I=(65,36,26), II=(95,44,31), III=(125,50,36), IV=(155,56,40), V=(185,61,43). Missing localities block instead of falling back to a guessed zone.
 - A machine-readable conformance matrix links each engineering issue to its source clauses and automated reference-test families.
+
+
+RC material registry closure:
+- TCVN 5574:2018 Tables 6-7: heavy, lightweight and aerated concrete ULS/SLS strengths across the tabulated strength classes.
+- 6.1.2.3: gamma_b1..gamma_b4 working-condition factors, with the correct scope on Rb/Rbt.
+- Table 10: heavy concrete Eb B3.5-B100 plus tabulated lightweight/aerated density-strength pairs.
+- Table 11: creep factor by humidity/strength class and the permitted lightweight density correction.
+- Eq.(192): long-term modulus Eb,tau=Eb/(1+phi_b,cr).
