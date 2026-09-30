@@ -164,3 +164,25 @@ export function crackedRectangularCurvature({
 }
 
 function round(v,d=6){const f=10**d;return Math.round(v*f)/f;}
+
+
+// Backward-compatible names retained so existing callers use the same TCVN solver.
+export function crackTensionSteelFactor({momentKnM,crackingMomentKnM}) {
+  return psiSForBending({momentKnM,crackingMomentKnM});
+}
+
+export function crackedRectangularSection(input) {
+  const duration=input.duration==='short-term'?'short':input.duration==='long-term'?'long':input.duration;
+  const result=crackedRectangularSectionRigidity({...input,duration});
+  return {...result,neutralAxisMm:result.compressionZoneMm};
+}
+
+export function crackedSectionCurvature({momentKnM,section}) {
+  if (!section?.rigidityNmm2) throw new TypeError('section with rigidityNmm2 is required');
+  const value=Number(momentKnM)*1e6/Number(section.rigidityNmm2)*1000;
+  return standardResult({
+    value,unit:'1/m',formulaId:'TCVN5574-2018-Eq187-existing-section',
+    reference:standardRef({standard:'TCVN 5574:2018',clause:'8.2.3.3.3, equation (187)',formula:'1/r=M/D',sourceUrl:SOURCE}),
+    inputs:{momentKnM:Number(momentKnM),rigidityNmm2:Number(section.rigidityNmm2)},
+  });
+}

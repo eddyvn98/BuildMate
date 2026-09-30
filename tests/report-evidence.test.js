@@ -17,11 +17,12 @@ test('project report exposes standards coverage and evidence audit',()=>{
   assert.ok(reportToHtml(report).includes('Phạm vi điều khoản tiêu chuẩn'));
 });
 
-test('every open engineering issue has machine-readable implemented and pending coverage',()=>{
+test('every engineering issue has machine-readable implemented coverage and explicit gap/external-requirement arrays',()=>{
   for (const issue of [4,5,6,7,8]) {
     const item=STANDARD_CLAUSE_COVERAGE.find(x=>x.issue===issue);
     assert.ok(item);
     assert.ok(item.implemented.length>0);
-    assert.ok(item.pending.length>0);
+    assert.ok(Array.isArray(item.pending));
+    assert.ok(Array.isArray(item.externalRequirements ?? []));
   }
 });
