@@ -80,7 +80,7 @@ function pricingPanel(p, workflow) {
   const quick = market?.quickEstimate;
   return `<div class="section-head"><div><h2>Giá nhanh thị trường</h2><p class="hint">Ưu tiên snapshot thị trường gần hiện tại để chốt khung ngân sách; BOQ chi tiết chỉ dùng khi cần tinh chỉnh.</p></div><div class="price-source">${market?.snapshot?.turnkeyM2 ? `${market.snapshot.turnkeyM2.confidence.toUpperCase()} · ${market.snapshot.turnkeyM2.sourceCount} nguồn · mới nhất ${escapeHtml(market.snapshot.turnkeyM2.freshestSourceDate ?? '')}` : 'Chưa có snapshot fresh'}</div></div>
     ${quick?.status==='ready' ? `<div class="metrics">${metric('Mốc nhanh',money(quick.centerVnd))}${metric('Khoảng thấp',money(quick.lowVnd))}${metric('Khoảng cao',money(quick.highVnd))}${metric('Đơn giá giữa',number(quick.pricePerM2.center,'đ/m²'))}</div><p class="hint">Diện tích quy đổi nhanh: ${quick.convertedAreaM2} m² · móng ${quick.areaAssumptions.foundationFactor*100}% + mái ${quick.areaAssumptions.roofFactor*100}%. ${escapeHtml(quick.warning)}</p>` : '<div class="alert">Market snapshot không đủ fresh để ước tính nhanh.</div>'}
-    <details class="advanced"><summary>Nguồn thị trường đang dùng</summary><div class="evidence-list">${market?.snapshot?.turnkeyM2?.sources?.map(s=>`<article><div><b>${escapeHtml(s.name)}</b><span>${money(s.min)}–${money(s.max)} / m²</span><small>${escapeHtml(s.sourceDate ?? s.observedAt ?? '')} · ${escapeHtml(s.dateBasis)} · ${escapeHtml(s.freshness)}</small></div></article>`).join('') ?? ''}</div></details>
+    <details class="advanced"><summary>Nguồn thị trường đang dùng</summary><div class="evidence-list">${market?.snapshot?.turnkeyM2?.sources?.map(s=>`<article><div><b>${escapeHtml(s.name)}</b><span>${money(s.min)}–${money(s.max)} / m²</span><small>${escapeHtml(s.sourceDate ?? s.observedAt ?? '')} · ${escapeHtml(s.dateBasis)} · ${escapeHtml(s.freshness)} · <a href="${escapeHtml(s.url)}" target="_blank" rel="noreferrer">mở nguồn</a></small></div></article>`).join('') ?? ''}</div><p class="hint">${market?.snapshot?.officialAnchors?.[0]?`Official anchor: ${escapeHtml(market.snapshot.officialAnchors[0].name)} · ${escapeHtml(market.snapshot.officialAnchors[0].sourceDate)}`:''}</p></details>
     <div class="section-head"><div><h2>Đơn giá chi tiết dự án</h2><p class="hint">Tùy chọn. Nhập báo giá thật để override profile BOQ và lưu provenance.</p></div><div class="price-source">${book ? `${escapeHtml(book.sourceLabel)} · ${escapeHtml(book.effectiveDate)}` : ''}</div></div>
     <div class="form-grid">
       ${input('Nguồn báo giá', 'pricing.sourceLabel', p.pricing.sourceLabel)}
@@ -109,10 +109,10 @@ function selected(project, value) {
 
 function resultsPanel(workflow) {
   if (!workflow.results) return `<h2>Kết quả</h2><div class="alert">${workflow.issues.map((i) => i.message).join(' ')}</div>`;
-  const { areas, budgets, alternatives, budgetFit, cashflow } = workflow.results;
+  const { areas, budgets, alternatives, budgetFit, cashflow, primaryBudget } = workflow.results;
   return `<h2>Tổng quan</h2><div class="metrics">
-    ${metric('Đất', number(areas.landArea.value, 'm²'))}${metric('Sàn dự kiến', number(areas.floorArea.value, 'm²'))}${metric('PA cân bằng', money(budgets[1].total))}${metric('Dự phòng', '8%')}
-  </div><h3>Phương án ngân sách</h3><div class="scenario-grid">${alternatives.map((b) => `<article><strong>${b.name}</strong><span>${money(b.totalVnd)}</span><small>${targetLabel(b.targetStatus)}</small></article>`).join('')}</div>
+    ${metric('Đất', number(areas.landArea.value, 'm²'))}${metric('Sàn dự kiến', number(areas.floorArea.value, 'm²'))}${metric('Ước tính hiện tại', money(primaryBudget?.centerVnd ?? budgets[1].total))}${metric('Nguồn giá', primaryBudget?.basis==='market-quick'?'Thị trường':'BOQ')}
+  </div><p class="hint">${primaryBudget?.basis==='market-quick'?`Khoảng thị trường: ${money(primaryBudget.lowVnd)} – ${money(primaryBudget.highVnd)} · confidence ${escapeHtml(primaryBudget.confidence)}`:'Đang dùng đơn giá chi tiết dự án/BOQ.'}</p><details class="advanced"><summary>Phương án BOQ tham khảo</summary><div class="scenario-grid">${alternatives.map((b) => `<article><strong>${b.name}</strong><span>${money(b.totalVnd)}</span><small>${targetLabel(b.targetStatus)}</small></article>`).join('')}</div></details>
   ${budgetFitPanel(budgetFit)}
   <h3>Dòng tiền theo giai đoạn</h3><div class="cashflow">${cashflow.map((s) => `<div><span>${s.order}. ${s.name}</span><b>${money(s.amount)}</b></div>`).join('')}</div>`;
 }
