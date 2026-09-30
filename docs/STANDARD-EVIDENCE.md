@@ -184,3 +184,8 @@ Additional closed calculation branches:
 - TCVN 5574:2018 8.1.2.3.3 Eq.(36)-(38): T/I-section flexural capacity with neutral-axis branch in compression flange or web; 8.1.2.3.5 xiR limiting rule.
 - TCVN 5574:2018 8.1.3.3.1 Eq.(89)-(92): full dangerous inclined-section shear search over h0 <= C <= 2h0, with Eq.(96) transverse-reinforcement eligibility.
 - TCVN 10304:2025 7.4.2.1 Eq.(34)/Table 17: short-pile settlement for 1 < k <= 7.5 using published zeta0 and mv coefficients.
+
+
+Wind dynamic closure:
+- TCVN 2737:2023 10.2.7.3 Eq.(13)-(24) and Table 10 are implemented for flexible structures T1>1s, including turbulence intensity/length, background response, resonance response, peak factors and aerodynamic admittance functions.
+- Appendix F.12.2 does not prescribe an interpolation rule for 5%<opening ratio<30%; BuildMate explicitly blocks this interval rather than manufacture a coefficient.

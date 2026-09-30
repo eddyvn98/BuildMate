@@ -1,8 +1,8 @@
 export const STANDARD_CLAUSE_COVERAGE=Object.freeze([
   {
     issue:4,standard:'TCVN 2737:2023',
-    implemented:['6.3','6.4','6.5','6.7 Eq.(3)-(4)','6.8 Eq.(5)-(6)','7.1-7.2/Table 1 permanent-load provenance and gamma_f','8.3.1/Table 4 residential subset','8.3.3','8.3.5(a)','10.2.2 Eq.(10) wind pressure','10.2.3 + QCVN 02:2022/BXD 5.2.2 wind-zone W0','10.2.5/Table 9 terrain k(ze) interpolation','10.2.7.2 rigid Gf=0.85','QCVN 02 Table 5.1 HCMC locality rows','Appendix F.4.1.1/Table F.4 rectangular-building wall ce','Appendix F.5a/F.5b pitched-roof ce exact table rows and same-sign interpolation','Appendix F.12 internal pressure endpoint cases'],
-    pending:['other geometry-specific aerodynamic cases','F.12 intermediate opening-ratio treatment','flexible-structure gust-factor Eq.(13)-(19) workflow','QCVN 02 locality ingestion outside verified HCMC rows','full reference-case review'],
+    implemented:['6.3','6.4','6.5','6.7 Eq.(3)-(4)','6.8 Eq.(5)-(6)','7.1-7.2/Table 1 permanent-load provenance and gamma_f','8.3.1/Table 4 residential subset','8.3.3','8.3.5(a)','10.2.2 Eq.(10) wind pressure','10.2.3 + QCVN 02:2022/BXD 5.2.2 wind-zone W0','10.2.5/Table 9 terrain k(ze) interpolation','10.2.7.2 rigid Gf=0.85','10.2.7.3 Eq.(13)-(24)/Table 10 flexible-structure gust factor','QCVN 02 Table 5.1 HCMC locality rows','Appendix F.4.1.1/Table F.4 rectangular-building wall ce','Appendix F.5a/F.5b pitched-roof ce exact table rows and same-sign interpolation','Appendix F.12 internal pressure endpoint cases'],
+    pending:['other geometry-specific aerodynamic cases that TCVN directs to specialist literature/wind tunnel','QCVN 02 locality ingestion outside verified HCMC rows','full reference-case review'],
   },
   {
     issue:5,standard:'TCVN 5574:2018',

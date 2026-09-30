@@ -276,7 +276,7 @@ export function enclosedBuildingInternalPressureCoefficient({openingRatioPercent
     };
   }
   return {
-    blocked:true,openingRatioPercent:mu,reason:'TCVN F.12 intermediate-opening case requires the applicable interpolation/case treatment; not inferred by BuildMate',
+    blocked:true,openingRatioPercent:mu,reason:'TCVN 2737:2023 F.12.2 specifies only mu <= 5% and mu >= 30%; no interpolation rule is stated for 5% < mu < 30%, so BuildMate does not invent one',
     reference:standardRef({standard:'TCVN 2737:2023',clause:'Appendix F, F.12',sourceUrl:FULL_TEXT}),
   };
 }
