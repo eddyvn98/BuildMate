@@ -1,3 +1,4 @@
+import { createEngineeringEvidenceRecord,assessEngineeringEvidence } from '../engine/engineering-evidence.js';
 import { projectEngineeringReadiness } from '../engine/project-readiness.js';
 import { createEngineeringReviewRecord,reviewEvidenceFingerprint,assessEngineeringReviewRecord } from '../engine/review-record.js';
 import { addActual, removeActual } from '../engine/actuals.js';
@@ -100,7 +101,7 @@ export class BuildMateService {
   addEngineeringReview(ownerId,id,input={}) {
     const project=this.store.getProject(ownerId,id);
     const issue=Number(input.issue);
-    const expectedFingerprint=reviewEvidenceFingerprint(issue,{commitSha:input.commitSha ?? null});
+    const expectedFingerprint=reviewEvidenceFingerprint(issue,{commitSha:input.commitSha ?? null,evidence:project.engineeringEvidence ?? []});
     if (String(input.evidenceFingerprint ?? '')!==expectedFingerprint) {
       const error=new Error('evidence fingerprint does not match current review packet');
       error.statusCode=409;
@@ -120,14 +121,28 @@ export class BuildMateService {
   listEngineeringReviews(ownerId,id) {
     const project=this.store.getProject(ownerId,id);
     return (project.engineeringReviews ?? []).map((record)=>{
-      const expectedFingerprint=reviewEvidenceFingerprint(record.issue,{commitSha:record.commitSha ?? null});
+      const expectedFingerprint=reviewEvidenceFingerprint(record.issue,{commitSha:record.commitSha ?? null,evidence:project.engineeringEvidence ?? []});
       return {...record,assessment:assessEngineeringReviewRecord(record,{expectedFingerprint})};
     });
   }
 
   reviewFingerprint(ownerId,id,issue,commitSha=null) {
     this.store.getProject(ownerId,id);
-    return {issue:Number(issue),commitSha,fingerprint:reviewEvidenceFingerprint(Number(issue),{commitSha})};
+    return {issue:Number(issue),commitSha,fingerprint:reviewEvidenceFingerprint(Number(issue),{commitSha,evidence:this.store.getProject(ownerId,id).engineeringEvidence ?? []})};
+  }
+
+  addEngineeringEvidence(ownerId,id,input={}) {
+    const project=this.store.getProject(ownerId,id);
+    const record=createEngineeringEvidenceRecord(input);
+    project.engineeringEvidence=[...(project.engineeringEvidence ?? []),record];
+    this.store.saveProject(ownerId,project);
+    return record;
+  }
+
+  listEngineeringEvidence(ownerId,id,issue=null) {
+    const project=this.store.getProject(ownerId,id);
+    if (issue==null) return project.engineeringEvidence ?? [];
+    return assessEngineeringEvidence(project.engineeringEvidence ?? [],Number(issue));
   }
 
   addDocument(ownerId,id,input={}) {

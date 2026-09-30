@@ -1,7 +1,8 @@
+import { engineeringEvidenceDigest } from './engineering-evidence.js';
 import { createHash } from 'node:crypto';
 import { buildIndependentReviewPacket } from './review-packet.js';
 
-export function reviewEvidenceFingerprint(issue,{commitSha=null}={}) {
+export function reviewEvidenceFingerprint(issue,{commitSha=null,evidence=[]}={}) {
   const packet=buildIndependentReviewPacket(issue,{commitSha});
   const canonical=JSON.stringify({
     issue:packet.issue,
@@ -10,6 +11,7 @@ export function reviewEvidenceFingerprint(issue,{commitSha=null}={}) {
     blockedExtensions:packet.blockedExtensions,
     implementedClauses:packet.implementedClauses,
     commitSha:packet.commitSha,
+    projectEvidenceDigest:engineeringEvidenceDigest(evidence,issue),
   });
   return createHash('sha256').update(canonical).digest('hex');
 }
