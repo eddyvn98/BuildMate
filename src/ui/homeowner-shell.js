@@ -22,10 +22,10 @@ export function shell({
   return `
     <div class="app-shell">
       <aside class="sidebar">
-        <div class="brand"><span class="brand-mark">B</span><div><b>BuildMate</b><small>Homeowner Beta</small></div></div>
+        <div class="brand" title="BuildMate · Homeowner Beta" aria-label="BuildMate · Homeowner Beta"><span class="brand-mark">B</span></div>
         <nav class="side-nav">${NAV.map(([id,label,iconName])=>`
           <button type="button" data-view="${id}" class="${activeView===id?'active':''}" aria-current="${activeView===id?'page':'false'}" title="${label}" aria-label="${label}"><span class="nav-icon">${icon(iconName)}</span><span class="nav-label">${label}</span></button>`).join('')}</nav>
-        <div class="sidebar-foot"><small>Standards-backed · VN townhouse</small></div>
+        
       </aside>
       <div class="workspace">
         ${topbar(project,projects)}
@@ -47,11 +47,11 @@ function topbar(project,projects) {
       <button type="button" id="run-demo-a2z" class="ghost icon-button" title="Chạy demo A→Z" aria-label="Chạy demo A→Z">${icon('play')}</button>
       <button type="button" id="new-project" class="ghost icon-button" title="Dự án mới" aria-label="Dự án mới">${icon('plus')}</button>
       <details class="menu-pop"><summary aria-label="Thêm tác vụ" title="Thêm tác vụ">${icon('more')}</summary><div>
-        <button id="export-html" class="ghost menu-action">${icon('download')}<span>Báo cáo HTML</span></button>
-        <button id="export-csv" class="ghost menu-action">${icon('download')}<span>BOQ kỹ thuật CSV</span></button>
-        <button id="export-json" class="ghost menu-action">${icon('download')}<span>Xuất JSON</span></button>
-        <button id="import-json" class="ghost menu-action">${icon('upload')}<span>Nhập JSON</span></button>
-        <button id="delete-project" class="ghost danger menu-action">${icon('trash')}<span>Xóa dự án</span></button>
+        <button id="export-html" class="ghost menu-action" title="Xuất báo cáo HTML" aria-label="Xuất báo cáo HTML">${icon('download')}<span>HTML</span></button>
+        <button id="export-csv" class="ghost menu-action" title="Xuất BOQ kỹ thuật CSV" aria-label="Xuất BOQ kỹ thuật CSV">${icon('download')}<span>BOQ CSV</span></button>
+        <button id="export-json" class="ghost menu-action" title="Xuất JSON" aria-label="Xuất JSON">${icon('download')}<span>JSON</span></button>
+        <button id="import-json" class="ghost menu-action" title="Nhập JSON" aria-label="Nhập JSON">${icon('upload')}<span>Nhập</span></button>
+        <button id="delete-project" class="ghost danger menu-action" title="Xóa dự án" aria-label="Xóa dự án">${icon('trash')}<span>Xóa</span></button>
       </div></details>
       <input id="import-json-file" type="file" accept="application/json" hidden>
     </div>
