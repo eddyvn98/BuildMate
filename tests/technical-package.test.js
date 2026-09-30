@@ -67,9 +67,10 @@ test('technical package appears in homeowner UI, report and BOQ CSV',()=>{
     calculatorCapabilities:standardCalculatorCapabilities(),
     calculatorState:{},guidedState:{action:'loads.permanent',values:guidedDefaultValues('loads.permanent')},evidenceState:{}
   });
-  assert.ok(html.includes('Hồ sơ kỹ thuật sơ bộ'));
-  assert.ok(html.includes('Thép theo đường kính'));
-  assert.ok(html.includes('BOQ theo hạng mục'));
+  assert.ok(html.includes('Tổng quan căn nhà'));
+  assert.ok(html.includes('Xem vật tư chi tiết'));
+  assert.ok(html.includes('Xem BOQ đầy đủ'));
+  assert.ok(html.includes('Xem bảng cấu kiện đầy đủ'));
   assert.ok(html.includes('Giằng móng'));
   assert.ok(html.includes('4Ø18'));
   assert.ok(html.includes('đai Ø8a150'));

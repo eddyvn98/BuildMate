@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.0.1 - 2026-09-30
+
+### Technical UI simplification
+
+- Reworked Technical Package around four homeowner-facing sections: main members, key materials, electrical/water and technical cost.
+- Moved full member schedules, detailed materials, MEP tables, full BOQ, editable member parameters and technical blockers behind progressive disclosure.
+- Replaced several internal/jargon-heavy labels with simpler homeowner language.
+- Added compact summary cards and responsive layouts without removing any technical data.
+
+
 ## 1.0.0 - 2026-09-30
 
 ### A-to-Z Planning Package
