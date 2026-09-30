@@ -62,3 +62,51 @@ function selectSigned(values,sign) {
   if (sign==='adverse') return values.reduce((a,b)=>Math.abs(b)>Math.abs(a)?b:a);
   throw new RangeError('sign must be positive, negative or adverse');
 }
+
+
+export function interpolatePitchedRoofPressureCoefficient({windAngleDeg,slopeDeg,zone,sign}) {
+  const theta=Number(windAngleDeg);
+  const slope=Number(slopeDeg);
+  if (![0,90].includes(theta)) throw new RangeError('windAngleDeg must be 0 or 90');
+  if (theta===0 && slope>-5 && slope<5) {
+    return {blocked:true,reason:'TCVN 2737 F.5 note prohibits interpolation between -5 and +5 degrees; use flat-roof F.2 data'};
+  }
+  const table=theta===0?F5A:F5B;
+  const z=String(zone).toUpperCase();
+  const slopes=Object.keys(table).map(Number).sort((a,b)=>a-b);
+  if (slope<slopes[0]||slope>slopes.at(-1)) throw new RangeError('slopeDeg outside verified F.5 table range');
+
+  if (slopes.includes(slope)) return pitchedRoofPressureCoefficient({windAngleDeg:theta,slopeDeg:slope,zone:z,sign});
+
+  let low,high;
+  for (let i=1;i<slopes.length;i+=1) {
+    if (slope<slopes[i]) { low=slopes[i-1]; high=slopes[i]; break; }
+  }
+  const y1=selectForInterpolation(table[String(low)]?.[z],sign);
+  const y2=selectForInterpolation(table[String(high)]?.[z],sign);
+  if (y1==null||y2==null) return {blocked:true,reason:'requested sign not available at both bounding rows'};
+  if (Math.sign(y1)!==Math.sign(y2) && y1!==0 && y2!==0) {
+    return {blocked:true,reason:'TCVN 2737 F.5 permits interpolation only between values of the same sign'};
+  }
+  const value=y1+(y2-y1)*(slope-low)/(high-low);
+  return {
+    value:round(value,4),windAngleDeg:theta,slopeDeg:slope,zone:z,sign,
+    bounds:{lowSlopeDeg:low,lowValue:y1,highSlopeDeg:high,highValue:y2},
+    level:'engineering-review',
+    reference:standardRef({
+      standard:'TCVN 2737:2023',
+      clause:theta===0?'Appendix F, Table F.5a notes':'Appendix F, Table F.5b interpolation',
+      sourceUrl:SOURCE,
+      note:'Linear interpolation only between tabulated values of the same sign; theta=0 must not interpolate across -5 to +5 degrees.',
+    }),
+  };
+}
+
+function selectForInterpolation(raw,sign) {
+  if (raw==null) return null;
+  const values=Array.isArray(raw)?raw:[raw];
+  if (sign==='positive') return values.filter(v=>v>=0).sort((a,b)=>b-a)[0] ?? null;
+  if (sign==='negative') return values.filter(v=>v<=0).sort((a,b)=>a-b)[0] ?? null;
+  throw new RangeError('sign must be positive or negative for interpolation');
+}
+function round(v,d=4){const f=10**d;return Math.round(v*f)/f;}

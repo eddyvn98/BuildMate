@@ -1,8 +1,8 @@
 export const STANDARD_CLAUSE_COVERAGE=Object.freeze([
   {
     issue:4,standard:'TCVN 2737:2023',
-    implemented:['6.3','6.4','6.5','6.7 Eq.(3)-(4)','6.8 Eq.(5)-(6)','7.1-7.2/Table 1 permanent-load provenance and gamma_f','8.3.1/Table 4 residential subset','8.3.3','8.3.5(a)','10.2.2 Eq.(10) wind pressure','10.2.3 + QCVN 02:2022/BXD 5.2.2 wind-zone W0','10.2.5/Table 9 terrain k(ze) interpolation','10.2.7.2 rigid Gf=0.85','QCVN 02 Table 5.1 HCMC locality rows','Appendix F.4.1.1/Table F.4 rectangular-building wall ce','Appendix F.5a/F.5b pitched-roof ce exact table rows','Appendix F.12 internal pressure endpoint cases'],
-    pending:['other geometry-specific aerodynamic cases','F.5 same-sign slope interpolation','F.12 intermediate opening-ratio treatment','flexible-structure gust-factor Eq.(13)-(19) workflow','QCVN 02 locality ingestion outside verified HCMC rows','full reference-case review'],
+    implemented:['6.3','6.4','6.5','6.7 Eq.(3)-(4)','6.8 Eq.(5)-(6)','7.1-7.2/Table 1 permanent-load provenance and gamma_f','8.3.1/Table 4 residential subset','8.3.3','8.3.5(a)','10.2.2 Eq.(10) wind pressure','10.2.3 + QCVN 02:2022/BXD 5.2.2 wind-zone W0','10.2.5/Table 9 terrain k(ze) interpolation','10.2.7.2 rigid Gf=0.85','QCVN 02 Table 5.1 HCMC locality rows','Appendix F.4.1.1/Table F.4 rectangular-building wall ce','Appendix F.5a/F.5b pitched-roof ce exact table rows and same-sign interpolation','Appendix F.12 internal pressure endpoint cases'],
+    pending:['other geometry-specific aerodynamic cases','F.12 intermediate opening-ratio treatment','flexible-structure gust-factor Eq.(13)-(19) workflow','QCVN 02 locality ingestion outside verified HCMC rows','full reference-case review'],
   },
   {
     issue:5,standard:'TCVN 5574:2018',
@@ -16,8 +16,8 @@ export const STANDARD_CLAUSE_COVERAGE=Object.freeze([
   },
   {
     issue:7,standard:'QCVN 12:2014/BXD + TCVN 9206:2012 + TCVN 7447-4-41:2010 + TCVN 7447-5-52:2010 + TCVN 7447-5-54:2015',
-    implemented:['QCVN 12 2.6.3.1 Eq.(3)-(4)','QCVN 12 2.3.4.1-2.3.4.2 short-circuit device breaking-capacity gate','QCVN 12 2.6.5.1','TCVN 9206 4.5','TCVN 9206 5.8','TCVN 9206 5.11/Table 8','TCVN 9206 5.12/Table 9','TCVN 7447-4-41 411.3.2.2/Table 41.1','TCVN 7447-4-41 411.4.4 TN fault loop Zs·Ia≤Uo','TCVN 7447-4-41 411.5.3 TT RCD RA·IΔn≤50V','TCVN 7447-5-52 Appendix B Tables B.52.2/B.52.4 copper PVC B1/B2/C','TCVN 7447-5-52 Appendix C Table C.52.2 D1/D2 copper subset','TCVN 7447-5-52 Table C.52.3 grouping item 1','TCVN 7447-5-52 B.52.14 ambient-air temperature correction','TCVN 7447-5-52 B.52.15 soil-temperature correction','TCVN 7447-5-52 B.52.16 soil thermal-resistivity correction','TCVN 7447-5-54 543.1.1/Table 54.2','TCVN 7447-5-54 543.1.2'],
-    pending:['A1/A2 and full XLPE/aluminium ampacity profiles','fault-loop impedance derivation from conductor/source network model plus field verification','device-specific curve datasets remain project/manufacturer inputs; generic sourced interpolation implemented','complete reference cases'],
+    implemented:['QCVN 12 2.6.3.1 Eq.(3)-(4)','QCVN 12 2.3.4.1-2.3.4.2 short-circuit device breaking-capacity gate','QCVN 12 2.6.5.1','TCVN 9206 4.5','TCVN 9206 5.8','TCVN 9206 5.11/Table 8','TCVN 9206 5.12/Table 9','TCVN 7447-4-41 411.3.2.2/Table 41.1','TCVN 7447-4-41 411.4.4 TN fault loop Zs·Ia≤Uo','TCVN 7447-4-41 411.5.3 TT RCD RA·IΔn≤50V','TCVN 7447-5-52 Appendix B Tables B.52.2/B.52.4 copper PVC A1/A2/B1/B2/C','TCVN 7447-5-52 Appendix C Table C.52.2 D1/D2 copper subset','TCVN 7447-5-52 Table C.52.3 grouping item 1','TCVN 7447-5-52 B.52.14 ambient-air temperature correction','TCVN 7447-5-52 B.52.15 soil-temperature correction','TCVN 7447-5-52 B.52.16 soil thermal-resistivity correction','TCVN 7447-5-54 543.1.1/Table 54.2','TCVN 7447-5-54 543.1.2'],
+    pending:['full XLPE/aluminium ampacity profiles','fault-loop impedance derivation from conductor/source network model plus field verification','device-specific curve datasets remain project/manufacturer inputs; generic sourced interpolation implemented','complete reference cases'],
   },
   {
     issue:8,standard:'TCVN 4513:1988 + TCVN 7957:2023',
