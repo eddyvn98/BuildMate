@@ -219,3 +219,9 @@ CPT and pump acceptance closure:
 Full foundation/cable table closure:
 - TCVN 9362:2012 Appendix C Table C.1 is implemented for m=0..12 across circular, rectangular n=1/1.4/1.8/2.4/3.2/5 and strip n>=10, with the standard's permitted interpolation of intermediate m/n; regular polygons map to equivalent circular radius sqrt(F/pi).
 - TCVN 7447-5-52:2010 Tables B.52.10-B.52.13 are implemented for free-air methods E/F/G across PVC and XLPE/EPR, copper and aluminium, preserving missing table cells instead of extrapolating.
+
+
+RC local bearing and fire closure:
+- TCVN 5574:2018 8.1.5.2 Eq.(116)-(118): local compression capacity, Rb,loc and phi_b limits are implemented. Clause 10.3.5.8 special anchor plates/nuts/angles/bulged ends route through this local-bearing check.
+- QCVN 06:2022/BXD Appendix F nominal RC fire tables are linked to TCVN 5574 detailing: Table F.3 beams, F.5/F.6 columns and F.9 solid slabs. Cover/section requirements are checked simultaneously and governing cover is max(TCVN5574 durability/detailing, QCVN06 fire).
+- QCVN 06 nominal Appendix F tables explicitly do not replace calculation/testing for cases outside their applicability, including statically indeterminate cases where the table note directs fire calculation to the selected applicable standard.
