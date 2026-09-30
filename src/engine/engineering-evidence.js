@@ -1,4 +1,4 @@
-import { createHash } from 'node:crypto';
+import { sha256Hex,canonicalJson } from './hash.js';
 
 const TYPES=Object.freeze({
   'qcvn02-locality':4,
@@ -115,7 +115,7 @@ export function engineeringEvidenceDigest(records,issue) {
       calibrationDate:x.calibrationDate??null,data:x.data??{},
     }))
     .sort((a,b)=>a.id.localeCompare(b.id));
-  return createHash('sha256').update(JSON.stringify(canonical)).digest('hex');
+  return sha256Hex(canonicalJson(canonical));
 }
 
 export function assessEngineeringEvidence(records,issue,{requiredTypes=[]}={}) {

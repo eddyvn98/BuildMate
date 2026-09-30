@@ -1,5 +1,5 @@
 import { engineeringEvidenceDigest } from './engineering-evidence.js';
-import { createHash } from 'node:crypto';
+import { sha256Hex,canonicalJson } from './hash.js';
 import { buildIndependentReviewPacket } from './review-packet.js';
 
 export function reviewEvidenceFingerprint(issue,{commitSha=null,evidence=[]}={}) {
@@ -13,7 +13,7 @@ export function reviewEvidenceFingerprint(issue,{commitSha=null,evidence=[]}={})
     commitSha:packet.commitSha,
     projectEvidenceDigest:engineeringEvidenceDigest(evidence,issue),
   });
-  return createHash('sha256').update(canonical).digest('hex');
+  return sha256Hex(canonicalJson(JSON.parse(canonical)));
 }
 
 export function createEngineeringReviewRecord(input) {
