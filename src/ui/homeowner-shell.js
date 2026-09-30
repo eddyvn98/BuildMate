@@ -4,15 +4,15 @@ import { engineeringPanel } from './panel-engineering.js';
 import { pricingPanel } from './panel-pricing.js';
 import { technicalPanel } from './panel-technical.js';
 import { reportPanel } from './panel-report.js';
-import { escapeHtml } from './common.js';
+import { escapeHtml,icon } from './common.js';
 
 const NAV=[
-  ['overview','Tổng quan','⌂'],
-  ['project','Thông tin nhà','▤'],
-  ['engineering','Tính toán','⌁'],
-  ['technical','Hồ sơ kỹ thuật','▦'],
-  ['pricing','Giá & ngân sách','₫'],
-  ['report','Báo cáo','□'],
+  ['overview','Tổng quan','home'],
+  ['project','Thông tin nhà','house'],
+  ['engineering','Tính toán','calculator'],
+  ['technical','Hồ sơ kỹ thuật','clipboard'],
+  ['pricing','Giá & ngân sách','wallet'],
+  ['report','Báo cáo','fileText'],
 ];
 
 export function shell({
@@ -23,8 +23,8 @@ export function shell({
     <div class="app-shell">
       <aside class="sidebar">
         <div class="brand"><span class="brand-mark">B</span><div><b>BuildMate</b><small>Homeowner Beta</small></div></div>
-        <nav class="side-nav">${NAV.map(([id,label,icon])=>`
-          <button type="button" data-view="${id}" class="${activeView===id?'active':''}" aria-current="${activeView===id?'page':'false'}"><span>${icon}</span>${label}</button>`).join('')}</nav>
+        <nav class="side-nav">${NAV.map(([id,label,iconName])=>`
+          <button type="button" data-view="${id}" class="${activeView===id?'active':''}" aria-current="${activeView===id?'page':'false'}" title="${label}" aria-label="${label}"><span class="nav-icon">${icon(iconName)}</span><span class="nav-label">${label}</span></button>`).join('')}</nav>
         <div class="sidebar-foot"><small>Standards-backed · VN townhouse</small></div>
       </aside>
       <div class="workspace">
@@ -43,15 +43,15 @@ function topbar(project,projects) {
       <input id="project-name" value="${escapeHtml(project.name)}" aria-label="Tên dự án">
     </div>
     <div class="top-actions">
-      <button type="button" id="load-public-demo" class="ghost">Nạp demo 4×16</button>
-      <button type="button" id="run-demo-a2z" class="ghost">Chạy demo A→Z</button>
-      <button type="button" id="new-project" class="ghost">Dự án mới</button>
-      <details class="menu-pop"><summary aria-label="Thêm tác vụ" title="Thêm tác vụ">•••</summary><div>
-        <button id="export-html" class="ghost">Báo cáo HTML</button>
-        <button id="export-csv" class="ghost">BOQ kỹ thuật CSV</button>
-        <button id="export-json" class="ghost">Xuất JSON</button>
-        <button id="import-json" class="ghost">Nhập JSON</button>
-        <button id="delete-project" class="ghost danger">Xóa dự án</button>
+      <button type="button" id="load-public-demo" class="ghost icon-button" title="Nạp demo 4×16" aria-label="Nạp demo 4×16">${icon('flask')}</button>
+      <button type="button" id="run-demo-a2z" class="ghost icon-button" title="Chạy demo A→Z" aria-label="Chạy demo A→Z">${icon('play')}</button>
+      <button type="button" id="new-project" class="ghost icon-button" title="Dự án mới" aria-label="Dự án mới">${icon('plus')}</button>
+      <details class="menu-pop"><summary aria-label="Thêm tác vụ" title="Thêm tác vụ">${icon('more')}</summary><div>
+        <button id="export-html" class="ghost menu-action">${icon('download')}<span>Báo cáo HTML</span></button>
+        <button id="export-csv" class="ghost menu-action">${icon('download')}<span>BOQ kỹ thuật CSV</span></button>
+        <button id="export-json" class="ghost menu-action">${icon('download')}<span>Xuất JSON</span></button>
+        <button id="import-json" class="ghost menu-action">${icon('upload')}<span>Nhập JSON</span></button>
+        <button id="delete-project" class="ghost danger menu-action">${icon('trash')}<span>Xóa dự án</span></button>
       </div></details>
       <input id="import-json-file" type="file" accept="application/json" hidden>
     </div>
