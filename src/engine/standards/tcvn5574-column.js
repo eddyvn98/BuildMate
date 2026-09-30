@@ -63,27 +63,31 @@ export function rectangularEccentricCompressionCheck({
   const x=(Nn+Number(RsMpa)*Number(AsMm2)-Number(RscMpa)*Number(AsCompressionMm2))
     /(Number(RbMpa)*Number(bMm));
   const xi=x/Number(h0Mm);
-  if (xi>Number(xiR)) {
-    return {
-      blocked:true,reason:'Eq.(42) branch requires xi <= xiR; implement Eq.(43) branch',
-      xi:round(xi,5),xiR:Number(xiR),
-      reference:standardRef({standard:'TCVN 5574:2018',clause:'8.1.2.4.1, equations (42)-(43)',sourceUrl:SOURCE}),
-    };
-  }
   const e0Mm=Number(firstOrderMomentKnM)*1e6/Nn;
+  let xUsed=x;
+  let branch='Eq42-large-eccentricity';
+  let transition=null;
+  if (xi>Number(xiR)) {
+    const epsilon0=e0Mm/Number(hMm);
+    xUsed=(Number(xiR)+(1-Number(xiR))/(1+50*epsilon0*epsilon0))*Number(h0Mm);
+    branch='Eq43-small-eccentricity-transition';
+    transition={epsilon0:round(epsilon0,6),xFromEq42Mm:round(x,3),xEq43Mm:round(xUsed,3)};
+  }
+  const xiUsed=xUsed/Number(h0Mm);
   const eMm=e0Mm*Number(eta)+Number(hMm)/2-Number(aPrimeMm);
   const demandKnM=Number(axialLoadKn)*eMm/1000;
-  const capacityNmm=Number(RbMpa)*Number(bMm)*x*(Number(h0Mm)-0.5*x)
+  const capacityNmm=Number(RbMpa)*Number(bMm)*xUsed*(Number(h0Mm)-0.5*xUsed)
     +Number(RscMpa)*Number(AsCompressionMm2)*(Number(h0Mm)-Number(aPrimeMm));
   const capacityKnM=capacityNmm/1e6;
   return {
     pass:demandKnM<=capacityKnM,blocked:false,
     demandKnM:round(demandKnM,4),capacityKnM:round(capacityKnM,4),
     utilization:round(demandKnM/capacityKnM,5),
-    xMm:round(x,3),xi:round(xi,5),xiR:Number(xiR),e0Mm:round(e0Mm,3),eMm:round(eMm,3),
+    xMm:round(xUsed,3),xi:round(xiUsed,5),xiFromEq42:round(xi,5),xiR:Number(xiR),e0Mm:round(e0Mm,3),eMm:round(eMm,3),
+    branch,transition,
     level:'engineering-review',
     references:[
-      standardRef({standard:'TCVN 5574:2018',clause:'8.1.2.4.1, equations (40)-(42)',formula:'Ne <= Rb b x(h0-0.5x)+Rsc As\'(h0-a\'); x=(N+RsAs-RscAs\')/(Rb b)',sourceUrl:SOURCE}),
+      standardRef({standard:'TCVN 5574:2018',clause:'8.1.2.4.1, equations (40)-(43)',formula:'Eq.(42) when xi<=xiR; Eq.(43) transition x=[xiR+(1-xiR)/(1+50 epsilon0^2)]h0 when xi>xiR, epsilon0=e0/h',sourceUrl:SOURCE}),
       standardRef({standard:'TCVN 5574:2018',clause:'8.1.2.4.1, equation (41)',formula:'e=e0*eta+h/2-a\'',sourceUrl:SOURCE}),
     ],
   };
