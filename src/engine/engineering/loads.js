@@ -5,6 +5,8 @@ export function estimateBuildingGravityLoad({
   storeys,
   deadLoadKnM2,
   liveLoadKnM2,
+  deadLoadSource = null,
+  liveLoadSource = null,
 }) {
   requirePositive('floorAreaM2', floorAreaM2);
   requirePositive('storeys', storeys);
@@ -24,12 +26,12 @@ export function estimateBuildingGravityLoad({
     inputs: [
       inputTrace('floorArea', floorAreaM2, 'm²'),
       inputTrace('storeys', storeys, 'floor'),
-      inputTrace('deadLoad', deadLoadKnM2, 'kN/m²', 'assumed'),
-      inputTrace('liveLoad', liveLoadKnM2, 'kN/m²', 'assumed'),
+      inputTrace('deadLoad', deadLoadKnM2, 'kN/m²', deadLoadSource ? 'confirmed' : 'assumed'),
+      inputTrace('liveLoad', liveLoadKnM2, 'kN/m²', liveLoadSource ? 'confirmed' : 'assumed'),
     ],
-    references: [{ type: 'standard-context', id: 'TCVN 2737:2023' }],
+    references: [{ type: 'standard-context', id: 'TCVN 2737:2023', deadLoadSource, liveLoadSource }],
     warnings: [
-      'Đây là mô hình tải trọng sơ bộ theo giả định người dùng/profile, chưa phải tổ hợp tải trọng thiết kế.',
+      'Đây là tổng tải sử dụng để định hướng; chưa phải tổ hợp tải trọng thiết kế hay nội lực kết cấu.',
     ],
   });
 }
