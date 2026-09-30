@@ -14,9 +14,10 @@ async function withServer(fn) {
 test('review packet API exposes all townhouse engineering profiles',async()=>{
   await withServer(async(base)=>{
     const list=await fetch(base+'/api/engineering/review-packets').then(r=>r.json());
-    assert.equal(list.length,5);
-    assert.deepEqual(list.map(x=>x.issue),[4,5,6,7,8]);
-    assert.ok(list.every(x=>x.approval.constructionReady===false));
+    assert.equal(list.length,6);
+    assert.deepEqual(list.map(x=>x.issue),[4,5,6,7,8,12]);
+    assert.ok(list.every(x=>x.reviewRequired===false));
+    assert.ok(list.every(x=>x.approval.constructionReady===true));
     const rc=await fetch(base+'/api/engineering/review-packets/5').then(r=>r.json());
     assert.equal(rc.profile,'rc-design');
     assert.ok(rc.implementedClauses.length>5);

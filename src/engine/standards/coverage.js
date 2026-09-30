@@ -36,7 +36,7 @@ export const STANDARD_CLAUSE_COVERAGE=Object.freeze([
       '5.2.2 HVAC design classes I/II/III and reliability metadata',
       '6.1.5 + Appendix E.1 residential outdoor-air rates by person/area',
       '6.1.6 + Appendix F.1 mechanical-ventilation air-change workflows',
-      '6.1.7 + Appendix G.1-G.7 supply-air sizing paths',
+      '6.1.7 + Appendix G Eq.(G.1), Eq.(G.5)-(G.7) residential supply-air sizing paths',
       'Appendix G Eq.(G.1) sensible-excess-heat airflow',
       'Appendix G Eq.(G.5) air changes, Eq.(G.6) area and Eq.(G.7) people',
       'source-backed component cooling-load aggregation without W/m2 placeholder',

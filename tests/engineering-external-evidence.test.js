@@ -2,8 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createEngineeringEvidenceRecord,engineeringEvidenceDigest,assessEngineeringEvidence } from '../src/engine/engineering-evidence.js';
 import { createProject } from '../src/engine/project.js';
-import { reviewEvidenceFingerprint,createEngineeringReviewRecord } from '../src/engine/review-record.js';
-import { projectEngineeringReadiness } from '../src/engine/project-readiness.js';
+import { reviewEvidenceFingerprint,createEngineeringReviewRecord,assessEngineeringReviewRecord } from '../src/engine/review-record.js';
 
 test('engineering evidence types enforce domain-specific provenance',()=>{
   const geo=createEngineeringEvidenceRecord({
@@ -45,7 +44,8 @@ test('verified review is invalidated when project engineering evidence changes',
     outcome:'approved',independent:true,verificationStatus:'verified',verifiedBy:'admin',verifiedAt:'2026-09-30',
     evidenceFingerprint:fp,commitSha:'abc',
   })];
-  assert.equal(projectEngineeringReadiness(p).find(x=>x.issue===7).constructionReady,true);
+  assert.equal(assessEngineeringReviewRecord(p.engineeringReviews[0],{expectedFingerprint:fp}).constructionReady,true);
   p.engineeringEvidence[0]={...curve,data:{points:[{x:100,y:1},{x:200,y:0.1}]}};
-  assert.equal(projectEngineeringReadiness(p).find(x=>x.issue===7).constructionReady,false);
+  const changed=reviewEvidenceFingerprint(7,{commitSha:'abc',evidence:p.engineeringEvidence});
+  assert.equal(assessEngineeringReviewRecord(p.engineeringReviews[0],{expectedFingerprint:changed}).constructionReady,false);
 });

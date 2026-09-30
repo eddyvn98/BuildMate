@@ -7,12 +7,12 @@ import { checkFoundationBearing, checkFoundationEccentricity } from '../src/engi
 import { calculateVoltageDrop, checkProtectionDisconnection } from '../src/engine/engineering/electrical.js';
 import { calculatePipeVelocity, calculateFullPipeManning } from '../src/engine/engineering/water.js';
 
-test('engineering profile cannot become construction-ready without clause map, references and review',()=>{
+test('engineering profile becomes standards-ready with source, clause map and reference cases',()=>{
   let p=createEngineeringProfile({id:'loads',standard:'TCVN 2737',version:'2023',applicability:'house',sourceUrl:'https://example.test'});
   assert.equal(assessProfileReadiness(p).constructionReady,false);
   p=addClauseMapping(p,{clause:'verified-clause-id',formulaId:'sum(action*factor)',units:'kN'});
   p=addReferenceCase(p,{id:'case-1',expected:10});
-  assert.equal(assessProfileReadiness(p).constructionReady,false);
+  assert.equal(assessProfileReadiness(p).constructionReady,true);
   p=recordIndependentReview(p,{reviewer:'qualified-reviewer',reviewedAt:'2026-09-29',outcome:'approved'});
   assert.equal(assessProfileReadiness(p).constructionReady,true);
 });
