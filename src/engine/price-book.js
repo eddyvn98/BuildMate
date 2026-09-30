@@ -13,6 +13,8 @@ export function overridePriceBook(baseBook, overrides, metadata = {}) {
   return {
     ...baseBook,
     id: `${baseBook.id}-override`,
+    sourceLabel: metadata.sourceLabel ?? baseBook.sourceLabel,
+    effectiveDate: metadata.effectiveDate ?? baseBook.effectiveDate,
     items,
     overrides: provenance,
   };
