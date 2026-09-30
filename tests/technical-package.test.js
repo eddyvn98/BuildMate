@@ -71,6 +71,8 @@ test('technical package appears in homeowner UI, report and BOQ CSV',()=>{
   assert.ok(html.includes('Thép theo đường kính'));
   assert.ok(html.includes('BOQ theo hạng mục'));
   assert.ok(html.includes('Giằng móng'));
+  assert.ok(html.includes('4Ø18'));
+  assert.ok(html.includes('đai Ø8a150'));
   const report=buildProjectReport(p,workflow);
   assert.equal(report.technicalPackage.version,'0.9');
   const csv=quantitiesToCsv(report);

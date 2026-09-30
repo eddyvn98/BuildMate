@@ -18,12 +18,12 @@ export function technicalPanel(project,workflow) {
 
     <section class="panel-block">
       <div class="section-head"><div><h2>Lưới & kích thước cấu kiện</h2><p class="hint">${m.grid.longitudinalBays} nhịp dọc × ${m.grid.transverseBays} nhịp ngang · ${m.grid.columnGridPoints} điểm cột.</p></div></div>
-      ${scheduleTable('Sàn',m.structural.slabs,['id','level','areaM2','thicknessMm'],['Mã','Tầng','Diện tích m²','d mm'])}
-      ${scheduleTable('Dầm',m.structural.beams,['id','quantity','totalLengthM','bMm','hMm'],['Mã','SL','Tổng dài m','b mm','h mm'])}
-      ${scheduleTable('Cột',m.structural.columns,['id','quantity','segmentHeightM','bMm','hMm'],['Mã','SL đoạn','Cao đoạn m','b mm','h mm'])}
-      ${scheduleTable('Móng',m.structural.foundations,['id','type','quantity','lengthM','widthM','thicknessM'],['Mã','Loại','SL','Dài m','Rộng m','d m'])}
-      ${scheduleTable('Giằng móng',m.structural.tieBeams,['id','quantity','totalLengthM','bMm','hMm'],['Mã','SL','Tổng dài m','b mm','h mm'])}
-      ${scheduleTable('Cầu thang',m.structural.stairs,['id','quantity','widthM','thicknessMm'],['Mã','SL','Rộng m','d mm'])}
+      ${memberSchedule('Sàn',m.structural.slabs,'slab')}
+      ${memberSchedule('Dầm',m.structural.beams,'beam')}
+      ${memberSchedule('Cột',m.structural.columns,'column')}
+      ${memberSchedule('Móng',m.structural.foundations,'foundation')}
+      ${memberSchedule('Giằng móng',m.structural.tieBeams,'beam')}
+      ${memberSchedule('Cầu thang',m.structural.stairs,'stair')}
     </section>
 
     <div class="two-col">
@@ -67,6 +67,34 @@ export function technicalPanel(project,workflow) {
 function scheduleTable(title,rows,keys,labels){
   if(!rows?.length) return '';
   return `<h3>${escapeHtml(title)}</h3><div class="table-wrap"><table class="technical-table"><thead><tr>${labels.map(x=>'<th>'+escapeHtml(x)+'</th>').join('')}</tr></thead><tbody>${rows.map(row=>'<tr>'+keys.map(k=>'<td>'+escapeHtml(formatValue(row[k]))+'</td>').join('')+'</tr>').join('')}</tbody></table></div>`;
+}
+function memberSchedule(title,rows,type){
+  if(!rows?.length) return '';
+  const body=rows.map(row=>`<tr><td>${escapeHtml(row.id)}</td><td>${escapeHtml(memberQuantity(row,type))}</td><td>${escapeHtml(memberSize(row,type))}</td><td>${escapeHtml(rebarDetail(row,type))}</td><td><small>${escapeHtml(row.basis??'')}</small></td></tr>`).join('');
+  return `<h3>${escapeHtml(title)}</h3><div class="table-wrap"><table class="technical-table"><thead><tr><th>Mã</th><th>SL/Quy mô</th><th>Kích thước</th><th>Cốt thép sơ bộ</th><th>Mức</th></tr></thead><tbody>${body}</tbody></table></div>`;
+}
+function memberQuantity(r,type){
+  if(type==='slab') return (r.level??'')+' · '+(r.areaM2??'')+' m²';
+  if(type==='beam') return (r.quantity??0)+' đoạn · '+(r.totalLengthM??0)+' m';
+  if(type==='column') return (r.quantity??0)+' đoạn · '+(r.segmentHeightM??0)+' m/đoạn';
+  if(type==='foundation') return (r.quantity??0)+' móng';
+  if(type==='stair') return (r.quantity??0)+' bộ';
+  return String(r.quantity??'');
+}
+function memberSize(r,type){
+  if(type==='slab') return 'd='+r.thicknessMm+' mm';
+  if(type==='beam'||type==='column') return r.bMm+'×'+r.hMm+' mm';
+  if(type==='foundation') return r.lengthM+'×'+r.widthM+'×'+r.thicknessM+' m';
+  if(type==='stair') return 'rộng '+r.widthM+' m · d='+r.thicknessMm+' mm';
+  return '—';
+}
+function rebarDetail(r,type){
+  if(type==='slab') return 'Dưới Ø'+r.reinforcement.bottom.diameterMm+'a'+r.reinforcement.bottom.spacingMm+' 2 phương · gối Ø'+r.reinforcement.supportTop.diameterMm+'a'+r.reinforcement.supportTop.spacingMm;
+  if(type==='beam') return r.mainBars.count+'Ø'+r.mainBars.diameterMm+(r.extraTop?' + '+r.extraTop.count+'Ø'+r.extraTop.diameterMm:'')+' · đai Ø'+r.stirrups.diameterMm+'a'+r.stirrups.spacingMm;
+  if(type==='column') return r.verticalBars.count+'Ø'+r.verticalBars.diameterMm+' · đai Ø'+r.ties.diameterMm+'a'+r.ties.spacingMm;
+  if(type==='foundation') return 'Đáy Ø'+r.bottomMesh.diameterMm+'a'+r.bottomMesh.spacingMm+' 2 phương';
+  if(type==='stair') return 'Chịu lực Ø'+r.mainBars.diameterMm+'a'+r.mainBars.spacingMm+' · phân bố Ø'+r.distributionBars.diameterMm+'a'+r.distributionBars.spacingMm;
+  return '—';
 }
 function simpleRows(rows){
   return '<div class="material-grid">'+rows.map(r=>'<div class="material-row"><span>'+escapeHtml(r[0])+'</span><b>'+escapeHtml(r[1])+'</b><small>'+escapeHtml(r[2]??'')+'</small></div>').join('')+'</div>';
