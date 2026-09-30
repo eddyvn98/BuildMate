@@ -10,6 +10,7 @@ import { runEngineeringPreview } from './engineering-preview.js';
 import { buildProjectPriceBook } from './project-price-book.js';
 import { resolvePlanningRules } from './planning-rules.js';
 import { buildProjectMarketPricing } from './market-pricing.js';
+import { buildTechnicalPackage } from './technical-package.js';
 
 export function runPlanningWorkflow(project) {
   const issues = validatePlanningInputs(project);
@@ -74,11 +75,16 @@ export function runPlanningWorkflow(project) {
     rules: project.planningRules ?? [],
   });
   const engineering = runEngineeringPreview(project, planningResults);
+  const technicalPackage=buildTechnicalPackage(
+    project,
+    {...planningResults,marketPricing,planningRules,engineering},
+    {fullPriceBook:priceBook}
+  );
 
   return {
     status: 'ready',
     issues,
     gates: engineeringGates(project),
-    results: { ...planningResults, marketPricing, planningRules, engineering },
+    results: { ...planningResults, marketPricing, planningRules, engineering, technicalPackage },
   };
 }

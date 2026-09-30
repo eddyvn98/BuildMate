@@ -1,7 +1,7 @@
 import { sha256Hex,canonicalJson } from './hash.js';
 
 export function createEngineeringCalculationRecord({
-  id=null,action,issue,standard,input,output,engineVersion='0.7.0',createdAt=null
+  id=null,action,issue,standard,input,output,engineVersion='0.9.0',createdAt=null
 }) {
   if (!action||!standard) throw new TypeError('action and standard are required');
   if (![4,5,6,7,8,12].includes(Number(issue))) throw new RangeError('unsupported engineering issue');
