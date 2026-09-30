@@ -1,3 +1,4 @@
+import { conformanceForIssue } from './standards/conformance.js';
 import { townhouseCoreScope } from './townhouse-scope.js';
 import { createEngineeringProfile, assessProfileReadiness } from './profile-gate.js';
 import { standardById } from './standards.js';
@@ -14,13 +15,7 @@ const DEFINITIONS=[
   ['external-drainage','external-drainage','TCVN 7957:2023','2023','Drainage design context',8],
 ];
 
-const REFERENCE_CASES={
-  4:['standard-derived.test:TCVN2737','standard-load-foundation.test:area-reduction','standard-wind-permanent.test','standard-wind-terrain.test','standard-wind-aerodynamic.test'],
-  5:['standard-derived.test:TCVN5574','standard-gap-closure.test:RC','standard-rc-materials.test','standard-rc-sls-pile.test','standard-rc-detailing.test','standard-rc-anchorage.test','standard-rc-cover.test'],
-  6:['standard-derived.test:foundation','standard-load-foundation.test:TCVN9362','standard-foundation-settlement.test','standard-foundation-alpha.test','standard-rc-sls-pile.test:pile'],
-  7:['standard-electrical.test','standard-electrical-ampacity.test','standard-electrical-corrections.test','standard-electrical-fault-loop.test','standard-provenance.test:PE'],
-  8:['standard-derived.test:water-drainage','standard-gap-closure.test:water','standard-water-drainage.test','standard-water-hydraulics.test','standard-water-pump.test'],
-};
+
 
 function evidenceForIssue(issue) {
   const coverage=STANDARD_CLAUSE_COVERAGE.find((item)=>item.issue===issue);
@@ -30,7 +25,7 @@ function evidenceForIssue(issue) {
       formulaId:`coverage-${issue}-${index+1}`,
       units:'see implementation result',
     })),
-    referenceCases:(REFERENCE_CASES[issue] ?? []).map((id)=>({id,expected:'assertions in automated Node test suite'})),
+    referenceCases:conformanceForIssue(issue).flatMap((group)=>group.testFiles.map((file)=>({id:file,expected:'assertions in automated Node test suite',conformanceGroup:group.id}))),
     pendingGaps:coverage?.pending ?? [],
     externalRequirements:coverage?.externalRequirements ?? [],
   };
