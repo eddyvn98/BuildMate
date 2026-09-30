@@ -84,3 +84,6 @@ Review packets expose supported townhouse scope, blocked extensions, implemented
 - `GET /api/projects/{id}/engineering-reviews` — list review records with current validity assessment.
 
 A review is not sufficient for `constructionReady` merely because it says `approved`. The record must also be independently verified and its evidence fingerprint must still match.
+
+
+- `GET /api/projects/{id}/engineering-readiness` — per-profile townhouse-core readiness after fingerprint and independent-review verification.

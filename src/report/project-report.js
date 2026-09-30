@@ -1,3 +1,4 @@
+import { projectEngineeringReadiness } from '../engine/project-readiness.js';
 import { auditEngineeringEvidence } from '../engine/evidence-audit.js';
 import { STANDARD_CLAUSE_COVERAGE } from '../engine/standards/coverage.js';
 export function buildProjectReport(project, workflow) {
@@ -23,6 +24,7 @@ export function buildProjectReport(project, workflow) {
     },
     priceBook: result.priceBook,
     engineering: result.engineering,
+    engineeringReviewStatus: projectEngineeringReadiness(project),
     engineeringEvidenceAudit: auditEngineeringEvidence(result.engineering),
     standardCoverage: structuredClone(STANDARD_CLAUSE_COVERAGE),
     gates: workflow.gates,
@@ -55,6 +57,7 @@ export function reportToHtml(report) {
   <h2>Ngân sách</h2><table><thead><tr><th>Phương án</th><th>Tổng</th></tr></thead><tbody>${budgetRows}</tbody></table>
   <h2>Khối lượng sơ bộ</h2><table><thead><tr><th>Hạng mục</th><th>Giá trị</th><th>Đơn vị</th><th>Mức</th></tr></thead><tbody>${quantityRows}</tbody></table>
   <h2>Giả định</h2><ul>${assumptions}</ul>
+  <h2>Trạng thái review kỹ thuật</h2><pre>${escapeHtml(JSON.stringify(report.engineeringReviewStatus, null, 2))}</pre>
   <h2>Bằng chứng tính toán kỹ thuật</h2><p>Audit evidence: <b>${report.engineeringEvidenceAudit.length === 0 ? 'PASS' : 'CÓ THIẾU SÓT'}</b></p><pre>${escapeHtml(JSON.stringify(report.engineeringEvidenceAudit, null, 2))}</pre>
   <h2>Phạm vi điều khoản tiêu chuẩn</h2><pre>${escapeHtml(JSON.stringify(report.standardCoverage, null, 2))}</pre>
   <h2>Cổng kỹ thuật</h2><pre>${escapeHtml(JSON.stringify(report.gates, null, 2))}</pre>

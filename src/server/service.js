@@ -1,3 +1,4 @@
+import { projectEngineeringReadiness } from '../engine/project-readiness.js';
 import { createEngineeringReviewRecord,reviewEvidenceFingerprint,assessEngineeringReviewRecord } from '../engine/review-record.js';
 import { addActual, removeActual } from '../engine/actuals.js';
 import { createDesignVersion, addDesignVersion } from '../engine/design-versions.js';
@@ -109,6 +110,11 @@ export class BuildMateService {
     project.engineeringReviews=[...(project.engineeringReviews ?? []),record];
     this.store.saveProject(ownerId,project);
     return {...record,assessment:assessEngineeringReviewRecord(record,{expectedFingerprint})};
+  }
+
+  engineeringReadiness(ownerId,id) {
+    const project=this.store.getProject(ownerId,id);
+    return projectEngineeringReadiness(project);
   }
 
   listEngineeringReviews(ownerId,id) {
