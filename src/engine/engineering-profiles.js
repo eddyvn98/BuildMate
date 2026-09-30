@@ -32,6 +32,7 @@ function evidenceForIssue(issue) {
     })),
     referenceCases:(REFERENCE_CASES[issue] ?? []).map((id)=>({id,expected:'assertions in automated Node test suite'})),
     pendingGaps:coverage?.pending ?? [],
+    externalRequirements:coverage?.externalRequirements ?? [],
   };
 }
 
@@ -57,6 +58,7 @@ export function engineeringProfileStatus() {
     implementedClauseCount:profile.clauseMap.length,
     referenceCaseCount:profile.referenceCases.length,
     pendingGaps:structuredClone(profile.pendingGaps),
+    externalRequirements:structuredClone(profile.externalRequirements ?? []),
     townhouseCore:townhouseCoreScope(issueForProfile(profile.id)),
     softwareReadyForIndependentReview:Boolean(profile.clauseMap.length && profile.referenceCases.length),
     ...assessProfileReadiness(profile),

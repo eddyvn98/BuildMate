@@ -225,3 +225,10 @@ RC local bearing and fire closure:
 - TCVN 5574:2018 8.1.5.2 Eq.(116)-(118): local compression capacity, Rb,loc and phi_b limits are implemented. Clause 10.3.5.8 special anchor plates/nuts/angles/bulged ends route through this local-bearing check.
 - QCVN 06:2022/BXD Appendix F nominal RC fire tables are linked to TCVN 5574 detailing: Table F.3 beams, F.5/F.6 columns and F.9 solid slabs. Cover/section requirements are checked simultaneously and governing cover is max(TCVN5574 durability/detailing, QCVN06 fire).
 - QCVN 06 nominal Appendix F tables explicitly do not replace calculation/testing for cases outside their applicability, including statically indeterminate cases where the table note directs fire calculation to the selected applicable standard.
+
+
+Standards coverage model:
+- `pending` now means a missing software calculation/table branch. For issues #4-#8 it is empty.
+- `externalRequirements` records evidence that the standards themselves require from outside the deterministic engine: geotechnical tests, manufacturer curves, measurements, specialist wind/fire analysis where the standard directs it, and independent verification.
+- QCVN 02:2022/BXD locality handling is generalized through a sourced Table 5.1 registry. Every row is validated against the exact zone tuple I=(65,36,26), II=(95,44,31), III=(125,50,36), IV=(155,56,40), V=(185,61,43). Missing localities block instead of falling back to a guessed zone.
+- A machine-readable conformance matrix links each engineering issue to its source clauses and automated reference-test families.
