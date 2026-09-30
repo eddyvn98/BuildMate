@@ -1,5 +1,13 @@
 # Roadmap
 
+## Completed — v1.0.0 A-to-Z Planning Package
+
+- Technical member parameters are editable and persisted per project.
+- Schedule → quantity takeoff → material summary → BOQ recalculates live.
+- Old projects hydrate safely with preliminary technical defaults.
+- Technical Package reports software-completion and distinguishes it from construction-design readiness.
+- v1.0 closes the planned homeowner software loop; remaining blockers are project evidence/design inputs rather than missing core product surfaces.
+
 ## Completed — v0.9.0 Technical Package Beta
 
 - Added parametric member model and schedules for the full townhouse frame.

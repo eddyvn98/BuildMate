@@ -1,7 +1,13 @@
 # Release Status
 
 Status date: 2026-09-30  
-Application version: 0.9.0
+Application version: 1.0.0
+
+## v1.0 software-complete status
+
+The planned homeowner A-to-Z software loop is complete: intake, current pricing, engineering calculators, editable technical schedules, detailed material takeoff, BOQ, actual-cost tracking, reports/exports and hosted deployment are all present.
+
+This does **not** mean a project is construction-design ready. Geotechnical data, member-by-member structural analysis, approved architectural/MEP layouts, manufacturer data and professional/legal deliverables remain project-specific inputs/evidence.
 
 ## Technical Package status
 

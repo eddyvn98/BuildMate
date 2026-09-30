@@ -139,7 +139,7 @@ function bindGuidedCalculator() {
 function persistCalculation(action,input) {
   const output=runStandardCalculation(project,{action,input});
   const record=createEngineeringCalculationRecord({
-    action,issue:output.issue,standard:output.standard,input,output,engineVersion:'0.9.0',
+    action,issue:output.issue,standard:output.standard,input,output,engineVersion:'1.0.0',
   });
   project={
     ...project,
@@ -164,7 +164,7 @@ function runPublicDemoAtoZ() {
   for (const [action,input] of publicReferenceCalculationInputs()) {
     const output=runStandardCalculation(project,{action,input});
     const record=createEngineeringCalculationRecord({
-      action,issue:output.issue,standard:output.standard,input,output,engineVersion:'0.9.0',
+      action,issue:output.issue,standard:output.standard,input,output,engineVersion:'1.0.0',
       createdAt:new Date().toISOString(),
     });
     project.engineeringCalculations.push(record);

@@ -1,4 +1,4 @@
-import { escapeHtml,metric } from './common.js';
+import { escapeHtml,metric,input } from './common.js';
 import { money,number } from './render.js';
 
 export function technicalPanel(project,workflow) {
@@ -7,13 +7,42 @@ export function technicalPanel(project,workflow) {
   const m=pack.model,t=pack.takeoff,b=pack.boq;
   return `
     <section class="panel-block technical-hero">
-      <div class="section-head"><div><span class="eyebrow">v0.9 Technical Package</span><h2>Hồ sơ kỹ thuật sơ bộ</h2><p class="hint">Cấu kiện → vật tư → BOQ được bóc từ mô hình hình học. Các cấu kiện chưa có calculation riêng vẫn mang mức preliminary.</p></div><span class="badge">${escapeHtml(pack.level)}</span></div>
+      <div class="section-head"><div><span class="eyebrow">v1.0 Technical Package</span><h2>Hồ sơ kỹ thuật sơ bộ</h2><p class="hint">Cấu kiện → vật tư → BOQ được bóc từ mô hình hình học. Các cấu kiện chưa có calculation riêng vẫn mang mức preliminary.</p></div><span class="badge">${escapeHtml(pack.level)}</span></div>
       <div class="metrics">
         ${metric('Bê tông',number(t.summary.concreteM3,'m³'),'từ cấu kiện')}
         ${metric('Thép',number(t.summary.rebarKg,'kg'),'theo Ø')}
         ${metric('Cốp pha',number(t.summary.formworkM2,'m²'),'theo hình học')}
         ${metric('BOQ đã có giá',money(b.pricedSubtotalVnd),b.pricedRowCount+' dòng')}
       </div>
+    </section>
+
+    <section class="panel-block">
+      <details class="advanced" open>
+        <summary>Chỉnh phương án cấu kiện preliminary</summary>
+        <p class="hint">Các ô này điều khiển trực tiếp schedule → bóc vật tư → BOQ. Thay đổi không biến chúng thành thiết kế thi công; calculation/evidence vẫn là bước xác nhận.</p>
+        <div class="form-grid">
+          ${input('Chiều cao tầng (m)','technicalModel.floorHeightM',project.technicalModel.floorHeightM,'number','2.6','5','0.1')}
+          ${input('Sàn dày (mm)','technicalModel.slabThicknessMm',project.technicalModel.slabThicknessMm,'number','80','250','5')}
+          ${input('Thép sàn Ø (mm)','technicalModel.slabBarDiameterMm',project.technicalModel.slabBarDiameterMm,'number','6','20','1')}
+          ${input('Bước thép sàn (mm)','technicalModel.slabBarSpacingMm',project.technicalModel.slabBarSpacingMm,'number','80','300','10')}
+          ${input('Dầm b (mm)','technicalModel.beamWidthMm',project.technicalModel.beamWidthMm,'number','150','500','10')}
+          ${input('Dầm h (mm)','technicalModel.beamDepthMm',project.technicalModel.beamDepthMm,'number','250','900','10')}
+          ${input('Thép dọc dầm - số thanh','technicalModel.beamMainCount',project.technicalModel.beamMainCount,'number','2','12','1')}
+          ${input('Thép dọc dầm Ø (mm)','technicalModel.beamMainDiameterMm',project.technicalModel.beamMainDiameterMm,'number','10','32','1')}
+          ${input('Đai dầm Ø (mm)','technicalModel.beamStirrupDiameterMm',project.technicalModel.beamStirrupDiameterMm,'number','6','14','1')}
+          ${input('Bước đai dầm (mm)','technicalModel.beamStirrupSpacingMm',project.technicalModel.beamStirrupSpacingMm,'number','80','300','10')}
+          ${input('Cột dưới b (mm)','technicalModel.lowerColumnWidthMm',project.technicalModel.lowerColumnWidthMm,'number','180','600','10')}
+          ${input('Cột dưới h (mm)','technicalModel.lowerColumnDepthMm',project.technicalModel.lowerColumnDepthMm,'number','180','600','10')}
+          ${input('Cột trên b (mm)','technicalModel.upperColumnWidthMm',project.technicalModel.upperColumnWidthMm,'number','180','600','10')}
+          ${input('Cột trên h (mm)','technicalModel.upperColumnDepthMm',project.technicalModel.upperColumnDepthMm,'number','180','600','10')}
+          ${input('Móng dài (m)','technicalModel.footingLengthM',project.technicalModel.footingLengthM,'number','0.6','4','0.1')}
+          ${input('Móng rộng (m)','technicalModel.footingWidthM',project.technicalModel.footingWidthM,'number','0.6','4','0.1')}
+          ${input('Móng dày (m)','technicalModel.footingThicknessM',project.technicalModel.footingThicknessM,'number','0.2','1.2','0.05')}
+          ${input('Thép móng Ø (mm)','technicalModel.footingBarDiameterMm',project.technicalModel.footingBarDiameterMm,'number','8','25','1')}
+          ${input('Bước thép móng (mm)','technicalModel.footingBarSpacingMm',project.technicalModel.footingBarSpacingMm,'number','80','300','10')}
+          ${input('Tường dày (mm)','technicalModel.wallThicknessMm',project.technicalModel.wallThicknessMm,'number','80','220','10')}
+        </div>
+      </details>
     </section>
 
     <section class="panel-block">
@@ -59,7 +88,7 @@ export function technicalPanel(project,workflow) {
     </section>
 
     <section class="panel-block">
-      <div class="section-head"><div><h2>Calculation coverage</h2><p class="hint">${pack.calculationCoverage.readyDomains}/6 domain có representative calculation run; chưa đồng nghĩa từng cấu kiện đã được thiết kế.</p></div></div>
+      <div class="section-head"><div><h2>Package status</h2><p class="hint">Software package: ready · calculation domain ${pack.softwareCompletion.calculationDomainPercent}% · priced takeoff ${pack.softwareCompletion.pricedTakeoffPercent}%. Chưa đồng nghĩa từng cấu kiện đã được thiết kế/duyệt.</p></div></div>
       <div class="blocker-list">${pack.blockers.map(x=>'<div class="alert">'+escapeHtml(x)+'</div>').join('')}</div>
     </section>`;
 }
