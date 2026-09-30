@@ -161,3 +161,9 @@ Additional TCVN 7447-5-52 evidence:
 Additional TCVN 7447-4-41 evidence:
 - 411.4.4: TN automatic-disconnection loop condition Zs·Ia ≤ Uo; Ia must come from the protective-device characteristic for the required time.
 - 411.5.3: TT system with RCD must satisfy RA·IΔn ≤ 50 V and the applicable disconnection time.
+
+
+Additional evidence implemented:
+- TCVN 2737:2023 Appendix F Tables F.5a/F.5b: exact pitched-roof external pressure coefficient rows for theta=0/90 degrees; dual-sign cases remain separate load cases.
+- TCVN 5574:2018 8.2.3.2.1 Eq.(177): f <= fu; 8.2.3.2.2 Eq.(179): curvature-based midspan deflection for even segment count n>=6.
+- TCVN 10304:2025 7.4.3.1: preliminary equal pile load Nd,mean=Nd,f/n and final-model force convergence requirement <=10%.
