@@ -178,3 +178,19 @@ input,select{width:100%;border:1px solid var(--line);background:#fff;border-radi
 @media(max-width:420px){
   .technical-summary-grid,.boq-group-grid,.material-highlight-grid{grid-template-columns:1fr}
 }
+
+.ui-icon{display:block;flex:0 0 auto}
+.icon-button{width:42px;height:42px;padding:0;display:inline-grid;place-items:center;border-radius:10px}
+.primary-icon{background:var(--accent);color:#fff}
+.nav-icon{width:22px;height:22px;display:grid;place-items:center;flex:0 0 22px}
+.menu-pop summary{min-width:42px;height:42px;display:grid;place-items:center;padding:0}
+.menu-action{display:flex;align-items:center;gap:9px}
+.next-action-card>.ui-icon{color:var(--accent)}
+.reference-links a::after,.source-row[href]::after,.source-table a::after{content:"↗";align-self:flex-start;color:var(--muted);font-size:12px}
+@media(max-width:1050px){
+  .side-nav button{justify-content:center}
+  .nav-label{display:none}
+}
+@media(max-width:760px){
+  .top-actions .icon-button,.menu-pop summary{min-width:44px;width:44px;height:44px}
+}
