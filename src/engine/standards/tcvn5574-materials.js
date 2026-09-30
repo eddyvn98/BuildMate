@@ -1,6 +1,6 @@
 import { standardRef, standardResult } from './common.js';
 
-const SOURCE='https://dulieuphapluat.vn/van-ban/xay-dung-van-ban/tieu-chuan-quoc-gia-tcvn-55742018-ve-thiet-ke-ket-cau-be-tong-va-be-tong-cot-thep-86955.html';
+const SOURCE='https://www.rds.com.vn/TCXD1/TCVN5574-2018.pdf';
 
 const HEAVY=Object.freeze({
   'B3.5':{Rb:2.1,Rbt:0.26,RbSer:2.7,RbtSer:0.39,Eb:9500},
@@ -174,3 +174,62 @@ function densityLookup(table,density,strengthClass) {
   return row[strengthClass];
 }
 function round(v,d=5){const f=10**d;return Math.round(v*f)/f;}
+
+
+const LONG_TERM_STRAINS=Object.freeze({
+  high:{eb0:0.0030,eb2:0.0042,eb1red:0.0024,ebt0:0.00021,ebt2:0.00027,ebt1red:0.00019},
+  medium:{eb0:0.0034,eb2:0.0048,eb1red:0.0028,ebt0:0.00024,ebt2:0.00031,ebt1red:0.00022},
+  low:{eb0:0.0040,eb2:0.0056,eb1red:0.0034,ebt0:0.00028,ebt2:0.00036,ebt1red:0.00026},
+});
+
+export function longTermConcreteStrains({strengthClass,relativeHumidityPercent}) {
+  const rh=Number(relativeHumidityPercent);
+  if (!(rh>=0&&rh<=100)) throw new RangeError('relativeHumidityPercent must be 0..100');
+  const band=rh>75?'high':rh>=40?'medium':'low';
+  const base=LONG_TERM_STRAINS[band];
+  const match=String(strengthClass).match(/^B(\d+(?:\.\d+)?)$/);
+  if (!match) throw new RangeError('strengthClass must be like B25');
+  const B=Number(match[1]);
+  let factor=1;
+  if (B>60) {
+    if (B<70||B>100) throw new RangeError('Table 9 high-strength factor implemented for B70..B100');
+    factor=(270-B)/210;
+  }
+  const values=Object.fromEntries(Object.entries(base).map(([k,v])=>[k,round(v*factor,8)]));
+  return {
+    ...values,strengthClass,relativeHumidityPercent:rh,humidityBand:band,highStrengthFactor:round(factor,8),
+    level:'engineering-review',
+    reference:standardRef({
+      standard:'TCVN 5574:2018',clause:'6.1.3.2, Table 9',
+      formula:B>60?'Table 9 strains multiplied by (270-B)/210 for B70..B100':'Table 9 values',
+      sourceUrl:SOURCE,
+    }),
+  };
+}
+
+export function equivalentConcreteModulus({
+  RbSerMpa,duration='short-term',strengthClass=null,relativeHumidityPercent=null,
+  concreteType='heavy',densityKgM3=null
+}) {
+  const R=Number(RbSerMpa);
+  if (!(R>0)) throw new RangeError('RbSerMpa must be > 0');
+  let epsilon;
+  let clause;
+  if (duration==='short-term'||duration==='short') {
+    if (concreteType==='heavy') epsilon=0.0015;
+    else if (concreteType==='lightweight') epsilon=0.0022;
+    else throw new RangeError('short-term concreteType must be heavy or lightweight');
+    clause='6.1.4.3 equation (13)';
+  } else if (duration==='long-term'||duration==='long') {
+    if (concreteType!=='heavy') throw new RangeError('automatic long-term Table 9 lookup is implemented for heavy concrete');
+    epsilon=longTermConcreteStrains({strengthClass,relativeHumidityPercent}).eb1red;
+    clause='6.1.3.2 Table 9 + 6.1.4.3 equation (13)';
+  } else {
+    throw new RangeError('duration must be short-term/short or long-term/long');
+  }
+  return standardResult({
+    value:round(R/epsilon,4),unit:'MPa',formulaId:'TCVN5574-2018-Eq13',
+    reference:standardRef({standard:'TCVN 5574:2018',clause,formula:'Eb,red = Rb,ser / epsilon_b1,red',sourceUrl:SOURCE}),
+    inputs:{RbSerMpa:R,duration,strengthClass,relativeHumidityPercent,concreteType,densityKgM3,epsilonB1Red:epsilon},
+  });
+}
