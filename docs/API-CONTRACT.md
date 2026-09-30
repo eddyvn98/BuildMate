@@ -66,3 +66,12 @@ GET    /api/projects/{projectId}/reports/{runId}
 ## Future verified engineering endpoint
 
 A verified standard profile must be explicitly selected. If the profile is not `verified`, the API must reject any request for `construction-ready` level output.
+
+
+## Engineering evidence and review
+
+- `GET /api/standards/coverage` — machine-readable clause coverage for issues #4-#8.
+- `GET /api/engineering/review-packets` — independent-review packets for all townhouse engineering profiles.
+- `GET /api/engineering/review-packets/{issue}` — one packet for issue 4, 5, 6, 7 or 8.
+
+Review packets expose supported townhouse scope, blocked extensions, implemented clause map, reviewer checklist and an explicit `constructionReady: false` approval state until independent review is recorded.
