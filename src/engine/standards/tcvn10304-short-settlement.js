@@ -17,11 +17,12 @@ const ROWS=Object.freeze({
 });
 
 export function shortPileTableRow(poissonRatio) {
-  const key=Number(poissonRatio).toFixed(2);
-  const row=ROWS[key];
+  const nu=Number(poissonRatio);
+  const key=Object.keys(ROWS).find((candidate)=>Math.abs(Number(candidate)-nu)<1e-9);
+  const row=key==null?null:ROWS[key];
   if (!row) throw new RangeError('poissonRatio must match a published TCVN 10304:2025 Table 17 row from 0.00 to 0.50 in 0.05 increments');
   return {
-    poissonRatio:Number(key),...row,level:'engineering-review',
+    poissonRatio:nu,...row,level:'engineering-review',
     reference:standardRef({standard:'TCVN 10304:2025',clause:'7.4.2.1, Table 17',sourceUrl:SOURCE,note:'Published coefficients for short-pile settlement branch.'}),
   };
 }
