@@ -1,7 +1,7 @@
 import { ENGINEERING_EVIDENCE_TYPES,evidenceDataExample } from './engineering-tools.js';
 import { guidedCalculatorSpec,guidedCalculatorSpecs } from './guided-calculator.js';
 import { explainCalculation } from './calculation-explain.js';
-import { escapeHtml,metric } from './common.js';
+import { escapeHtml,icon,metric } from './common.js';
 import { money,number } from './render.js';
 
 export function engineeringPanel(project,workflow,{calculatorCapabilities=[],calculatorState={},guidedState={},evidenceState={}}={}) {
@@ -24,7 +24,7 @@ export function engineeringPanel(project,workflow,{calculatorCapabilities=[],cal
       ${spec.warning?'<div class="alert">'+escapeHtml(spec.warning)+'</div>':''}
       <form id="guided-calculator-form" class="guided-form" data-guided-action="${escapeHtml(spec.id)}">
         ${spec.fields.map(field=>guidedField(field,guidedState.values??{})).join('')}
-        <div class="guided-submit"><button type="submit">Tính theo tiêu chuẩn</button><small>Kết quả sẽ được lưu vào lịch sử project.</small></div>
+        <div class="guided-submit"><button type="submit" class="icon-button primary-icon" title="Tính theo tiêu chuẩn" aria-label="Tính theo tiêu chuẩn">${icon('calculator')}</button><small>Kết quả sẽ được lưu vào lịch sử project.</small></div>
       </form>
       ${guidedState.error?'<div class="alert">'+escapeHtml(guidedState.error)+'</div>':''}
       ${guidedState.output?guidedResult(guidedState.record??null,guidedState.output):''}
@@ -104,7 +104,7 @@ function expertCalculator(capabilities,state) {
       <label>Workflow<select id="standard-calculator-action">${capabilities.map(x=>`<option value="${escapeHtml(x.id)}" ${x.id===state.action?'selected':''}>${escapeHtml(x.id)} · #${x.issue}</option>`).join('')}</select></label>
       <div class="evidence-requirement"><b>Evidence bắt buộc</b><span>${selected?.requiredEvidenceTypes?.length?selected.requiredEvidenceTypes.map(x=>'<code>'+escapeHtml(x)+'</code>').join(' '):'Không có external evidence bắt buộc'}</span></div>
       <label class="wide-field">Input JSON<textarea id="standard-calculator-input" spellcheck="false">${escapeHtml(state.inputText??'{}')}</textarea></label>
-      <div><button type="submit">Chạy raw calculator</button></div>
+      <div><button type="submit" class="icon-button primary-icon" title="Chạy raw calculator" aria-label="Chạy raw calculator">${icon('play')}</button></div>
     </form>
     ${state.error?'<div class="alert">'+escapeHtml(state.error)+'</div>':''}
     ${state.output?'<pre class="raw-output">'+escapeHtml(JSON.stringify(state.output,null,2))+'</pre>':''}
@@ -124,8 +124,8 @@ function evidencePanel(project,state) {
       <label>Phương pháp/điều khoản<input id="engineering-evidence-method" required></label>
       <label class="wide-field">Data JSON<textarea id="engineering-evidence-data">${escapeHtml(JSON.stringify(evidenceDataExample(defaultType),null,2))}</textarea></label>
       <input id="engineering-evidence-manufacturer" hidden><input id="engineering-evidence-model" hidden><input id="engineering-evidence-instrument" hidden><input id="engineering-evidence-calibration" hidden>
-      <div><button type="submit">Thêm evidence</button></div>
+      <div><button type="submit" class="icon-button primary-icon" title="Thêm evidence" aria-label="Thêm evidence">${icon('plus')}</button></div>
     </form>
-    <div class="evidence-list">${evidence.map(item=>`<article><div><b>#${item.issue} · ${escapeHtml(item.type)}</b><small>${escapeHtml(item.source)} · ${escapeHtml(item.documentId)}</small></div><button class="ghost danger" data-remove-engineering-evidence="${item.id}">Xóa</button></article>`).join('')}</div>
+    <div class="evidence-list">${evidence.map(item=>`<article><div><b>#${item.issue} · ${escapeHtml(item.type)}</b><small>${escapeHtml(item.source)} · ${escapeHtml(item.documentId)}</small></div><button class="ghost danger icon-button" data-remove-engineering-evidence="${item.id}" title="Xóa evidence" aria-label="Xóa evidence">${icon('trash')}</button></article>`).join('')}</div>
   </div>`;
 }

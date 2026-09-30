@@ -1,7 +1,7 @@
 import { projectAtoZStatus } from '../engine/a2z-status.js';
 import { homeownerNextActions } from '../engine/homeowner-next-actions.js';
 import { functionalPlan,money,number } from './render.js';
-import { escapeHtml,metric,stageTone } from './common.js';
+import { escapeHtml,icon,metric,stageTone } from './common.js';
 
 export function overviewPanel(project,workflow) {
   const status=projectAtoZStatus(project);
@@ -36,7 +36,7 @@ export function overviewPanel(project,workflow) {
         <button class="next-action-card" data-go-view="${escapeHtml(item.view)}" ${item.guidedAction?`data-guided-action="${escapeHtml(item.guidedAction)}"`:''}>
           <span class="step-index">${index+1}</span>
           <span><b>${escapeHtml(item.title)}</b><small>${escapeHtml(item.body)}</small></span>
-          <span class="arrow">→</span>
+          ${icon('chevronRight')}
         </button>`).join('')}</div>
     </section>
 

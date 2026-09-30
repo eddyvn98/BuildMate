@@ -1,12 +1,12 @@
 import { functionalPlan } from './render.js';
-import { escapeHtml,input,option } from './common.js';
+import { escapeHtml,icon,input,option } from './common.js';
 
 export function projectPanel(project) {
   return `
     <section class="panel-block">
       <div class="section-head"><div><h2>Mô tả ngôi nhà bằng lời</h2><p class="hint">Nhập những gì bạn biết; BuildMate sẽ tách thành dữ liệu có trạng thái.</p></div></div>
       <p class="question" id="next-question"></p>
-      <form id="chat-form" class="chat-form"><textarea id="chat-text" placeholder="Ví dụ: đất 4x16 ở TP.HCM, 5 người, 3 tầng, 4 phòng ngủ, ngân sách 1,5 tỷ"></textarea><button>Phân tích thông tin</button></form>
+      <form id="chat-form" class="chat-form"><textarea id="chat-text" placeholder="Ví dụ: đất 4x16 ở TP.HCM, 5 người, 3 tầng, 4 phòng ngủ, ngân sách 1,5 tỷ"></textarea><button class="icon-button primary-icon" title="Phân tích thông tin" aria-label="Phân tích thông tin">${icon('send')}</button></form>
     </section>
 
     <section class="panel-block">
