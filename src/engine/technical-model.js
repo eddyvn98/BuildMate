@@ -1,7 +1,7 @@
 import { readValue } from './project.js';
 
 export const TECHNICAL_MODEL_PROFILE=Object.freeze({
-  id:'townhouse-parametric-v0.9',
+  id:'townhouse-parametric-v1.0',
   level:'preliminary',
   defaults:{
     floorHeightM:3.4,

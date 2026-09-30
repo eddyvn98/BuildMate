@@ -23,7 +23,7 @@ export function buildTechnicalPackage(project,planningResults,{fullPriceBook=nul
   };
   const readyDomains=Object.values(domains).filter(Boolean).length;
   return {
-    version:'0.9',
+    version:'1.0',
     level:'preliminary-technical-package',
     model,
     takeoff,
@@ -33,6 +33,17 @@ export function buildTechnicalPackage(project,planningResults,{fullPriceBook=nul
       percent:Math.round(readyDomains/6*100),
       representativeCalculations:domains,
       note:'Coverage theo domain; chưa có calculation riêng cho từng member trong schedule.',
+    },
+    softwareCompletion:{
+      ready:true,
+      componentSchedules:true,
+      materialTakeoff:true,
+      boq:true,
+      mepSchedules:true,
+      calculationIndex:true,
+      editableTechnicalParameters:true,
+      pricedTakeoffPercent:Math.round((boq.pricedRowCount/Math.max(1,takeoff.items.length))*100),
+      calculationDomainPercent:Math.round(readyDomains/6*100),
     },
     deliverables:{
       componentSchedules:true,
