@@ -97,7 +97,7 @@ function bindEngineeringTools() {
       const action=el('standard-calculator-action').value;
       const input=JSON.parse(el('standard-calculator-input').value || '{}');
       const output=runStandardCalculation(project,{action,input});
-      const calculation=createEngineeringCalculationRecord({action,issue:output.issue,standard:output.standard,input,output,engineVersion:'0.6.0'});
+      const calculation=createEngineeringCalculationRecord({action,issue:output.issue,standard:output.standard,input,output,engineVersion:'0.7.0'});
       project={...project,engineeringCalculations:[...(project.engineeringCalculations ?? []),calculation],updatedAt:new Date().toISOString()};
       saveProject(project);
       calculatorState={action,inputText:JSON.stringify(input,null,2),output,error:null};

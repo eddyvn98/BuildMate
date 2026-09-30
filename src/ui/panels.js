@@ -76,7 +76,12 @@ function projectForm(p) {
 
 function pricingPanel(p, workflow) {
   const book = workflow.results?.priceBook;
-  return `<div class="section-head"><div><h2>Đơn giá dự án</h2><p class="hint">Để trống để dùng profile demo; nhập báo giá thật để override và lưu nguồn.</p></div><div class="price-source">${book ? `${escapeHtml(book.sourceLabel)} · ${escapeHtml(book.effectiveDate)}` : ''}</div></div>
+  const market = workflow.results?.marketPricing;
+  const quick = market?.quickEstimate;
+  return `<div class="section-head"><div><h2>Giá nhanh thị trường</h2><p class="hint">Ưu tiên snapshot thị trường gần hiện tại để chốt khung ngân sách; BOQ chi tiết chỉ dùng khi cần tinh chỉnh.</p></div><div class="price-source">${market?.snapshot?.turnkeyM2 ? `${market.snapshot.turnkeyM2.confidence.toUpperCase()} · ${market.snapshot.turnkeyM2.sourceCount} nguồn · mới nhất ${escapeHtml(market.snapshot.turnkeyM2.freshestSourceDate ?? '')}` : 'Chưa có snapshot fresh'}</div></div>
+    ${quick?.status==='ready' ? `<div class="metrics">${metric('Mốc nhanh',money(quick.centerVnd))}${metric('Khoảng thấp',money(quick.lowVnd))}${metric('Khoảng cao',money(quick.highVnd))}${metric('Đơn giá giữa',number(quick.pricePerM2.center,'đ/m²'))}</div><p class="hint">Diện tích quy đổi nhanh: ${quick.convertedAreaM2} m² · móng ${quick.areaAssumptions.foundationFactor*100}% + mái ${quick.areaAssumptions.roofFactor*100}%. ${escapeHtml(quick.warning)}</p>` : '<div class="alert">Market snapshot không đủ fresh để ước tính nhanh.</div>'}
+    <details class="advanced"><summary>Nguồn thị trường đang dùng</summary><div class="evidence-list">${market?.snapshot?.turnkeyM2?.sources?.map(s=>`<article><div><b>${escapeHtml(s.name)}</b><span>${money(s.min)}–${money(s.max)} / m²</span><small>${escapeHtml(s.sourceDate ?? s.observedAt ?? '')} · ${escapeHtml(s.dateBasis)} · ${escapeHtml(s.freshness)}</small></div></article>`).join('') ?? ''}</div></details>
+    <div class="section-head"><div><h2>Đơn giá chi tiết dự án</h2><p class="hint">Tùy chọn. Nhập báo giá thật để override profile BOQ và lưu provenance.</p></div><div class="price-source">${book ? `${escapeHtml(book.sourceLabel)} · ${escapeHtml(book.effectiveDate)}` : ''}</div></div>
     <div class="form-grid">
       ${input('Nguồn báo giá', 'pricing.sourceLabel', p.pricing.sourceLabel)}
       ${input('Ngày báo giá', 'pricing.effectiveDate', p.pricing.effectiveDate, 'date')}

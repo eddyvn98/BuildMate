@@ -2,6 +2,7 @@ import { STANDARD_STATUS_SNAPSHOT,standardsSnapshotHealth } from '../engine/stan
 import { buildIndependentReviewPacket } from '../engine/review-packet.js';
 import { STANDARD_CLAUSE_COVERAGE } from '../engine/standards/coverage.js';
 import { bearerUser } from './auth.js';
+import { buildMarketSnapshot } from '../engine/market-pricing.js';
 
 export function createHandler({service,store,authSecret}) {
   return async function handler(req,res) {
@@ -11,6 +12,10 @@ export function createHandler({service,store,authSecret}) {
       if (req.method==='GET' && url.pathname==='/api/standards/coverage') return json(res,200,STANDARD_CLAUSE_COVERAGE);
       if (req.method==='GET' && url.pathname==='/api/standards/status') return json(res,200,{snapshot:STANDARD_STATUS_SNAPSHOT,health:standardsSnapshotHealth()});
       if (req.method==='GET' && url.pathname==='/api/engineering/calculators') return json(res,200,service.standardCalculatorCapabilities());
+      if (req.method==='GET' && url.pathname==='/api/pricing/market-snapshot') return json(res,200,buildMarketSnapshot({
+        province:url.searchParams.get('province') ?? 'TP.HCM',
+        asOf:url.searchParams.get('asOf') ?? new Date().toISOString().slice(0,10),
+      }));
       if (req.method==='GET' && url.pathname==='/api/engineering/review-packets') return json(res,200,[4,5,6,7,8,12].map((issue)=>buildIndependentReviewPacket(issue)));
       const packetMatch=url.pathname.match(/^\/api\/engineering\/review-packets\/(4|5|6|7|8|12)$/);
       if (req.method==='GET' && packetMatch) return json(res,200,buildIndependentReviewPacket(Number(packetMatch[1])));

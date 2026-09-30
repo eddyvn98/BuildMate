@@ -9,6 +9,7 @@ import { analyzeBudgetFit } from './optimizer.js';
 import { runEngineeringPreview } from './engineering-preview.js';
 import { buildProjectPriceBook } from './project-price-book.js';
 import { resolvePlanningRules } from './planning-rules.js';
+import { buildProjectMarketPricing } from './market-pricing.js';
 
 export function runPlanningWorkflow(project) {
   const issues = validatePlanningInputs(project);
@@ -42,6 +43,7 @@ export function runPlanningWorkflow(project) {
     cashflow,
     preferredScenario: preferred.key,
   };
+  const marketPricing = buildProjectMarketPricing(project,areas);
   const projectDate = readValue(project, 'context.projectDate', project.createdAt?.slice(0, 10) ?? new Date().toISOString().slice(0, 10));
   const planningRules = resolvePlanningRules({
     projectDate,
@@ -59,6 +61,6 @@ export function runPlanningWorkflow(project) {
     status: 'ready',
     issues,
     gates: engineeringGates(project),
-    results: { ...planningResults, planningRules, engineering },
+    results: { ...planningResults, marketPricing, planningRules, engineering },
   };
 }

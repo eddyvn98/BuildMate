@@ -6,11 +6,6 @@ import { runStandardCalculation } from '../src/engine/engineering/standards-calc
 import { createEngineeringCalculationRecord } from '../src/engine/engineering-calculation-record.js';
 import { projectAtoZStatus } from '../src/engine/a2z-status.js';
 
-const PRICE_FIXTURE={
-  concrete:1500000,rebar:18000,masonry:300000,plaster:180000,
-  paint:120000,electrical:900000,plumbing:1000000,
-};
-
 function sampleProject() {
   let p=createProject({id:'sample-hcm-4x16',name:'Smoke test - nha pho HCM 4x16'});
   for (const [path,value] of [
@@ -23,11 +18,9 @@ function sampleProject() {
     ['household.people',5],
     ['household.bedrooms',4],
     ['budget.totalVnd',3000000000],
-    ['pricing.sourceLabel','Synthetic supplier quotation for regression test'],
-    ['pricing.effectiveDate','2026-09-30'],
+    ['context.projectDate','2026-09-30'],
   ]) p=setField(p,path,value);
-  for (const [code,value] of Object.entries(PRICE_FIXTURE)) p=setField(p,'pricing.items.'+code,value);
-  return p;
+    return p;
 }
 
 function calculationRecord(project,action,input) {
@@ -49,7 +42,9 @@ test('sample HCMC 4x16 townhouse runs end-to-end through all six engineering dom
   assert.equal(planningBefore.results.areas.landArea.value,64);
   assert.equal(planningBefore.results.areas.footprint.value,54.4);
   assert.equal(planningBefore.results.areas.floorArea.value,163.2);
-  assert.equal(planningBefore.results.priceBook.sourceLabel,'Synthetic supplier quotation for regression test');
+  assert.equal(planningBefore.results.marketPricing.quickEstimate.status,'ready');
+  assert.equal(planningBefore.results.marketPricing.snapshot.turnkeyM2.confidence,'medium');
+  assert.equal(planningBefore.results.marketPricing.quickEstimate.centerVnd,1_262_352_000);
 
   const runs=[
     calculationRecord(p,'loads.permanent',{layers:[
@@ -95,7 +90,9 @@ test('sample HCMC 4x16 townhouse runs end-to-end through all six engineering dom
       floorAreaM2:planningAfter.results.areas.floorArea.value,
       preferredScenario:planningAfter.results.preferredScenario,
       preferredBudgetVnd:planningAfter.results.budgets.find(x=>x.key===planningAfter.results.preferredScenario)?.total,
-      priceSource:planningAfter.results.priceBook.sourceLabel,
+      quickMarketEstimateVnd:planningAfter.results.marketPricing.quickEstimate.centerVnd,
+      quickMarketRangeVnd:[planningAfter.results.marketPricing.quickEstimate.lowVnd,planningAfter.results.marketPricing.quickEstimate.highVnd],
+      marketConfidence:planningAfter.results.marketPricing.quickEstimate.confidence,
     },
     calculations:{
       permanentLoadDesignKnM2:runs[0].output.result.designKnM2,

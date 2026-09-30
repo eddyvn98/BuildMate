@@ -1,4 +1,5 @@
 import { projectEngineeringReadiness } from './project-readiness.js';
+import { projectMarketPricingReady } from './market-pricing.js';
 
 const PRICE_CODES=Object.freeze(['concrete','rebar','masonry','plaster','paint','electrical','plumbing']);
 
@@ -12,16 +13,20 @@ export function projectAtoZStatus(project) {
   const budgetReady=positive(project?.budget?.totalVnd);
   const pricingMetaReady=Boolean(textValue(project?.pricing?.sourceLabel)&&textValue(project?.pricing?.effectiveDate));
   const pricedCodes=PRICE_CODES.filter(code=>positive(project?.pricing?.items?.[code]));
-  const pricingReady=pricingMetaReady&&pricedCodes.length===PRICE_CODES.length;
+  const manualPricingReady=pricingMetaReady&&pricedCodes.length===PRICE_CODES.length;
+  const marketPricing=projectMarketPricingReady(project);
+  const pricingReady=manualPricingReady||marketPricing.ready;
   const stages=[
     stage('brief','Thông tin đất & nhu cầu',briefReady,briefReady?'Đủ dữ liệu cơ bản':'Thiếu vị trí, kích thước đất, số tầng hoặc số người'),
     stage(
       'budget','Ngân sách & đơn giá',budgetReady&&pricingReady,
-      budgetReady&&pricingReady
-        ?'Có ngân sách và đủ bộ đơn giá có nguồn'
-        :pricingMetaReady&&pricedCodes.length<PRICE_CODES.length
-          ?'Đã có nguồn/ngày nhưng còn thiếu đơn giá: '+PRICE_CODES.filter(code=>!pricedCodes.includes(code)).join(', ')
-          :'Cần ngân sách mục tiêu, nguồn/ngày và đủ bộ đơn giá dự án'
+      budgetReady&&manualPricingReady
+        ?'Có ngân sách và đủ bộ đơn giá dự án có nguồn'
+        :budgetReady&&marketPricing.ready
+          ?'Có ngân sách + snapshot thị trường '+marketPricing.snapshot.turnkeyM2.confidence+' ('+marketPricing.snapshot.turnkeyM2.sourceCount+' nguồn)'
+          :pricingMetaReady&&pricedCodes.length<PRICE_CODES.length
+            ?'Nguồn thủ công chưa đủ và market snapshot đã stale/không khả dụng'
+            :'Cần ngân sách; dùng market snapshot fresh hoặc nhập đủ bộ đơn giá dự án'
     ),
     engineeringStage('loads','Tải trọng',byIssue.get(4)),
     engineeringStage('rc','Kết cấu BTCT',byIssue.get(5)),
