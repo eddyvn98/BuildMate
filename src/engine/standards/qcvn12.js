@@ -28,3 +28,26 @@ export function requireProspectiveShortCircuitCurrent(source) {
 
 export const QCVN12_METADATA={standard:'QCVN 12:2014/BXD',officialSource:OFFICIAL};
 function round(v,d=3){const f=10**d;return Math.round(v*f)/f;}
+
+
+export function checkShortCircuitBreakingCapacity({
+  prospectiveShortCircuitCurrentA,deviceBreakingCapacityA,deviceSource
+}) {
+  const Ik=Number(prospectiveShortCircuitCurrentA),Icn=Number(deviceBreakingCapacityA);
+  if (!(Ik>0)||!(Icn>0)) throw new RangeError('prospectiveShortCircuitCurrentA and deviceBreakingCapacityA must be > 0');
+  if (!deviceSource) throw new TypeError('deviceSource is required');
+  return {
+    pass:Icn>=Ik,
+    prospectiveShortCircuitCurrentA:Ik,
+    deviceBreakingCapacityA:Icn,
+    marginA:Icn-Ik,
+    deviceSource:String(deviceSource),
+    level:'engineering-review',
+    reference:standardRef({
+      standard:'QCVN 12:2014/BXD',
+      clause:'2.3.4.1-2.3.4.2',
+      formula:'protective device rated current >= maximum continuous operating current; breaking capacity >= maximum short-circuit current',
+      sourceUrl:OFFICIAL,
+    }),
+  };
+}
