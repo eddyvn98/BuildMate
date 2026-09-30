@@ -1,59 +1,44 @@
 # Release Status
 
-Status date: 2026-09-29
-Application version: 0.4.0
+Status date: 2026-09-30
+Application version: 0.5.0
 
-## Deployable software
+## Product status
 
-BuildMate now has two deployable surfaces:
+BuildMate is a deployable Vietnam townhouse planning and engineering-review application for the PRD scope of 1-5 storey townhouses.
 
-- static homeowner planning UI via Nginx;
-- authenticated Node.js backend API with optional JSON-file persistence.
+The engineering core now follows a standards-first rule:
 
-The repository includes Docker packaging for the web app and API plus a Compose stack with a persistent data volume.
+- no technical placeholder silently becomes an engineering input;
+- every implemented engineering calculation carries standard, clause/table/equation, source URL, formula/algorithm and explicit inputs;
+- project/geotechnical/manufacturer values require provenance;
+- unsupported standard branches fail closed.
 
-## Product and workflow capabilities
+## Townhouse-core review readiness
 
-- multi-project workspace and import/export;
-- homeowner intake with explicit information states;
-- deterministic planning-area, quantity, budget and cash-flow engines;
-- sourced project-specific price overrides;
-- design-version snapshots;
-- construction actual-cost ledger;
-- immutable backend calculation runs;
-- document metadata storage;
-- HTML reports and BOQ CSV export;
-- project-date/locality-aware planning-rule resolution;
-- QCVN 01:2021/BXD baseline through 2026-12-31 and QCVN 01:2026/BXD baseline from 2027-01-01.
+Issues #4-#8 now have:
 
-## Engineering-review primitives implemented
+- versioned standards and applicability;
+- implemented clause maps;
+- automated reference cases;
+- evidence audit;
+- explicit supported townhouse scope and blocked extensions;
+- independent-review packets exposed by API;
+- evidence fingerprinting and persisted review records;
+- project readiness reporting that invalidates review when signed evidence changes.
 
-- sourced explicit load combinations;
-- sourced natural-condition inputs;
-- gravity-load aggregation and simple-beam mechanics;
-- RC demand/capacity verification against supplied capacities;
-- foundation equivalent-area, bearing-utilization and eccentricity checks;
-- conceptual pile count from supplied working capacity;
-- service-current and cable ampacity checks;
-- voltage-drop calculation;
-- protection clearing-time check;
-- PE adiabatic area from supplied fault current/time/k;
-- domestic water/storage and pump-head arithmetic;
-- pipe velocity and Manning full-pipe drainage flow;
-- HVAC planning capacity;
-- productivity-based duration.
+The remaining construction-ready blocker is a real independent professional review and its verification. BuildMate does not fabricate that approval.
 
-## Construction-ready gate
+## Engineering API surfaces
 
-No structural, foundation, electrical or water/drainage profile is marked construction-ready yet.
+- `GET /api/standards/coverage`
+- `GET /api/engineering/review-packets`
+- `GET /api/engineering/review-packets/{issue}`
+- `GET /api/projects/{id}/engineering-reviews/fingerprint`
+- `POST /api/projects/{id}/engineering-reviews`
+- `GET /api/projects/{id}/engineering-reviews`
+- `GET /api/projects/{id}/engineering-readiness`
 
-The code requires all of the following before a profile can pass:
+## Broader extensions
 
-1. exact standard and version;
-2. applicability;
-3. source;
-4. verified clause/formula mapping and units;
-5. automated reference cases;
-6. recorded qualified independent review.
-
-Issues #4 through #8 remain open specifically for that verification work. The missing independent professional review is an external approval step, not something BuildMate should fabricate or auto-approve.
+The engine intentionally blocks cases outside the initial townhouse-core scope instead of guessing. Examples include flexible/high-dynamic wind cases, uncommon aerodynamic geometry, RC section branches not yet implemented, broad aluminium/XLPE cable families, and large/special foundation numerical models.

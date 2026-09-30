@@ -1,64 +1,46 @@
 # Roadmap
 
-## Completed - v0.4.0 application platform
+## Completed - v0.5.0 standards-first townhouse core
 
-### Product foundation
+### Application platform
 
-- Product requirements and homeowner-first workflow.
-- Explicit confirmed/suggested/assumed/missing/blocked information states.
-- Deterministic-engine / AI boundary.
-- Calculation trace and engineering safety levels.
-- Multiple projects, versions, actual costs and report exports.
+- Local-first/web workspace, persistent authenticated API and Docker deployment.
+- Multi-project data, versions, actuals, sourced price overrides, immutable calculation runs and reports.
+- QCVN 01 project-date/locality planning-rule resolution.
 
-### Planning and cost
+### Engineering evidence platform
 
-- Land/floor-area calculations.
-- Indicative quantity takeoff.
-- Economy / balanced / comfort budgets.
-- Safe budget-gap optimization.
-- Construction-stage cash flow.
-- Sourced project price overrides.
-- Project-date and locality-aware planning rule ingestion.
-- QCVN 01 transition handling.
+- Standard/clause/formula/source metadata.
+- Calculation evidence audit and proof payloads.
+- Townhouse-core scope vs blocked extension model.
+- Independent-review packets.
+- Evidence fingerprints tied to commit/evidence.
+- Persisted reviewer record and verification status.
+- Per-project engineering readiness.
 
-### Backend and deployment
+### Townhouse engineering core
 
-- Bearer authentication boundary.
-- Per-user project ownership.
-- Project/version CRUD.
-- Immutable calculation runs.
-- Price override, actual-cost and document metadata persistence.
-- AI candidate-intake endpoint.
-- Local-first JSON migration/import.
-- JSON-file persistent server store.
-- Static web and API containers with Compose deployment.
-- CI syntax, test and Docker validation.
+- #4 Loads: TCVN 2737:2023 + QCVN 02 wind/load workflow for implemented townhouse cases.
+- #5 RC: TCVN 5574:2018 rectangular beam/slab/column ULS/SLS/detailing workflow.
+- #6 Foundations: TCVN 9362:2012 shallow-foundation and TCVN 10304:2025 pile/geotechnical workflow.
+- #7 Electrical: QCVN 12 + TCVN 9206 + TCVN 7447 demand/cable/protection/earthing workflow.
+- #8 Water/drainage: TCVN 4513 + TCVN 7957:2023 demand/hydraulic/pump/drainage workflow.
+- #9 Locality-aware planning rules and QCVN 01 transition.
+- #10 Backend/auth/collaboration boundary.
 
-### Engineering software layer
+## Remaining gate before construction-ready
 
-- Profile readiness gate.
-- Explicit load-combination engine.
-- Natural-condition provenance requirement.
-- RC demand/capacity review workflow.
-- Foundation bearing and eccentricity checks.
-- Electrical demand, ampacity, voltage drop, protection timing and PE primitives.
-- Water demand/storage, pump head, pipe velocity and drainage-flow primitives.
+For issues #4-#8 the remaining mandatory gate is qualified independent review of the exact evidence fingerprint and verification of that reviewer record.
 
-## Remaining verification backlog - construction-ready profiles
-
-These issues remain open because they require verified standard content and independent professional review:
-
-- #4 TCVN 2737:2023 load/action clause mapping, reference cases and review.
-- #5 TCVN 5574:2018 RC clause/formula implementation, reference cases and review.
-- #6 TCVN 9362:2012 / TCVN 10304:2025 foundation verification and review.
-- #7 QCVN 12 / TCVN 9206 / TCVN 7447-5-54 electrical verification and review.
-- #8 TCVN 4513 / TCVN 7957:2023 water/drainage verification and review.
-
-## Completed tracked work
-
-- #9 locality-aware planning rule ingestion and QCVN 01 transition.
-- #10 backend/auth/collaboration API boundary.
+Cases listed as blocked extensions are not silently calculated. They require an additional standard branch/module before BuildMate may evaluate them.
 
 ## Release rule
 
-A module may move to `construction-ready` only when its exact standard version, applicability, clause/formula mapping, units, reference cases and independent professional review are recorded. Until then BuildMate labels the output planning, indicative or engineering-review.
+A supported townhouse-core module may be marked construction-ready only when:
+
+1. the project stays inside the declared supported scope;
+2. all required project/source inputs are satisfied;
+3. evidence audit passes;
+4. automated reference cases pass;
+5. the independent reviewer approves the exact evidence fingerprint;
+6. the review record is independently verified and not revoked.

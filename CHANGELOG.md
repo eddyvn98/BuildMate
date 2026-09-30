@@ -1,5 +1,57 @@
 # Changelog
 
+## 0.5.0 - 2026-09-30
+
+### Standards-first engineering
+
+- Replaced engineering placeholders with source-backed QCVN/TCVN inputs and blocked missing provenance.
+- Added machine-readable standard/clause/formula/source metadata and calculation evidence audit.
+- Added explicit townhouse-core engineering scope for 1-5 storey Vietnam townhouses; unsupported extensions fail closed.
+- Added independent-review packets, evidence fingerprints, project review records, verification status and project readiness reporting.
+
+### Loads - TCVN 2737:2023 / QCVN 02:2022/BXD
+
+- Load combination factors, live-load tables and area/storey reduction.
+- Permanent-load reliability factors from sourced material layers.
+- Wind W0, terrain k(ze), rigid-structure gust factor, rectangular wall coefficients, pitched-roof F.5 coefficients and bounded interpolation.
+- HCMC QCVN 02 wind-zone rows; other localities can still use explicit sourced wind-zone input.
+
+### Reinforced concrete - TCVN 5574:2018
+
+- Concrete/rebar material tables.
+- Rectangular flexure, simplified shear and eccentric-compression column checks.
+- Column second-order rigidity, Ncr and eta.
+- Crack width, deflection acceptance/curvature workflow.
+- Cover, clear spacing, transverse spacing, minimum reinforcement, anchorage and lap-splice rules.
+- Separate beam/slab/column workflows requiring TCVN 2737 load trace.
+
+### Foundations - TCVN 9362:2012 / TCVN 10304:2025
+
+- Bearing/eccentricity, conventional resistance adjustment and Appendix C settlement workflow.
+- Rectangular stress-influence alpha interpolation within verified domain.
+- End-bearing and driven/pressed friction pile capacity from sourced geotechnical inputs.
+- Geotechnical investigation document gate.
+- Preliminary pile-group loading, model convergence and sourced external group-settlement adapter.
+
+### Electrical - QCVN 12 / TCVN 9206 / TCVN 7447 series
+
+- Demand/coincidence, residential power factor and voltage-drop limits.
+- Copper PVC A1/A2/B1/B2/C/D1/D2 ampacity profiles and correction factors.
+- QCVN overload and short-circuit breaking-capacity checks.
+- TN/TT disconnection/fault-loop checks.
+- PE section and adiabatic sizing.
+- Source-backed manufacturer trip-curve interpolation.
+
+### Water and drainage - TCVN 4513 / TCVN 7957:2023
+
+- Fixture-unit demand, pipe sizing/velocity/pressure and DN10-DN150 friction workflow.
+- Pump duty point and source-backed Q-H curve checks.
+- Gravity drainage Manning, fill, minimum self-cleansing velocity, maximum velocity, diameter and slope rules.
+
+### Construction-ready boundary
+
+Software evidence for the defined townhouse core is now packaged for independent engineering review. No profile becomes construction-ready until a review is approved, independently verified and still matches the signed evidence fingerprint.
+
 ## 0.4.0 - 2026-09-29
 
 ### Added
