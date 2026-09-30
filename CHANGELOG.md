@@ -1,5 +1,50 @@
 # Changelog
 
+## 0.6.0 - 2026-09-30
+
+### Tracked TCVN/QCVN calculation coverage reaches zero software gaps
+
+For engineering issues #4-#8, the machine-readable standard coverage now has `pending: []`. Remaining requirements are explicitly classified as project/manufacturer/test evidence or independent verification rather than missing formulas.
+
+### Loads and wind
+
+- Completed TCVN 2737:2023 rigid and flexible wind workflows, including Eq.(13)-(24), Table 10, wall/roof aerodynamic cases and bounded interpolation rules.
+- QCVN 02 locality registry validates W0/V metrics and supports sourced official rows without guessing.
+- F.12 opening-ratio interval without a prescribed interpolation rule remains explicitly blocked as a standard-defined evidence gap, not filled by invention.
+
+### Reinforced concrete
+
+- Completed rectangular and T/I flexure, both eccentric-compression branches, dangerous inclined-section shear search, crack and deflection workflows.
+- Added automatic cracked-section neutral axis, transformed inertia/rigidity and curvature.
+- Consolidated concrete material/creep/working-condition formulas behind one canonical TCVN 5574 registry while retaining backward-compatible API wrappers.
+- Added local compression/anchorage/detailing and QCVN 06 nominal fire geometry/cover checks.
+
+### Foundations
+
+- Completed full TCVN 9362 Appendix C influence-table workflow used by the engine.
+- Completed TCVN 10304 SPT/CPT/static-test processing, long/short pile settlement and pile-group interaction settlement.
+- Geotechnical test data remain explicit project evidence, not software assumptions.
+
+### Electrical
+
+- Completed PVC/XLPE-EPR copper/aluminium ampacity families used by the tracked profile, including free-air E/F/G and correction factors.
+- Added source-network/field loop verification workflow under TCVN 7447-6.
+- Manufacturer trip curves and commissioning measurements are persisted as project engineering evidence.
+
+### Water, drainage and pumps
+
+- Completed small and large TCVN 4513 hydraulic resistance branches and TCVN 7957 gravity-drainage checks.
+- Added TCVN 9222 Q/H/efficiency and NPSH/cavitation acceptance workflow.
+- Manufacturer pump reports are persisted as source evidence.
+
+### Proof and drift control
+
+- Added active-standard status snapshot and freshness health endpoint.
+- Added executable conformance catalog whose referenced test files must exist.
+- Added golden hand-derived TCVN/QCVN benchmark cases for issues #4-#8.
+- Project technical reports now include standard-version health, conformance groups, golden benchmarks, project-evidence digests and review state.
+- Independent review fingerprints now include project engineering evidence; changing geology, device curves, commissioning measurements or pump reports invalidates the old review automatically.
+
 ## 0.5.0 - 2026-09-30
 
 ### Standards-first engineering

@@ -1,44 +1,37 @@
 # Release Status
 
 Status date: 2026-09-30
-Application version: 0.5.0
+Application version: 0.6.0
 
-## Product status
+## Engineering software status
 
-BuildMate is a deployable Vietnam townhouse planning and engineering-review application for the PRD scope of 1-5 storey townhouses.
+For tracked engineering issues #4-#8, BuildMate's machine-readable standard coverage currently reports **zero remaining software calculation gaps** (`pending: []`).
 
-The engineering core now follows a standards-first rule:
+This means the implemented engine contains the TCVN/QCVN calculation/table branches currently tracked by those profiles. It does **not** mean project-specific source evidence can be invented or that professional verification can be skipped.
 
-- no technical placeholder silently becomes an engineering input;
-- every implemented engineering calculation carries standard, clause/table/equation, source URL, formula/algorithm and explicit inputs;
-- project/geotechnical/manufacturer values require provenance;
-- unsupported standard branches fail closed.
+The system separates three layers:
 
-## Townhouse-core review readiness
+1. **Standard software coverage** — formulas, tables, applicability checks, provenance, conformance tests and golden reference benchmarks.
+2. **Project evidence** — locality authority rows, geotechnical investigation/tests, manufacturer curves, commissioning measurements, pump test reports or specialist evidence where the standard requires them.
+3. **Verification** — review of the exact code/evidence fingerprint. A changed project evidence set invalidates the previous review fingerprint.
 
-Issues #4-#8 now have:
+## Standards drift control
 
-- versioned standards and applicability;
-- implemented clause maps;
-- automated reference cases;
-- evidence audit;
-- explicit supported townhouse scope and blocked extensions;
-- independent-review packets exposed by API;
-- evidence fingerprinting and persisted review records;
-- project readiness reporting that invalidates review when signed evidence changes.
-
-The remaining construction-ready blocker is a real independent professional review and its verification. BuildMate does not fabricate that approval.
+The standards status snapshot was verified on 2026-09-30. The application exposes freshness health and requires re-verification when that snapshot becomes stale instead of assuming an old edition remains current.
 
 ## Engineering API surfaces
 
 - `GET /api/standards/coverage`
+- `GET /api/standards/status`
 - `GET /api/engineering/review-packets`
 - `GET /api/engineering/review-packets/{issue}`
+- `POST /api/projects/{id}/engineering-evidence`
+- `GET /api/projects/{id}/engineering-evidence`
 - `GET /api/projects/{id}/engineering-reviews/fingerprint`
 - `POST /api/projects/{id}/engineering-reviews`
 - `GET /api/projects/{id}/engineering-reviews`
 - `GET /api/projects/{id}/engineering-readiness`
 
-## Broader extensions
+## Current boundary
 
-The engine intentionally blocks cases outside the initial townhouse-core scope instead of guessing. Examples include flexible/high-dynamic wind cases, uncommon aerodynamic geometry, RC section branches not yet implemented, broad aluminium/XLPE cable families, and large/special foundation numerical models.
+BuildMate does not substitute arbitrary constants when a TCVN/QCVN requires project-, test-, authority- or manufacturer-specific evidence. Such inputs are represented as evidence gates and are included in the signed project fingerprint.

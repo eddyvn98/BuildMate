@@ -56,7 +56,7 @@ export class BuildMateService {
       id:crypto.randomUUID(),
       projectId:id,
       createdAt:new Date().toISOString(),
-      engineVersion:String(request.engineVersion ?? '0.5.0'),
+      engineVersion:String(request.engineVersion ?? '0.6.0'),
       requestedModules:request.requestedModules ?? ['planning','quantities','budget','engineering-preview'],
       alternativeId:request.alternativeId ?? null,
       status:workflow.status,

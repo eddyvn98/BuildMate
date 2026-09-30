@@ -6,7 +6,7 @@ The product is designed around one hard boundary:
 
 > AI interprets and explains. Deterministic, versioned engines produce BuildMate numbers.
 
-## Current V2
+## Current v0.6
 
 - Multiple house projects in one browser.
 - Guided natural-language intake + editable fields.
@@ -66,7 +66,9 @@ The API is then available on `http://localhost:3000` and persists data in the `b
 
 ## Important engineering status
 
-V2 is software-complete as a planning/engineering-review prototype. It intentionally does **not** mark structural or MEP modules construction-ready until exact standard clauses/formulas, project inputs, reference cases and qualified review are completed.
+For tracked engineering issues #4-#8, machine-readable TCVN/QCVN software coverage is now at `pending: []`. Calculation engines carry clause/formula/source/input provenance, executable conformance tests and golden benchmarks.
+
+Project-specific evidence is still mandatory wherever the standards require authority data, geotechnical investigation, manufacturer curves or commissioning/test results. BuildMate persists that evidence and includes it in the review fingerprint instead of replacing it with assumptions.
 
 See:
 

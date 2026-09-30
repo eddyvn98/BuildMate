@@ -1,46 +1,55 @@
 # Roadmap
 
-## Completed - v0.5.0 standards-first townhouse core
+## Completed - v0.6.0 standards-complete tracked engineering core
 
-### Application platform
+### #4 Loads / actions
 
-- Local-first/web workspace, persistent authenticated API and Docker deployment.
-- Multi-project data, versions, actuals, sourced price overrides, immutable calculation runs and reports.
-- QCVN 01 project-date/locality planning-rule resolution.
+- TCVN 2737:2023 combinations, permanent/live loads, load reductions.
+- QCVN 02 natural-condition/wind data registry.
+- Rigid and flexible wind response, terrain, wall and pitched-roof aerodynamic workflows.
+- No remaining tracked software calculation gap.
 
-### Engineering evidence platform
+### #5 Reinforced concrete
 
-- Standard/clause/formula/source metadata.
-- Calculation evidence audit and proof payloads.
-- Townhouse-core scope vs blocked extension model.
-- Independent-review packets.
-- Evidence fingerprints tied to commit/evidence.
-- Persisted reviewer record and verification status.
-- Per-project engineering readiness.
+- TCVN 5574 material/SLS/ULS registries and working-condition factors.
+- Rectangular and T/I flexure.
+- Eccentric compression, second-order effects and both compression-zone branches.
+- Full tracked inclined-section shear workflow.
+- Crack, cracked/uncracked curvature and deflection.
+- Cover, detailing, anchorage/lap and local compression.
+- QCVN 06 nominal Appendix F RC fire geometry/cover checks.
+- No remaining tracked software calculation gap.
 
-### Townhouse engineering core
+### #6 Foundations
 
-- #4 Loads: TCVN 2737:2023 + QCVN 02 wind/load workflow for implemented townhouse cases.
-- #5 RC: TCVN 5574:2018 rectangular beam/slab/column ULS/SLS/detailing workflow.
-- #6 Foundations: TCVN 9362:2012 shallow-foundation and TCVN 10304:2025 pile/geotechnical workflow.
-- #7 Electrical: QCVN 12 + TCVN 9206 + TCVN 7447 demand/cable/protection/earthing workflow.
-- #8 Water/drainage: TCVN 4513 + TCVN 7957:2023 demand/hydraulic/pump/drainage workflow.
-- #9 Locality-aware planning rules and QCVN 01 transition.
-- #10 Backend/auth/collaboration boundary.
+- TCVN 9362 shallow-foundation pressure and settlement workflows.
+- TCVN 10304 pile capacity from direct, SPT, CPT and field-test/statistical paths.
+- Long/short single-pile settlement and group interaction settlement.
+- No remaining tracked software calculation gap.
 
-## Remaining gate before construction-ready
+### #7 Electrical
 
-For issues #4-#8 the remaining mandatory gate is qualified independent review of the exact evidence fingerprint and verification of that reviewer record.
+- QCVN 12, TCVN 9206 and TCVN 7447 demand, cable, correction, protection, loop verification and PE workflows.
+- PVC/XLPE-EPR copper/aluminium tracked ampacity families including free-air cases.
+- No remaining tracked software calculation gap.
 
-Cases listed as blocked extensions are not silently calculated. They require an additional standard branch/module before BuildMate may evaluate them.
+### #8 Water / drainage / pumps
 
-## Release rule
+- TCVN 4513 demand, pipe sizing and hydraulic-loss workflows across implemented table ranges.
+- TCVN 7957 drainage hydraulics.
+- TCVN 9222 pump Q/H/efficiency and cavitation/NPSH acceptance.
+- No remaining tracked software calculation gap.
 
-A supported townhouse-core module may be marked construction-ready only when:
+## Evidence and verification platform
 
-1. the project stays inside the declared supported scope;
-2. all required project/source inputs are satisfied;
-3. evidence audit passes;
-4. automated reference cases pass;
-5. the independent reviewer approves the exact evidence fingerprint;
-6. the review record is independently verified and not revoked.
+- Standard/clause/formula/input provenance.
+- Calculation evidence audit.
+- Active-standard status snapshot with freshness health.
+- Executable conformance catalog.
+- Golden hand-derived reference benchmarks.
+- Project engineering-evidence records.
+- Review fingerprints include project evidence and become invalid after evidence changes.
+
+## Next product work
+
+Further work should focus on user-facing engineering input/result workflows, importing real project evidence, expanding standard reference benchmarks and maintaining the standards status snapshot as editions change. Missing project evidence must remain blocked rather than replaced with BuildMate assumptions.
