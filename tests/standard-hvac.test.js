@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
   residentialComfortCondition,outdoorDesignClass,residentialOutdoorAir,
-  mechanicalVentilationByAch,airflowBySensibleHeat,componentCoolingLoad,selectCoolingEquipment
+  mechanicalVentilationByAch,airflowBySensibleHeat,componentCoolingLoad,selectCoolingEquipment,energyEfficiencyRegulation
 } from '../src/engine/engineering/hvac.js';
 
 test('TCVN 5687 residential comfort registry exposes Appendix A hot-season values',()=>{
@@ -57,4 +57,29 @@ test('equipment selection uses explicit rated capacity and conditions',()=>{
   ]});
   assert.equal(r.pass,true);
   assert.equal(r.selected.id,'b');
+});
+
+
+test('energy-efficiency regulation resolves by scope, date and explicit transition eligibility',()=>{
+  const townhouse=energyEfficiencyRegulation({
+    projectDate:'2026-09-30',buildingType:'townhouse',totalFloorAreaM2:192
+  });
+  assert.equal(townhouse.applicable,false);
+  assert.equal(townhouse.regulation,null);
+
+  const largeApartmentBefore=energyEfficiencyRegulation({
+    projectDate:'2026-12-31',buildingType:'apartment',totalFloorAreaM2:5000
+  });
+  assert.equal(largeApartmentBefore.regulation,'QCVN 09:2017/BXD');
+
+  const largeApartmentAfter=energyEfficiencyRegulation({
+    projectDate:'2027-02-02',buildingType:'apartment',totalFloorAreaM2:5000
+  });
+  assert.equal(largeApartmentAfter.regulation,'QCVN 04-3:2026/BXD');
+
+  const transitioned=energyEfficiencyRegulation({
+    projectDate:'2027-02-02',buildingType:'apartment',totalFloorAreaM2:5000,transitionEligible:true
+  });
+  assert.equal(transitioned.regulation,'QCVN 09:2017/BXD');
+  assert.equal(transitioned.transitionApplied,true);
 });

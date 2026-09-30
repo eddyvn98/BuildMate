@@ -38,6 +38,7 @@ const EXAMPLES=Object.freeze({
   'water.design-flow':{fixtureEquivalentUnits:20,litersPerPersonDay:150},
   'water.pump-acceptance':{guaranteedFlow:10,guaranteedHeadM:25,guaranteedEfficiencyPercent:70,testedFlow:10.2,testedHeadM:24.8,testedEfficiencyPercent:69,grade:2,testReportSource:'Pump test report'},
   'water.pump-npsh':{npshAvailableM:5,npshRequiredM:3,requiredNpshSource:'Manufacturer test report',operatingFlow:10},
+  'hvac.energy-regulation':{projectDate:'2026-09-30',buildingType:'townhouse',totalFloorAreaM2:192,transitionEligible:false},
   'hvac.comfort':{spaceType:'living',season:'hot'},
   'hvac.outdoor-design':{classId:'II',dryBulbC:35,wetBulbC:28,source:'TCVN 5687:2024 Appendix B / project climate row'},
   'hvac.outdoor-air':{spaceType:'bedroom',people:2,areaM2:18},

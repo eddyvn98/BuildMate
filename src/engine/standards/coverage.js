@@ -32,6 +32,7 @@ export const STANDARD_CLAUSE_COVERAGE=Object.freeze([
   {
     issue:12,standard:'TCVN 5687:2024',
     implemented:[
+      'QCVN 09:2017/BXD -> QCVN 04-3:2026/BXD energy-efficiency applicability/date/transition resolver',
       '5.1.1 + Appendix A.1 residential indoor comfort conditions',
       '5.2.2 HVAC design classes I/II/III and reliability metadata',
       '6.1.5 + Appendix E.1 residential outdoor-air rates by person/area',

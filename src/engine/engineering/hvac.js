@@ -35,6 +35,50 @@ const RESIDENTIAL_OUTDOOR_AIR=Object.freeze({
   living:{perPersonM3h:30},
 });
 
+
+const ENERGY_COVERED_TYPES=new Set(['office','hotel','hospital','school','commercial','apartment']);
+const ENERGY_2026_EFFECTIVE_DATE='2027-02-01';
+
+export function energyEfficiencyRegulation({
+  projectDate,buildingType='townhouse',totalFloorAreaM2=0,transitionEligible=false
+}={}) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(String(projectDate??''))) throw new TypeError('projectDate must be YYYY-MM-DD');
+  const area=Number(totalFloorAreaM2);
+  if (!(area>=0)) throw new RangeError('totalFloorAreaM2 must be >= 0');
+  const type=String(buildingType);
+  const coveredType=ENERGY_COVERED_TYPES.has(type);
+  const coveredArea=area>=2500;
+  const base={
+    applicable:coveredType&&coveredArea,
+    buildingType:type,totalFloorAreaM2:area,projectDate:String(projectDate),
+    thresholdM2:2500,
+    coveredTypes:[...ENERGY_COVERED_TYPES],
+  };
+  if (!base.applicable) {
+    return {
+      ...base,regulation:null,
+      reason:!coveredType?'building-type-outside-energy-regulation-scope':'floor-area-below-2500m2',
+      references:[
+        {standard:'QCVN 09:2017/BXD',clause:'1.1.1'},
+        {standard:'QCVN 04-3:2026/BXD',clause:'1.1.1; effective 2027-02-01'},
+      ],
+    };
+  }
+  if (String(projectDate)<ENERGY_2026_EFFECTIVE_DATE||transitionEligible===true) {
+    return {
+      ...base,regulation:'QCVN 09:2017/BXD',
+      transitionApplied:String(projectDate)>=ENERGY_2026_EFFECTIVE_DATE&&transitionEligible===true,
+      reason:String(projectDate)<ENERGY_2026_EFFECTIVE_DATE?'before-qcvn04-3-effective-date':'explicit-transition-eligibility',
+      references:[{standard:'QCVN 09:2017/BXD',clause:'1.1.1'},{document:'Thông tư 61/2026/TT-BXD',clause:'effective date and transition'}],
+    };
+  }
+  return {
+    ...base,regulation:'QCVN 04-3:2026/BXD',transitionApplied:false,
+    reason:'qcvn04-3-effective',
+    references:[{standard:'QCVN 04-3:2026/BXD',clause:'1.1.1'},{document:'Thông tư 61/2026/TT-BXD',clause:'effective 2027-02-01'}],
+  };
+}
+
 const F1_ACH=Object.freeze({
   bedroom:{range:[2,3]},
   corridor:{exact:4},
