@@ -94,6 +94,10 @@ function bindActions() {
     project=createAndSave(); activeView='overview'; render();
   });
   el('delete-project')?.addEventListener('click',()=>{
+    const ok=typeof globalThis.confirm==='function'
+      ? globalThis.confirm('Xóa project "'+project.name+'"? Thao tác này xóa dữ liệu local của project này.')
+      : true;
+    if (!ok) return;
     deleteProject(project.id);
     project=loadProject()??createAndSave();
     activeView='overview'; render();

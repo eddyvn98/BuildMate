@@ -6,7 +6,7 @@ The product has one hard boundary:
 
 > AI interprets and explains. Deterministic, versioned engines produce BuildMate numbers.
 
-## Current v0.8 — Homeowner Beta
+## Current v0.8.1 — Homeowner Beta
 
 - Homeowner dashboard with clear navigation: Overview, Home Info, Engineering, Pricing and Report.
 - Public 4×16 m / 3-storey / 4-bedroom reference fixture with explicit source provenance and demo-only assumptions.

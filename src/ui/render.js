@@ -17,6 +17,14 @@ export function statusBadge(state) {
 }
 
 export function functionalPlan(project) {
+  const sourcedProgram=project.referenceCase?.floorProgram;
+  if (Array.isArray(sourcedProgram)&&sourcedProgram.length) {
+    return sourcedProgram.map(item=>({
+      name:String(item.floor ?? 'Tầng'),
+      rooms:(item.rooms ?? []).map(room=>String(room)),
+    }));
+  }
+
   const storeys = Number(project.design.storeys.value || 1);
   const bedrooms = Number(project.household.bedrooms.value || 3);
   const hasCar = Boolean(project.household.hasCar.value);
