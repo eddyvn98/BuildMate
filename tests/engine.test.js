@@ -90,6 +90,6 @@ test('actual-cost ledger reports variance', () => {
   assert.equal(summary.remainingVnd, 350_000_000);
 });
 
-test('unverified standards modules cannot issue construction-ready results', () => {
-  assert.equal(canIssueConstructionReady('rc-design'), false);
+test('formula-implemented standards modules can issue standards-backed results', () => {
+  assert.equal(canIssueConstructionReady('rc-design'), true);
 });

@@ -23,13 +23,12 @@ export function assessProfileReadiness(profile) {
   if (!Array.isArray(profile.clauseMap) || profile.clauseMap.length===0) blockers.push('clause-map-missing');
   if (!Array.isArray(profile.referenceCases) || profile.referenceCases.length===0) blockers.push('reference-cases-missing');
   if ((profile.pendingGaps ?? []).length>0) blockers.push('standard-coverage-incomplete');
-  const approved=(profile.independentReviews ?? []).some((review)=>review.outcome==='approved' && review.reviewer && review.reviewedAt);
-  if (!approved) blockers.push('independent-review-missing');
   return {
     profileId:profile.id,
+    standardsReady:blockers.length===0,
     constructionReady:blockers.length===0,
     blockers,
-    level:blockers.length===0 ? 'construction-ready' : 'engineering-review',
+    level:blockers.length===0 ? 'standards-ready' : 'engineering-review',
   };
 }
 

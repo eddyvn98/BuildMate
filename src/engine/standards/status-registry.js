@@ -11,6 +11,7 @@ export const STANDARD_STATUS_SNAPSHOT=Object.freeze([
   active('TCVN 4513:1988','https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+4513%3A1988'),
   active('TCVN 7957:2023','https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+7957%3A2023'),
   active('TCVN 9222:2012','https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+9222%3A2012'),
+  active('TCVN 5687:2024','https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+5687%3A2024'),
   active('QCVN 12:2014/BXD','https://tieuchuan.vsqi.gov.vn/quychuan/view?sohieu=QCVN+12%3A2014%2FBXD'),
   {
     id:'QCVN 02:2022/BXD',status:'active',verifiedAt:'2026-09-30',

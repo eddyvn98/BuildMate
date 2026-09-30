@@ -1,27 +1,29 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createProject } from '../src/engine/project.js';
-import { reviewEvidenceFingerprint,createEngineeringReviewRecord } from '../src/engine/review-record.js';
 import { projectEngineeringReadiness,allTownhouseEngineeringReady } from '../src/engine/project-readiness.js';
 
-test('project readiness is false without independently verified reviews',()=>{
+test('standard coverage is ready but project readiness waits for project calculation runs',()=>{
   const p=createProject();
   const status=projectEngineeringReadiness(p);
-  assert.equal(status.length,5);
+  assert.equal(status.length,6);
+  assert.ok(status.every(x=>x.standardsReady===true));
   assert.ok(status.every(x=>x.constructionReady===false));
   assert.equal(allTownhouseEngineeringReady(p).ready,false);
 });
 
-test('verified review makes only its exact profile ready',()=>{
+test('ready calculation runs make the exact standards-backed project profiles ready',()=>{
   const p=createProject();
-  const fp=reviewEvidenceFingerprint(4,{commitSha:'abc'});
-  p.engineeringReviews=[createEngineeringReviewRecord({
-    issue:4,reviewerName:'Engineer',qualification:'Structural engineer',
-    reviewedAt:'2026-09-30',outcome:'approved',independent:true,
-    verificationStatus:'verified',verifiedBy:'org-admin',verifiedAt:'2026-09-30',
-    evidenceFingerprint:fp,commitSha:'abc',
-  })];
+  p.engineeringCalculations=[4,5,6,7,8,12].map(issue=>({id:'run-'+issue,issue,status:'ready'}));
   const status=projectEngineeringReadiness(p);
-  assert.equal(status.find(x=>x.issue===4).constructionReady,true);
-  assert.equal(status.find(x=>x.issue===5).constructionReady,false);
+  assert.ok(status.every(x=>x.constructionReady===true));
+  assert.equal(allTownhouseEngineeringReady(p).ready,true);
+});
+
+test('a blocked evidence-dependent calculation keeps its profile blocked',()=>{
+  const p=createProject();
+  p.engineeringCalculations=[{id:'run-6',issue:6,status:'blocked'}];
+  const row=projectEngineeringReadiness(p).find(x=>x.issue===6);
+  assert.equal(row.constructionReady,false);
+  assert.ok(row.blockers.includes('project-input-or-evidence-blocked'));
 });

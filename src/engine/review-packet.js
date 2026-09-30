@@ -6,6 +6,7 @@ export function buildIndependentReviewPacket(issue,{commitSha=null,reviewer=null
   const coverage=STANDARD_CLAUSE_COVERAGE.find(x=>x.issue===n);
   const scope=townhouseCoreScope(n);
   if (!coverage||!scope) throw new RangeError('Unknown engineering issue/profile');
+  const standardsReady=(coverage.pending??[]).length===0;
   return {
     issue:n,
     profile:scope.name,
@@ -15,17 +16,20 @@ export function buildIndependentReviewPacket(issue,{commitSha=null,reviewer=null
     automatedReferenceCases:true,
     commitSha,
     reviewer:reviewer??null,
-    requiredReviewChecks:[
-      'Confirm exact standard/version and applicability to 1-5 storey townhouse scope.',
-      'Recalculate selected reference cases independently from the cited clauses/tables.',
+    reviewRequired:false,
+    auditChecks:[
+      'Confirm exact standard/version and applicability to the townhouse scope.',
+      'Recalculate selected reference cases from the cited clauses/tables when an optional audit is performed.',
       'Check units, sign conventions, formula-domain gates and interpolation rules.',
       'Check project-input provenance gates and blocked unsupported cases.',
-      'Record reviewer name/qualification/date and outcome.',
+      'Record auditor identity/date/outcome when an optional audit is performed.',
     ],
     approval:{
-      outcome:'pending',
-      constructionReady:false,
-      reason:'independent-review-not-recorded',
+      required:false,
+      outcome:'not-required',
+      standardsReady,
+      constructionReady:standardsReady,
+      reason:standardsReady?'standard-coverage-complete':'standard-coverage-incomplete',
     },
   };
 }

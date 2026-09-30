@@ -37,3 +37,21 @@ test('sourced dead and live load traces are marked confirmed in preview',()=>{
   assert.equal(structure.result.inputs.find(x=>x.key==='deadLoad').state,'confirmed');
   assert.equal(structure.result.inputs.find(x=>x.key==='liveLoad').state,'confirmed');
 });
+
+
+test('HVAC preview becomes standards-backed only after a ready TCVN 5687 calculation record exists',()=>{
+  const p=baseProject();
+  let hvac=runPlanningWorkflow(p).results.engineering.modules.hvac;
+  assert.equal(hvac.status,'blocked');
+  assert.ok(hvac.message.includes('TCVN 5687:2024'));
+
+  p.engineeringCalculations=[{
+    id:'hvac-1',issue:12,status:'ready',action:'hvac.outdoor-air',
+    standard:'TCVN 5687:2024 6.1.5 + Appendix E/G',
+    result:{value:70,unit:'m³/h'},calculationDigest:'a'.repeat(64),projectEvidenceDigest:'b'.repeat(64),
+  }];
+  hvac=runPlanningWorkflow(p).results.engineering.modules.hvac;
+  assert.equal(hvac.status,'standards-backed');
+  assert.equal(hvac.result.value,70);
+  assert.equal(hvac.calculationId,'hvac-1');
+});

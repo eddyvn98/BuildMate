@@ -84,15 +84,31 @@ export function runEngineeringPreview(project, planningResults) {
       }
     : {status:'blocked',message:'Cần tổng đương lượng thiết bị vệ sinh và mức dùng nước chọn từ TCVN 4513:1988.'};
 
-  const hvac={
-    status:'blocked',
-    message:'Chưa có profile tiêu chuẩn HVAC trong tracked engineering core. BuildMate không dùng suất W/m² placeholder làm thiết kế HVAC.',
-  };
+  const hvacEvidence=assessEngineeringEvidence(project.engineeringEvidence ?? [],12);
+  const hvacRuns=(project.engineeringCalculations ?? []).filter((item)=>Number(item.issue)===12);
+  const latestHvacReady=[...hvacRuns].reverse().find((item)=>item.status==='ready') ?? null;
+  const hvac=latestHvacReady
+    ? {
+        status:'standards-backed',
+        result:structuredClone(latestHvacReady.result ?? null),
+        calculationId:latestHvacReady.id,
+        provenance:{
+          standard:latestHvacReady.standard,
+          calculationDigest:latestHvacReady.calculationDigest,
+          projectEvidenceDigest:latestHvacReady.projectEvidenceDigest ?? hvacEvidence.digest,
+        },
+        message:'Đã có calculation run TCVN 5687:2024 cho dự án. Xem calculator/history để kiểm tra input, công thức và dẫn chứng.',
+      }
+    : {
+        status:'blocked',
+        message:'Chạy workflow TCVN 5687:2024 với điều kiện trong/ngoài nhà, thông gió, tải lạnh thành phần và evidence thiết bị khi workflow yêu cầu. BuildMate không dùng suất W/m² placeholder làm thiết kế HVAC.',
+        evidence:hvacEvidence,
+      };
 
   return {
     status:'ready',
     profiles:engineeringProfileStatus(),
-    projectEvidence:{foundation:geotechEvidence},
+    projectEvidence:{foundation:geotechEvidence,hvac:hvacEvidence},
     modules:{structure,foundation,pile,electrical,water,hvac},
   };
 }

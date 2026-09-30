@@ -1,37 +1,38 @@
 # Release Status
 
-Status date: 2026-09-30
-Application version: 0.6.0
+Status date: 2026-09-30  
+Application version: 0.7.0
 
 ## Engineering software status
 
-For tracked engineering issues #4-#8, BuildMate's machine-readable standard coverage currently reports **zero remaining software calculation gaps** (`pending: []`).
+The tracked townhouse engineering profiles #4, #5, #6, #7, #8 and #12 report **zero tracked software calculation gaps** (`pending: []`).
 
-This means the implemented engine contains the TCVN/QCVN calculation/table branches currently tracked by those profiles. It does **not** mean project-specific source evidence can be invented or that professional verification can be skipped.
+BuildMate now separates three concerns:
 
-The system separates three layers:
+1. **Standards software readiness** — standard/version, applicability, clause/formula/table implementation, units, provenance, conformance tests and golden/reference benchmarks.
+2. **Project evidence readiness** — authority/locality data, geotechnical tests, manufacturer curves/performance data, commissioning measurements and other project-specific inputs required by a calculation.
+3. **Optional audit/review** — review records and fingerprints remain supported, but do not block the software profile from being standards-ready.
 
-1. **Standard software coverage** — formulas, tables, applicability checks, provenance, conformance tests and golden reference benchmarks.
-2. **Project evidence** — locality authority rows, geotechnical investigation/tests, manufacturer curves, commissioning measurements, pump test reports or specialist evidence where the standard requires them.
-3. **Verification** — review of the exact code/evidence fingerprint. A changed project evidence set invalidates the previous review fingerprint.
+A profile being standards-ready does not authorize BuildMate to invent missing project evidence. Evidence-dependent calculations fail closed until the required records exist.
+
+## HVAC v0.7
+
+Residential HVAC/ventilation adds TCVN 5687:2024 workflows for:
+
+- residential comfort-condition registry;
+- sourced outdoor design conditions and design class;
+- residential outdoor-air rates;
+- mechanical ventilation by air-change rate;
+- Appendix G sensible-heat and people/area/ACH airflow paths;
+- source-backed component cooling load;
+- source-backed equipment-capacity acceptance.
+
+The legacy W/m² estimator remains planning-only and is marked deprecated for standards-backed HVAC work.
 
 ## Standards drift control
 
-The standards status snapshot was verified on 2026-09-30. The application exposes freshness health and requires re-verification when that snapshot becomes stale instead of assuming an old edition remains current.
-
-## Engineering API surfaces
-
-- `GET /api/standards/coverage`
-- `GET /api/standards/status`
-- `GET /api/engineering/review-packets`
-- `GET /api/engineering/review-packets/{issue}`
-- `POST /api/projects/{id}/engineering-evidence`
-- `GET /api/projects/{id}/engineering-evidence`
-- `GET /api/projects/{id}/engineering-reviews/fingerprint`
-- `POST /api/projects/{id}/engineering-reviews`
-- `GET /api/projects/{id}/engineering-reviews`
-- `GET /api/projects/{id}/engineering-readiness`
+The standards status snapshot is date-stamped and exposes freshness health. BuildMate requires status re-verification when the snapshot becomes stale rather than assuming an old edition remains current.
 
 ## Current boundary
 
-BuildMate does not substitute arbitrary constants when a TCVN/QCVN requires project-, test-, authority- or manufacturer-specific evidence. Such inputs are represented as evidence gates and are included in the signed project fingerprint.
+BuildMate produces deterministic and traceable software calculations. Project-specific permits, approvals, signed design deliverables or other obligations outside the calculation engine remain separate project/legal deliverables where applicable.

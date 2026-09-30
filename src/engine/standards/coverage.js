@@ -3,31 +3,53 @@ export const STANDARD_CLAUSE_COVERAGE=Object.freeze([
     issue:4,standard:'TCVN 2737:2023',
     implemented:['6.3','6.4','6.5','6.7 Eq.(3)-(4)','6.8 Eq.(5)-(6)','7.1-7.2/Table 1 permanent-load provenance and gamma_f','8.3.1/Table 4 residential subset','8.3.3','8.3.5(a)','10.2.2 Eq.(10) wind pressure','10.2.3 + QCVN 02:2022/BXD 5.2.2 wind-zone W0','10.2.5/Table 9 terrain k(ze) interpolation','10.2.7.2 rigid Gf=0.85','10.2.7.3 Eq.(13)-(24)/Table 10 flexible-structure gust factor','QCVN 02 Table 5.1 sourced locality registry with exact zone-metric validation + built-in HCMC/Can Tho/BRVT/Truong Sa/Hoang Sa rows','Appendix F.4.1.1/Table F.4 rectangular-building wall ce','Appendix F.5a/F.5b pitched-roof ce exact table rows and same-sign interpolation','Appendix F.12 internal pressure endpoint cases'],
     pending:[],
-    externalRequirements:['geometry-specific wind cases explicitly directed by TCVN to specialist literature/wind-tunnel evidence','project locality must resolve to a sourced QCVN 02 Table 5.1/map/authority row; generic registry ingestion supports any official row','independent engineering verification'],
+    externalRequirements:['geometry-specific wind cases explicitly directed by TCVN to specialist literature/wind-tunnel evidence','project locality must resolve to a sourced QCVN 02 Table 5.1/map/authority row; generic registry ingestion supports any official row'],
   },
   {
     issue:5,standard:'TCVN 5574:2018',
     implemented:['6.1.2.3 concrete working-condition factors gamma_b1..gamma_b4','6.1.2.2/Table 6 heavy-concrete RbSer/RbtSer B3.5-B100','6.1.4/Table 7 heavy-concrete Rb/Rbt B3.5-B100','6.1.3/Table 10 heavy-concrete Eb B3.5-B100','6.1.3/Table 11 creep phi_b,cr','6.1.3/Table 9 long-term strain incl B70-B100 factor','6.1.4.3 Eq.(13) Eb,red','6.2.2/Table 13 rebar Rs/Rsc subset','6.2.2/Table 14 rebar Rsw subset','6.2.3.3 rebar Es','8.1.2 equations (33)-(35) rectangular flexure','8.1.2.3.3 Eq.(36)-(38) T/I flexure','8.1.2.3.5 xiR capacity limit','8.1.3.2 Eq.(88)','8.1.3.3.1 Eq.(89)-(92) full critical inclined-section shear search','8.1.3.3.1 Eq.(92)-(96) simplified shear branch','8.2.2.1.3 Eq.(155)/Table 17 crack limits','8.2.2.3.1 Eq.(166) crack width','8.2.3.2.1 Eq.(177) deflection acceptance','8.2.3.2.2 Eq.(179) curvature-based midspan deflection','8.2.3.3.2 Eq.(185)-(186) total curvature composition','8.2.3.3.3 Eq.(187)-(188) curvature and transformed stiffness','8.2.3.3.5 Eq.(193) cracked Ired','8.2.3.3.6 Eq.(194)-(196) cracked rectangular neutral axis','8.2.3.3.8 Eq.(202)-(204) transformed steel/tension stiffening','8.2.3.3.4 Eq.(191)-(192) short/long-term uncracked Eb1','8.2.3.3.5 Eq.(193)-(196) cracked rectangular x/Ired solver','8.2.3.3.6 Eq.(202)-(204) cracked steel transformation','8.2.2.3.4 Eq.(176) psi_s','8.2.3.2.4 Eq.(182) shear strain','8.1.2.4.1 Eq.(40)-(43) rectangular eccentric compression both xi branches','8.1.2.4.2 Eq.(44)-(46) column second-order factor/critical load/rigidity','separate beam/slab/column workflows requiring TCVN 2737 load trace','10.3.2 minimum clear bar spacing','10.3.3.1 minimum longitudinal reinforcement','10.3.4.3 transverse reinforcement spacing','10.3.4.4 compression-bar restraint spacing','10.3.1.2/Table 19 concrete cover','10.3.5.4 bond strength and Eq.(255) basic anchorage','10.3.5.5 alpha1 and required anchorage','10.3.6.2 lap-splice alpha2 and minimum lap length','8.1.5.2 Eq.(116)-(118) local concrete compression','10.3.5.8 special-anchor local-bearing gate','QCVN 06:2022/BXD Appendix F Tables F.3/F.5/F.6/F.9 RC fire geometry and cover'],
     pending:[],
-    externalRequirements:['fire cases outside QCVN 06 nominal Appendix F tables require calculation/test under the selected applicable fire standard','independent structural/fire verification'],
+    externalRequirements:['fire cases outside QCVN 06 nominal Appendix F tables require calculation/test under the selected applicable fire standard'],
   },
   {
     issue:6,standard:'TCVN 9362:2012 + TCVN 10304:2025',
     implemented:['TCVN 9362 4.6.6 Eq.(14)','TCVN 9362 Appendix C Table C.1 full circle/rectangle/strip alpha m=0..12 with m,n interpolation','TCVN 9362 Appendix C additional pressure p0z=alpha p0','TCVN 9362 Appendix C C.1.6 layer-summation settlement','TCVN 9362 4.6.18','TCVN 9362 4.6.19','TCVN 9362 Appendix D D.1-D.2','TCVN 10304 7.1.7 Eq.(4)','TCVN 10304 7.2.1 Eq.(5)-(6) end-bearing pile','TCVN 10304 7.2.2 driven/pressed friction pile capacity from explicit sourced qb/fi/factors','TCVN 10304 5.1-5.3 geotechnical document gate','TCVN 10304 Appendix D Eq.(D.1)-(D.6)/Table D.1 driven-pressed SPT capacity','TCVN 10304 7.3.4.2 Eq.(25)-(28) driven CPT capacity with sourced Table 15 coefficients','TCVN 10304 Appendix G G.1-G.7 alpha=0.95 statistical processing','TCVN 10304 Table 15 exact CPT coefficient selector','TCVN 10304 7.3.4.4 Eq.(29)/Table 16 bored-pile CPT with linear qc interpolation','TCVN 10304 7.4.2 Eq.(30)-(33) long friction-pile settlement and kv derivation','TCVN 10304 7.4.2.1 Eq.(34)/Table 17 short-pile settlement','TCVN 10304 7.4.3.1 Eq.(36)-(38) pile interaction/group settlement','TCVN 10304 7.4.3.1 preliminary equal pile load and <=10% geotechnical/global model convergence'],
     pending:[],
-    externalRequirements:['geotechnical investigation/test data required by TCVN 10304','independent geotechnical/foundation verification'],
+    externalRequirements:['geotechnical investigation/test data required by TCVN 10304'],
   },
   {
     issue:7,standard:'QCVN 12:2014/BXD + TCVN 9206:2012 + TCVN 7447-4-41:2010 + TCVN 7447-5-52:2010 + TCVN 7447-5-54:2015 + TCVN 7447-6:2011',
     implemented:['QCVN 12 2.6.3.1 Eq.(3)-(4)','QCVN 12 2.3.4.1-2.3.4.2 short-circuit device breaking-capacity gate','QCVN 12 2.6.5.1','TCVN 9206 4.5','TCVN 9206 5.8','TCVN 9206 5.11/Table 8','TCVN 9206 5.12/Table 9','TCVN 7447-4-41 411.3.2.2/Table 41.1','TCVN 7447-4-41 411.4.4 TN fault loop Zs·Ia≤Uo','TCVN 7447-4-41 411.5.3 TT RCD RA·IΔn≤50V','TCVN 7447-6 C.61.3.6.2 measured TN loop quick 2/3 Uo/Ia and detailed Ze+Rphase+RPE verification','TCVN 7447-5-52 Appendix B Tables B.52.2/B.52.4 copper PVC A1/A2/B1/B2/C','TCVN 7447-5-52 B.52.3/B.52.5 XLPE/EPR copper+aluminium A1/A2/B1/B2/C/D1/D2','TCVN 7447-5-52 B.52.10-B.52.13 full E/F/G PVC+XLPE/EPR copper+aluminium','TCVN 7447-5-52 Appendix C Table C.52.2 D1/D2 copper subset','TCVN 7447-5-52 Table C.52.3 grouping item 1','TCVN 7447-5-52 B.52.14 ambient-air temperature correction','TCVN 7447-5-52 B.52.15 soil-temperature correction','TCVN 7447-5-52 B.52.16 soil thermal-resistivity correction','TCVN 7447-5-54 543.1.1/Table 54.2','TCVN 7447-5-54 543.1.2'],
     pending:[],
-    externalRequirements:['device-specific protective-device curves and measured commissioning data remain manufacturer/project evidence as required by the standards','independent electrical verification'],
+    externalRequirements:['device-specific protective-device curves and measured commissioning data remain manufacturer/project evidence as required by the standards'],
   },
   {
     issue:8,standard:'TCVN 4513:1988 + TCVN 7957:2023 + TCVN 9222:2012',
     implemented:['TCVN 4513 3.5/Table 2 fixture-unit schedule','TCVN 4513 3.8-3.9 fixture pressure limits','TCVN 4513 6.3 pressure requirement','TCVN 4513 6.5 velocity limits','TCVN 4513 6.6/Table 8','TCVN 4513 6.7 Eq.(2)/Tables 9-10','TCVN 4513 6.14/Table 14(a) DN10-DN150 resistance lookup and friction gradient i=Aq²','TCVN 4513 6.14-6.15 Tables 14(b)-15 DN175-DN400 large-pipe resistance and low-velocity correction','TCVN 4513 project pump duty-point and sourced manufacturer-curve acceptance','TCVN 9222:2012 Table 10 pump Q/H/efficiency acceptance','TCVN 9222:2012 6.4.3/11 NPSH acceptance and cavitation verification','TCVN 4513 6.16 local-loss allowances','TCVN 4513 7.1 booster requirement','TCVN 4513 7.7 pump flow basis','TCVN 4513 8.1 tank limit','TCVN 7957 5.3.2/Table 9 Manning','TCVN 7957 5.3.4/Table 10 minimum diameters','TCVN 7957 5.3.5/Table 11 maximum fill','TCVN 7957 5.3.6/Table 12 self-cleansing velocity','TCVN 7957 5.3.9 maximum velocity','TCVN 7957 5.3.11 rain-inlet connection slope'],
     pending:[],
-    externalRequirements:['manufacturer pump test curves/reports remain sourced product evidence','independent MEP verification'],
+    externalRequirements:['manufacturer pump test curves/reports remain sourced product evidence'],
+  },
+  {
+    issue:12,standard:'TCVN 5687:2024',
+    implemented:[
+      'QCVN 09:2017/BXD -> QCVN 04-3:2026/BXD energy-efficiency applicability/date/transition resolver',
+      '5.1.1 + Appendix A.1 residential indoor comfort conditions',
+      '5.2.2 HVAC design classes I/II/III and reliability metadata',
+      '6.1.5 + Appendix E.1 residential outdoor-air rates by person/area',
+      '6.1.6 + Appendix F.1 mechanical-ventilation air-change workflows',
+      '6.1.7 + Appendix G Eq.(G.1), Eq.(G.5)-(G.7) residential supply-air sizing paths',
+      'Appendix G Eq.(G.1) sensible-excess-heat airflow',
+      'Appendix G Eq.(G.5) air changes, Eq.(G.6) area and Eq.(G.7) people',
+      'source-backed component cooling-load aggregation without W/m2 placeholder',
+      'source-backed rated equipment capacity acceptance at stated design conditions'
+    ],
+    pending:[],
+    externalRequirements:[
+      'project outdoor design conditions must be sourced from Appendix B or another applicable official climate source',
+      'project geometry, envelope, solar, occupancy, lighting, equipment and ventilation gains must be sourced',
+      'equipment rated performance must come from manufacturer/source documentation',
+      'fire/smoke requirements remain governed by QCVN 06 and applicable fire-safety design'
+    ],
   },
 ]);
 

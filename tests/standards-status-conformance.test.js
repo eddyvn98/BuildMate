@@ -9,7 +9,7 @@ test('standards status snapshot is fresh on the verification date and becomes st
   const fresh=standardsSnapshotHealth({asOfDate:'2026-09-30',maxAgeDays:120});
   assert.equal(fresh.healthy,true);
   assert.equal(standardStatus('TCVN 10304:2025').status,'active');
-  assert.ok(STANDARD_STATUS_SNAPSHOT.length>=15);
+  assert.ok(STANDARD_STATUS_SNAPSHOT.length>=16);
   const stale=standardsSnapshotHealth({asOfDate:'2027-02-15',maxAgeDays:120});
   assert.equal(stale.healthy,false);
   assert.ok(stale.blockers.some(x=>x.reason==='status-reverification-required'));
@@ -25,7 +25,7 @@ test('every conformance catalog test file actually exists',()=>{
 });
 
 test('every zero-gap engineering issue has conformance groups',()=>{
-  for (const issue of [4,5,6,7,8]) {
+  for (const issue of [4,5,6,7,8,12]) {
     const coverage=STANDARD_CLAUSE_COVERAGE.find(x=>x.issue===issue);
     assert.deepEqual(coverage.pending,[]);
     assert.ok(STANDARD_CONFORMANCE_MATRIX.some(x=>x.issue===issue));

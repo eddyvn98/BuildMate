@@ -4,10 +4,10 @@ import { createProject } from '../src/engine/project.js';
 import { standardCalculatorCapabilities,runStandardCalculation } from '../src/engine/engineering/standards-calculator.js';
 import { createEngineeringEvidenceRecord } from '../src/engine/engineering-evidence.js';
 
-test('standards calculator exposes high-level actions across issues 4-8',()=>{
+test('standards calculator exposes high-level actions across the townhouse engineering scope',()=>{
   const caps=standardCalculatorCapabilities();
   assert.ok(caps.length>=20);
-  assert.deepEqual([...new Set(caps.map(x=>x.issue))].sort(),[4,5,6,7,8]);
+  assert.deepEqual([...new Set(caps.map(x=>x.issue))].sort((a,b)=>a-b),[4,5,6,7,8,12]);
 });
 
 test('standard calculation can run a source-independent TCVN calculation',()=>{

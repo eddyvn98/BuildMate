@@ -36,6 +36,9 @@ export const STANDARD_CONFORMANCE_MATRIX=Object.freeze([
     'standard-water-drainage.test.js','standard-water-hydraulics.test.js','standard-water-pump.test.js','standards-reference-benchmarks.test.js',
     'standard-cpt-pump-acceptance.test.js','standard-xlpe-largewater.test.js'
   ]),
+  entry(12,'hvac-residential','TCVN 5687:2024 5.1-6.2 + Appendices A/E/F/G',[
+    'standard-hvac.test.js','a2z-status.test.js'
+  ]),
 ]);
 
 export function conformanceForIssue(issue) {

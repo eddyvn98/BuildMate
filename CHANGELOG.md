@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.7.0 - 2026-09-30
+
+### Standards-backed readiness
+
+- Removed independent engineering review as a mandatory software-readiness blocker.
+- Profiles become standards-ready from identified standard/version, applicability, clause/formula mapping, executable reference cases and zero tracked software gaps.
+- Project/site/manufacturer/test evidence remains mandatory when required by the calculation workflow.
+- Independent review records and evidence fingerprints remain available as optional audit history.
+
+### Residential HVAC / TCVN 5687:2024
+
+- Added residential comfort conditions, HVAC design classes and sourced outdoor design conditions.
+- Added residential outdoor-air, ACH and Appendix G sensible-heat/people/area/ACH airflow calculations.
+- Replaced standards-backed W/m² cooling sizing with source-backed component cooling-load aggregation.
+- Added source-backed equipment-capacity acceptance.
+- Added HVAC project-evidence records, conformance tests and a golden outdoor-air benchmark.
+
+### A-to-Z product flow
+
+- Added project progress from brief and pricing through loads, RC, foundations, electrical, water/drainage, HVAC and final report.
+- Expanded API/report/readiness coverage from five to six engineering profiles.
+- Bumped deterministic engine/package version to 0.7.0.
+
+
 ## 0.6.0 - 2026-09-30
 
 ### Tracked TCVN/QCVN calculation coverage reaches zero software gaps

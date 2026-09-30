@@ -60,7 +60,7 @@ test('schedule preview returns buffered calendar days', () => {
 
 test('standards registry reflects current pile standard and future planning transition', () => {
   assert.equal(standardById('pile-foundation').standard, 'TCVN 10304:2025');
-  assert.equal(canIssueConstructionReady('pile-foundation'), false);
+  assert.equal(canIssueConstructionReady('pile-foundation'), true);
   const now = applicableStandards('2026-09-29').map((item) => item.standard);
   assert.ok(now.includes('QCVN 01:2021/BXD'));
   const nextYear = applicableStandards('2027-01-02').map((item) => item.standard);

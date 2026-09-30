@@ -13,6 +13,7 @@ const DEFINITIONS=[
   ['earthing-pe','earthing-pe','TCVN 7447-5-54:2015','2015','Earthing and protective conductor checks',7],
   ['internal-water','internal-water','TCVN 4513:1988','1988','Internal domestic water design context',8],
   ['external-drainage','external-drainage','TCVN 7957:2023','2023','Drainage design context',8],
+  ['hvac-residential','hvac-residential','TCVN 5687:2024','2024','Residential ventilation and comfort air-conditioning for the townhouse core',12],
 ];
 
 
@@ -55,7 +56,7 @@ export function engineeringProfileStatus() {
     pendingGaps:structuredClone(profile.pendingGaps),
     externalRequirements:structuredClone(profile.externalRequirements ?? []),
     townhouseCore:townhouseCoreScope(issueForProfile(profile.id)),
-    softwareReadyForIndependentReview:Boolean(profile.clauseMap.length && profile.referenceCases.length),
+    softwareStandardsReady:Boolean(profile.clauseMap.length && profile.referenceCases.length && (profile.pendingGaps ?? []).length===0),
     ...assessProfileReadiness(profile),
   }));
 }
@@ -67,6 +68,7 @@ function officialSourceFallback(issue) {
     6:'https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+9362%3A2012',
     7:'https://tieuchuan.vsqi.gov.vn/quychuan/view?sohieu=QCVN+12%3A2014%2FBXD',
     8:'https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+4513%3A1988',
+    12:'https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+5687%3A2024',
   }[issue] ?? '';
 }
 
@@ -81,5 +83,6 @@ function issueForProfile(id) {
     'earthing-pe':7,
     'internal-water':8,
     'external-drainage':8,
+    'hvac-residential':12,
   }[id] ?? null;
 }

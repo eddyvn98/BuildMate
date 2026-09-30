@@ -10,6 +10,8 @@ export const ENGINEERING_EVIDENCE_TYPES=Object.freeze([
   ['protective-device-curve','Đường đặc tính CB/RCD'],
   ['commissioning-loop-test','Đo vòng sự cố hiện trường'],
   ['pump-test-report','Biên bản thử bơm'],
+  ['hvac-outdoor-design-condition','HVAC - điều kiện thiết kế ngoài trời'],
+  ['hvac-equipment-performance','HVAC - dữ liệu hiệu suất thiết bị'],
 ]);
 
 const EXAMPLES=Object.freeze({
@@ -36,6 +38,21 @@ const EXAMPLES=Object.freeze({
   'water.design-flow':{fixtureEquivalentUnits:20,litersPerPersonDay:150},
   'water.pump-acceptance':{guaranteedFlow:10,guaranteedHeadM:25,guaranteedEfficiencyPercent:70,testedFlow:10.2,testedHeadM:24.8,testedEfficiencyPercent:69,grade:2,testReportSource:'Pump test report'},
   'water.pump-npsh':{npshAvailableM:5,npshRequiredM:3,requiredNpshSource:'Manufacturer test report',operatingFlow:10},
+  'hvac.energy-regulation':{projectDate:'2026-09-30',buildingType:'townhouse',totalFloorAreaM2:192,transitionEligible:false},
+  'hvac.comfort':{spaceType:'living',season:'hot'},
+  'hvac.outdoor-design':{classId:'II',dryBulbC:35,wetBulbC:28,source:'TCVN 5687:2024 Appendix B / project climate row'},
+  'hvac.outdoor-air':{spaceType:'bedroom',people:2,areaM2:18},
+  'hvac.ach':{spaceType:'bedroom',areaM2:18,heightM:3,ach:2.5},
+  'hvac.airflow-sensible':{sensibleExcessHeatW:1200,localExhaustM3h:0,localExhaustTempC:26,supplyTempC:18,roomExhaustTempC:26},
+  'hvac.cooling-load':{components:[
+    {category:'envelope',watts:1800,source:'Project envelope calculation',methodRef:'Envelope heat-gain worksheet'},
+    {category:'solar',watts:900,source:'Project glazing/orientation calculation',methodRef:'Solar heat-gain worksheet'},
+    {category:'people-lighting-equipment',watts:700,source:'Project room schedule',methodRef:'Internal gain schedule'},
+    {category:'ventilation',watts:600,source:'TCVN 5687 airflow result + psychrometric calculation',methodRef:'Ventilation load worksheet'}
+  ]},
+  'hvac.equipment-selection':{designLoadKw:4,equipment:[
+    {id:'AC-01',model:'Demo 4.5 kW',ratedCapacityKw:4.5,source:'Manufacturer performance sheet',ratedConditions:'rated cooling condition stated by manufacturer'}
+  ]},
 });
 
 export function calculatorExample(action) {
@@ -55,5 +72,7 @@ export function evidenceDataExample(type) {
     'protective-device-curve':{points:[{x:100,y:1},{x:200,y:0.2}]},
     'commissioning-loop-test':{loopImpedanceOhm:0.8},
     'pump-test-report':{points:[{flow:8,headM:28,efficiencyPercent:68},{flow:10,headM:25,efficiencyPercent:70}]},
+    'hvac-outdoor-design-condition':{classId:'II',location:'TP.HCM',dryBulbC:35,wetBulbC:28},
+    'hvac-equipment-performance':{ratedCapacityKw:4.5,ratedConditions:'manufacturer rated cooling condition'},
   }[type] ?? {});
 }

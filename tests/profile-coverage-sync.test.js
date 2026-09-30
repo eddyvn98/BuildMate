@@ -10,13 +10,18 @@ test('engineering profiles are synchronized with implemented clause coverage and
   }
 });
 
-test('profile blockers distinguish real remaining standard gaps from independent review',()=>{
+test('zero-gap profiles become standards-ready without mandatory independent review',()=>{
   for (const profile of engineeringProfileStatus()) {
     assert.ok(!profile.blockers.includes('clause-map-missing'));
     assert.ok(!profile.blockers.includes('reference-cases-missing'));
-    if (profile.pendingGaps.length>0) assert.ok(profile.blockers.includes('standard-coverage-incomplete'));
-    else assert.ok(!profile.blockers.includes('standard-coverage-incomplete'));
-    assert.ok(profile.blockers.includes('independent-review-missing'));
-    assert.equal(profile.constructionReady,false);
+    assert.ok(!profile.blockers.includes('independent-review-missing'));
+    if (profile.pendingGaps.length>0) {
+      assert.equal(profile.constructionReady,false);
+      assert.ok(profile.blockers.includes('standard-coverage-incomplete'));
+    } else {
+      assert.equal(profile.constructionReady,true);
+      assert.equal(profile.standardsReady,true);
+      assert.ok(!profile.blockers.includes('standard-coverage-incomplete'));
+    }
   }
 });

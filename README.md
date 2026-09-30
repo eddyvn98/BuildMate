@@ -1,28 +1,38 @@
 # BuildMate
 
-BuildMate is a Vietnam-focused townhouse planning, calculation and construction-control assistant for homeowners.
+BuildMate is a Vietnam-focused townhouse planning, standards-backed calculation and construction-control assistant for homeowners.
 
-The product is designed around one hard boundary:
+The product has one hard boundary:
 
 > AI interprets and explains. Deterministic, versioned engines produce BuildMate numbers.
 
-## Current v0.6
+## Current v0.7
 
-- Multiple house projects in one browser.
-- Guided natural-language intake + editable fields.
-- Confirmed / suggested / assumed / missing / blocked data states.
-- Planning area and indicative quantity takeoff.
-- Economy / balanced / comfort budgets.
-- User price overrides with source and effective date.
-- Safe budget optimization that never cuts locked safety scope.
-- Construction-stage cash flow.
-- Engineering preview for structure, foundations, electrical, water and HVAC.
-- Simple 2D functional block plan.
-- Saved design versions.
-- Actual construction cost tracking.
+- Multi-project homeowner workspace with guided natural-language intake.
+- Confirmed / suggested / assumed / missing / blocked input states.
+- Planning area, indicative quantities, Economy / Balanced / Comfort budgets and stage cash flow.
+- Project-specific price overrides, design versions and actual-cost tracking.
+- A-to-Z readiness board from project brief to technical calculations and report.
+- Standards-backed calculation workflows for loads, reinforced concrete, foundations, electrical, water/drainage/pumps and residential HVAC.
+- TCVN/QCVN clause/formula/source/input provenance, executable conformance tests and golden reference benchmarks.
+- Project evidence gates for data that the applicable standard requires from the site, authority, manufacturer or test/commissioning records.
+- Optional engineering audit/review records and evidence fingerprints; review is not a mandatory software-readiness gate.
 - JSON backup/import, HTML report and BOQ CSV export.
-- Current Vietnam standards registry with construction-ready gates.
-- Automated tests, syntax checks and Docker packaging.
+- Authenticated API, persistent storage, Docker packaging and CI.
+
+## Readiness model
+
+A calculation/profile is **standards-ready** when its tracked standard coverage has:
+
+1. an identified document/version and applicability;
+2. implemented clause/formula/table mappings;
+3. explicit units and input provenance;
+4. executable conformance/reference tests;
+5. no tracked software calculation gap.
+
+A project calculation may still be blocked when the standard requires project-specific evidence such as locality data, geotechnical investigation, manufacturer curves or commissioning measurements. BuildMate does not replace those inputs with assumptions.
+
+Independent review remains available as an optional audit trail and fingerprint, but is not required to close a software implementation gap.
 
 ## Run locally
 
@@ -45,36 +55,22 @@ npm test
 AUTH_SECRET=replace-me DATA_FILE=./data/buildmate.json npm run start:api
 ```
 
-The API listens on port `3000` by default. When `DATA_FILE` is set, projects, immutable calculation runs and document metadata survive restarts.
+The API listens on port `3000` by default.
 
 ## Docker
-
-```bash
-docker build -t buildmate .
-docker run --rm -p 8080:80 buildmate
-```
-
-Open `http://localhost:8080`; health check is `/healthz`.
-
-For the static web + persistent API together:
 
 ```bash
 AUTH_SECRET=replace-me docker compose up --build
 ```
 
-The API is then available on `http://localhost:3000` and persists data in the `buildmate-data` volume.
+The static app and persistent API are packaged together; API data persists in the `buildmate-data` volume.
 
-## Important engineering status
-
-For tracked engineering issues #4-#8, machine-readable TCVN/QCVN software coverage is now at `pending: []`. Calculation engines carry clause/formula/source/input provenance, executable conformance tests and golden benchmarks.
-
-Project-specific evidence is still mandatory wherever the standards require authority data, geotechnical investigation, manufacturer curves or commissioning/test results. BuildMate persists that evidence and includes it in the review fingerprint instead of replacing it with assumptions.
-
-See:
+## Main documentation
 
 - `docs/PRD.md`
 - `docs/ARCHITECTURE.md`
 - `docs/ENGINEERING-MODULES.md`
 - `docs/STANDARDS-REGISTRY.md`
 - `docs/RELEASE-STATUS.md`
+- `docs/ROADMAP.md`
 - `docs/API-CONTRACT.md`

@@ -13,8 +13,8 @@ test('technical report carries standards version, conformance, benchmarks and pr
   const report=buildProjectReport(p,workflow);
   assert.equal(report.standardStatusHealth.healthy,true);
   assert.ok(report.standardConformance.length>=9);
-  assert.equal(report.standardReferenceBenchmarks.length,5);
-  assert.equal(report.engineeringProjectEvidence.length,5);
+  assert.equal(report.standardReferenceBenchmarks.length,6);
+  assert.equal(report.engineeringProjectEvidence.length,6);
   assert.ok(report.engineeringProjectEvidence.every(x=>x.digest.length===64));
   const html=reportToHtml(report);
   assert.ok(html.includes('Tình trạng phiên bản tiêu chuẩn'));
