@@ -1,3 +1,4 @@
+import { runStandardCalculation,standardCalculatorCapabilities } from '../engine/engineering/standards-calculator.js';
 import { createEngineeringEvidenceRecord,assessEngineeringEvidence } from '../engine/engineering-evidence.js';
 import { projectEngineeringReadiness } from '../engine/project-readiness.js';
 import { createEngineeringReviewRecord,reviewEvidenceFingerprint,assessEngineeringReviewRecord } from '../engine/review-record.js';
@@ -47,6 +48,30 @@ export class BuildMateService {
     this.store.getProject(ownerId,id);
     const result=interpretHomeownerText(String(text ?? ''));
     return { ...result, authoritative:false, applyRequired:true };
+  }
+
+  standardCalculatorCapabilities() {
+    return standardCalculatorCapabilities();
+  }
+
+  calculateStandard(ownerId,id,request={}) {
+    const project=this.store.getProject(ownerId,id);
+    const output=runStandardCalculation(project,request);
+    const run={
+      id:crypto.randomUUID(),
+      projectId:id,
+      createdAt:new Date().toISOString(),
+      engineVersion:String(request.engineVersion ?? '0.6.0'),
+      requestedModules:[String(request.action ?? 'standard-calculation')],
+      alternativeId:null,
+      status:output.status,
+      level:'engineering-review',
+      results:{standardCalculation:output},
+      issues:output.status==='blocked'?[{severity:'blocked',message:output.reason}]:[],
+      gates:{projectEvidence:output.evidence ?? null},
+      sourceVersions:{standardAction:output.standard,projectEvidenceDigest:output.projectEvidenceDigest ?? output.evidence?.digest ?? null},
+    };
+    return this.store.createRun(ownerId,run);
   }
 
   calculate(ownerId,id,request={}) {

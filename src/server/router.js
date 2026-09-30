@@ -10,6 +10,7 @@ export function createHandler({service,store,authSecret}) {
       if (url.pathname==='/healthz') return json(res,200,{ok:true});
       if (req.method==='GET' && url.pathname==='/api/standards/coverage') return json(res,200,STANDARD_CLAUSE_COVERAGE);
       if (req.method==='GET' && url.pathname==='/api/standards/status') return json(res,200,{snapshot:STANDARD_STATUS_SNAPSHOT,health:standardsSnapshotHealth()});
+      if (req.method==='GET' && url.pathname==='/api/engineering/calculators') return json(res,200,service.standardCalculatorCapabilities());
       if (req.method==='GET' && url.pathname==='/api/engineering/review-packets') return json(res,200,[4,5,6,7,8].map((issue)=>buildIndependentReviewPacket(issue)));
       const packetMatch=url.pathname.match(/^\/api\/engineering\/review-packets\/(4|5|6|7|8)$/);
       if (req.method==='GET' && packetMatch) return json(res,200,buildIndependentReviewPacket(Number(packetMatch[1])));
@@ -32,6 +33,7 @@ export function createHandler({service,store,authSecret}) {
       if (parts[3]==='versions' && req.method==='GET') return json(res,200,service.listVersions(userId,projectId));
       if (parts[3]==='intake' && parts[4]==='interpret' && req.method==='POST') return json(res,200,service.interpret(userId,projectId,body.text));
       if (parts[3]==='calculate' && req.method==='POST') return json(res,201,service.calculate(userId,projectId,body));
+      if (parts[3]==='engineering' && parts[4]==='calculate' && req.method==='POST') return json(res,201,service.calculateStandard(userId,projectId,body));
       if (parts[3]==='runs' && parts[4] && req.method==='GET') return json(res,200,service.getRun(userId,projectId,parts[4]));
       if (parts[3]==='price-overrides' && req.method==='POST') return json(res,200,service.addPriceOverrides(userId,projectId,body));
       if (parts[3]==='actual-costs' && parts.length===4 && req.method==='POST') return json(res,201,service.addActualCost(userId,projectId,body));
