@@ -74,11 +74,11 @@ export function rectangularShearCheck({
 
 
 const CONCRETE=Object.freeze({
-  B3.5:{Rb:2.1,Rbt:0.26,RbSer:2.7,RbtSer:0.39,Eb:9500},
+  'B3.5':{Rb:2.1,Rbt:0.26,RbSer:2.7,RbtSer:0.39,Eb:9500},
   B5:{Rb:2.8,Rbt:0.37,RbSer:3.5,RbtSer:0.55,Eb:13000},
-  B7.5:{Rb:4.5,Rbt:0.48,RbSer:5.5,RbtSer:0.70,Eb:16000},
+  'B7.5':{Rb:4.5,Rbt:0.48,RbSer:5.5,RbtSer:0.70,Eb:16000},
   B10:{Rb:6.0,Rbt:0.56,RbSer:7.5,RbtSer:0.85,Eb:19000},
-  B12.5:{Rb:7.5,Rbt:0.66,RbSer:9.5,RbtSer:1.00,Eb:21500},
+  'B12.5':{Rb:7.5,Rbt:0.66,RbSer:9.5,RbtSer:1.00,Eb:21500},
   B15:{Rb:8.5,Rbt:0.75,RbSer:11.0,RbtSer:1.10,Eb:24000},
   B20:{Rb:11.5,Rbt:0.90,RbSer:15.0,RbtSer:1.35,Eb:27500},
   B25:{Rb:14.5,Rbt:1.05,RbSer:18.5,RbtSer:1.55,Eb:30000},
