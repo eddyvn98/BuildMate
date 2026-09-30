@@ -1,0 +1,44 @@
+name: Refresh market prices
+
+on:
+  push:
+    branches: ["feat/auto-refresh-market-prices"]
+  schedule:
+    - cron: "15 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-market-prices
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Refresh pricing sources
+        run: npm run refresh:prices
+      - name: Verify pricing parsers and A-to-Z smoke test
+        run: node --test tests/market-price-parsers.test.js tests/market-pricing.test.js tests/e2e-townhouse-sample.test.js
+      - name: Commit refreshed snapshot on main
+        if: github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          git add src/engine/market-price-live.js
+          if git diff --cached --quiet; then
+            echo "No pricing snapshot changes."
+            exit 0
+          fi
+          git config user.name "buildmate-price-bot"
+          git config user.email "buildmate-price-bot@users.noreply.github.com"
+          git commit -m "chore(pricing): refresh market snapshot $(date -u +%F)"
+          git pull --rebase origin main
+          git push origin HEAD:main

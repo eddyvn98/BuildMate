@@ -21,6 +21,8 @@
 ### Product flow
 
 - Added A-to-Z progress model from project brief through technical calculations to report.
+- Added fresh TP.HCM quick-market pricing as the primary early budget signal.
+- Added daily automated pricing refresh with per-source parsers, freshness expiry and fail-closed quality gates.
 - Added HVAC actions to the same standards calculator/evidence pipeline as structure and MEP.
 - Technical reports include all six engineering profiles.
 - Calculation history preserves inputs, result, evidence audit and digests.
@@ -31,4 +33,5 @@
 2. Improve forms for the project evidence that users most often lack.
 3. Replace raw JSON-first technical inputs with guided forms while preserving an expert JSON mode.
 4. Expand golden benchmarks and regression cases when a real project exposes missing branches.
-5. Keep the standards-status snapshot current as editions and regulations change.
+5. Expand market-pricing adapters beyond TP.HCM after the HCMC refresh loop proves stable.
+6. Keep the standards-status snapshot current as editions and regulations change.

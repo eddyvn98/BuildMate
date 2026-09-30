@@ -7,7 +7,8 @@
     "test": "node --test",
     "check": "node scripts/check-syntax.js",
     "serve": "python3 -m http.server 4173",
-    "start:api": "node src/server/server.js"
+    "start:api": "node src/server/server.js",
+    "refresh:prices": "node scripts/refresh-market-prices.mjs"
   },
   "engines": {
     "node": ">=20"

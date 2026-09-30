@@ -44,7 +44,7 @@ test('sample HCMC 4x16 townhouse runs end-to-end through all six engineering dom
   assert.equal(planningBefore.results.areas.floorArea.value,163.2);
   assert.equal(planningBefore.results.marketPricing.quickEstimate.status,'ready');
   assert.equal(planningBefore.results.marketPricing.snapshot.turnkeyM2.confidence,'medium');
-  assert.equal(planningBefore.results.marketPricing.quickEstimate.centerVnd,1_262_352_000);
+  assert.equal(planningBefore.results.marketPricing.quickEstimate.centerVnd,1_251_744_000);
 
   const runs=[
     calculationRecord(p,'loads.permanent',{layers:[
@@ -91,6 +91,7 @@ test('sample HCMC 4x16 townhouse runs end-to-end through all six engineering dom
       preferredScenario:planningAfter.results.preferredScenario,
       preferredBudgetVnd:planningAfter.results.budgets.find(x=>x.key===planningAfter.results.preferredScenario)?.total,
       quickMarketEstimateVnd:planningAfter.results.marketPricing.quickEstimate.centerVnd,
+      marketSnapshotRefreshedAt:planningAfter.results.marketPricing.snapshot.refreshedAt,
       quickMarketRangeVnd:[planningAfter.results.marketPricing.quickEstimate.lowVnd,planningAfter.results.marketPricing.quickEstimate.highVnd],
       marketConfidence:planningAfter.results.marketPricing.quickEstimate.confidence,
     },
