@@ -214,3 +214,8 @@ CPT and pump acceptance closure:
 - TCVN 10304:2025 Table 15 exact beta1/beta2/beta_i lookup is implemented without unsupported interpolation.
 - TCVN 10304:2025 7.3.4.4 Eq.(29)/Table 16 bored-pile CPT uses the standard's explicit linear interpolation for intermediate qc and enforces d=600-1200 mm / embedment >=5 m applicability metadata.
 - TCVN 9222:2012 (ISO 9906:1999) Table 10 Q/H/efficiency acceptance tolerances, equations (20)-(21) hydraulic efficiency, and NPSH/cavitation verification are linked to the TCVN 4513 building-water duty workflow.
+
+
+Full foundation/cable table closure:
+- TCVN 9362:2012 Appendix C Table C.1 is implemented for m=0..12 across circular, rectangular n=1/1.4/1.8/2.4/3.2/5 and strip n>=10, with the standard's permitted interpolation of intermediate m/n; regular polygons map to equivalent circular radius sqrt(F/pi).
+- TCVN 7447-5-52:2010 Tables B.52.10-B.52.13 are implemented for free-air methods E/F/G across PVC and XLPE/EPR, copper and aluminium, preserving missing table cells instead of extrapolating.
