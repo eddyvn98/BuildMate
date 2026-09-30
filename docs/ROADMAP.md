@@ -1,5 +1,14 @@
 # Roadmap
 
+## Completed — v0.8.0 Homeowner Beta
+
+- Added homeowner-first dashboard/navigation and prioritized next actions.
+- Added public 4×16 m / 3-storey / 4-bedroom composite reference fixture with source provenance.
+- Replaced JSON-first entry for the six primary engineering flows with guided forms; Expert mode keeps raw calculator/evidence tools.
+- Added human-readable "Xem cách tính" summaries for calculation history.
+- Added daily market-price history recording and trend/material-drift UI.
+- Kept the A-to-Z smoke workflow and standards/evidence boundaries intact.
+
 ## Completed — v0.7.0 standards-backed A-to-Z core
 
 ### Engineering coverage
@@ -27,7 +36,15 @@
 - Technical reports include all six engineering profiles.
 - Calculation history preserves inputs, result, evidence audit and digests.
 
-## Next — real-project validation
+## Next — Beta validation
+
+1. Use the public reference project as the permanent UI regression fixture.
+2. Collect homeowner feedback on wording, required fields and blocker explanations.
+3. Add locality-specific public reference fixtures outside TP.HCM.
+4. Add more guided engineering workflows only when real Beta use shows they are needed.
+5. Add authenticated hosted Beta deployment and backup/sync workflow.
+
+## Prior real-project validation backlog
 
 1. Run one real 1–5 storey townhouse through the complete A-to-Z workflow.
 2. Improve forms for the project evidence that users most often lack.
