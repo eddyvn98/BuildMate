@@ -6,14 +6,17 @@ The product has one hard boundary:
 
 > AI interprets and explains. Deterministic, versioned engines produce BuildMate numbers.
 
-## Current v0.7
+## Current v0.8 — Homeowner Beta
 
+- Homeowner dashboard with clear navigation: Overview, Home Info, Engineering, Pricing and Report.
+- Public 4×16 m / 3-storey / 4-bedroom reference fixture with explicit source provenance and demo-only assumptions.
+- Guided engineering forms for loads, RC beam, shallow-foundation settlement, cable sizing, domestic water flow and residential outdoor air; raw JSON remains available in Expert mode.
 - Multi-project homeowner workspace with guided natural-language intake.
 - Confirmed / suggested / assumed / missing / blocked input states.
 - Planning area, indicative quantities, Economy / Balanced / Comfort budgets and stage cash flow.
-- Fresh TP.HCM market pricing with source/date provenance, robust price ranges and project-specific overrides.
+- Fresh TP.HCM market pricing with source/date provenance, robust price ranges, daily price-history capture and project-specific overrides.
 - Daily market-price refresh with fail-closed freshness gates, design versions and actual-cost tracking.
-- A-to-Z readiness board from project brief to technical calculations and report.
+- A-to-Z readiness board plus prioritized "what to do next" actions from project brief to technical calculations and report.
 - Standards-backed calculation workflows for loads, reinforced concrete, foundations, electrical, water/drainage/pumps and residential HVAC.
 - TCVN/QCVN clause/formula/source/input provenance, executable conformance tests and golden reference benchmarks.
 - Project evidence gates for data that the applicable standard requires from the site, authority, manufacturer or test/commissioning records.
@@ -67,6 +70,10 @@ AUTH_SECRET=replace-me DATA_FILE=./data/buildmate.json npm run start:api
 ```
 
 The API listens on port `3000` by default.
+
+## Public demo project
+
+Use **Nạp demo 4×16** in the web UI to load a public composite townhouse fixture. **Chạy demo A→Z** executes one standards-backed calculation in each of the six tracked engineering domains. The fixture clearly separates public facts from BuildMate assumptions and synthetic engineering test inputs; it is for product validation, not construction.
 
 ## Docker
 

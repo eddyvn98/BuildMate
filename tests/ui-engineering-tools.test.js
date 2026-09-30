@@ -4,25 +4,41 @@ import { createProject } from '../src/engine/project.js';
 import { runPlanningWorkflow } from '../src/engine/workflow.js';
 import { standardCalculatorCapabilities } from '../src/engine/engineering/standards-calculator.js';
 import { calculatorExample } from '../src/ui/engineering-tools.js';
+import { guidedDefaultValues } from '../src/ui/guided-calculator.js';
 import { shell } from '../src/ui/panels.js';
 
-test('local UI exposes standards calculator and project evidence panel',()=>{
+function ctx(activeView='overview'){
   const p=createProject();
   p.location.province.value='TP.HCM';
   p.land.widthM.value=5;
   p.land.lengthM.value=20;
   const workflow=runPlanningWorkflow(p);
-  const html=shell({
-    project:p,projects:[p],workflow,
-    calculatorCapabilities:standardCalculatorCapabilities(),
-    calculatorState:{action:'water.design-flow',inputText:JSON.stringify(calculatorExample('water.design-flow')),output:null,error:null},
-    evidenceState:{error:null},
-  });
-  assert.ok(html.includes('TCVN / QCVN Calculator'));
+  return {
+    p,
+    html:shell({
+      project:p,projects:[p],workflow,activeView,
+      calculatorCapabilities:standardCalculatorCapabilities(),
+      calculatorState:{action:'water.design-flow',inputText:JSON.stringify(calculatorExample('water.design-flow')),output:null,error:null},
+      guidedState:{action:'water.design-flow',values:guidedDefaultValues('water.design-flow'),output:null,error:null,record:null},
+      evidenceState:{error:null},
+    }),
+  };
+}
+
+test('homeowner shell exposes dashboard navigation and primary next action surface',()=>{
+  const {html}=ctx('overview');
+  assert.ok(html.includes('Homeowner Beta'));
+  assert.ok(html.includes('Tổng quan'));
+  assert.ok(html.includes('Việc nên làm tiếp'));
+  assert.ok(html.includes('Nạp demo 4×16'));
+});
+
+test('engineering view exposes guided calculators and keeps raw JSON in expert mode',()=>{
+  const {html}=ctx('engineering');
+  assert.ok(html.includes('Tính mà không cần JSON'));
+  assert.ok(html.includes('Lưu lượng nước thiết kế'));
+  assert.ok(html.includes('Chế độ chuyên gia'));
+  assert.ok(html.includes('Raw standards calculator'));
   assert.ok(html.includes('water.design-flow'));
-  assert.ok(html.includes('Project engineering evidence'));
-  assert.ok(html.includes('Tiến độ A→Z'));
-  assert.ok(html.includes('hvac.cooling-load'));
   assert.ok(!html.includes('Tĩnh tải giả định'));
-  assert.ok(html.includes('Loại khu vực hoạt tải TCVN 2737'));
 });

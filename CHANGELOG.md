@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.8.0 - 2026-09-30
+
+### Homeowner Beta
+
+- Reorganized the web UI into Overview, Home Info, Engineering, Pricing and Report views.
+- Added a public composite 4x16 m / 3-storey / 4-bedroom demo fixture with explicit source provenance and demo assumptions.
+- Added prioritized homeowner next actions from the A-to-Z readiness model.
+- Added guided forms for permanent load, RC beam, shallow settlement, XLPE cable sizing, domestic water flow and residential outdoor air.
+- Kept raw JSON calculator and engineering-evidence entry under Expert mode.
+- Added human-readable calculation explanations with formula/basis, key results, steps and immutable digest.
+- Added daily market-price history recording and trend/material-drift UI.
+- Bumped application/package version to 0.8.0; deterministic engineering formulas remain the existing standards-backed core.
+
+
 ## 0.7.0 - 2026-09-30
 
 ### Standards-backed readiness

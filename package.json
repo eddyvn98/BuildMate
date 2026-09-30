@@ -1,6 +1,6 @@
 {
   "name": "buildmate",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,7 +8,8 @@
     "check": "node scripts/check-syntax.js",
     "serve": "python3 -m http.server 4173",
     "start:api": "node src/server/server.js",
-    "refresh:prices": "node scripts/refresh-market-prices.mjs"
+    "refresh:prices": "node scripts/refresh-market-prices.mjs",
+    "record:price-history": "node scripts/record-market-price-history.mjs"
   },
   "engines": {
     "node": ">=20"

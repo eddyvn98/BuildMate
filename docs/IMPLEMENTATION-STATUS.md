@@ -1,10 +1,15 @@
 # Implementation Status
 
 Status date: 2026-09-30  
-Application version: 0.7.0
+Application version: 0.8.0
 
 ## Complete and usable now
 
+- Homeowner-first responsive dashboard with five primary views.
+- Public composite 4×16 m / 3-storey / 4-bedroom demo fixture with provenance.
+- Guided engineering forms for one key workflow in each tracked domain; Expert mode preserves raw JSON/evidence controls.
+- Prioritized next-action engine and human-readable calculation explanations.
+- Daily market-price history recording for future drift/trend analysis.
 - Multi-project local-first workspace and authenticated persistent API.
 - Guided natural-language intake plus editable structured fields.
 - Explicit confirmed/suggested/assumed/missing/blocked input states.
@@ -42,10 +47,10 @@ BuildMate still blocks a project calculation when its governing workflow require
 
 This is a data/evidence requirement of the calculation workflow, not an independent-review requirement.
 
-## v0.7 product objective
+## v0.8 product objective
 
-The product now tracks one project through:
+The product now lets a homeowner navigate one project through:
 
 brief → planning → budget/pricing → loads → RC → foundations → electrical → water/drainage → HVAC → report.
 
-The next product-validation step is to run this flow with a real townhouse project dataset and improve input UX around the blockers that appear.
+The permanent regression fixture now uses a sourced public townhouse reference. The next validation step is hosted Beta use with homeowner feedback on wording, blockers and required inputs.

@@ -24,13 +24,15 @@ jobs:
           node-version: 22
       - name: Refresh pricing sources
         run: npm run refresh:prices
-      - name: Verify pricing parsers and A-to-Z smoke test
-        run: node --test tests/market-price-parsers.test.js tests/market-pricing.test.js tests/e2e-townhouse-sample.test.js
+      - name: Record daily price history
+        run: npm run record:price-history
+      - name: Verify pricing parsers, history and A-to-Z smoke test
+        run: node --test tests/market-price-parsers.test.js tests/market-pricing.test.js tests/price-trend.test.js tests/e2e-townhouse-sample.test.js
       - name: Commit refreshed snapshot on main
         if: github.ref == 'refs/heads/main'
         shell: bash
         run: |
-          git add src/engine/market-price-live.js
+          git add src/engine/market-price-live.js src/engine/market-price-history.js
           if git diff --cached --quiet; then
             echo "No pricing snapshot changes."
             exit 0
