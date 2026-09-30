@@ -98,7 +98,13 @@ export function reportToHtml(report) {
 }
 
 export function quantitiesToCsv(report) {
-  if (report.technicalPackage) return technicalPackageToCsv(report.technicalPackage);
+  if (report.technicalPackage) {
+    const technical=technicalPackageToCsv(report.technicalPackage);
+    const legacy=(report.quantities??[]).map(item=>[
+      'planning-v1',item.label,item.value,item.unit,'','','',item.id
+    ].map(csvCell).join(','));
+    return [technical,...legacy].join('\n');
+  }
   const lines = [['id', 'label', 'value', 'unit', 'level']];
   for (const item of report.quantities) lines.push([item.id, item.label, item.value, item.unit, item.level]);
   return lines.map((row) => row.map(csvCell).join(',')).join('\n');
