@@ -240,3 +240,12 @@ RC material registry closure:
 - Table 10: heavy concrete Eb B3.5-B100 plus tabulated lightweight/aerated density-strength pairs.
 - Table 11: creep factor by humidity/strength class and the permitted lightweight density correction.
 - Eq.(192): long-term modulus Eb,tau=Eb/(1+phi_b,cr).
+
+
+RC cracked-section automatic solver:
+- TCVN 5574:2018 Eq.(13) + 8.2.3.3.5: Eb,red from Rb,ser/epsilon_b1,red for short/long duration.
+- Eq.(176): bending psi_s = 1 - 0.8 Mcrc/M after cracking.
+- Eq.(193): cracked transformed Ired.
+- Eq.(194)-(196): neutral-axis/compression-zone solution for rectangular sections with tension-only or tension+compression reinforcement.
+- Eq.(202)-(204): alpha_s1, alpha_s2 and Es,red.
+- The cracked rigidity is automatically capped by uncracked rigidity when the latter is supplied, as required by 8.2.3.3.5.
