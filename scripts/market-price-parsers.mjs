@@ -99,7 +99,7 @@ function parseObservation(text,adapter) {
 
 function rangeNear(text,{marker,window=600,rangeIndex=0,minValue=1,maxValue=100_000_000}) {
   const segment=segmentAfter(text,marker,window);
-  const ranges=[...segment.matchAll(/([0-9][0-9.,]{3,})\s*(?:đ|vnđ)?\s*[–—-]\s*([0-9][0-9.,]{3,})/gi)]
+  const ranges=[...segment.matchAll(/([0-9][0-9.,]{3,})\s*(?:đ|vnđ)?(?:\s*\/?\s*m[²2])?\s*(?:[–—-]|\bđến\b)\s*([0-9][0-9.,]{3,})/gi)]
     .map(m=>[parseMoney(m[1]),parseMoney(m[2])])
     .filter(([a,b])=>a>=minValue&&b<=maxValue&&b>=a);
   const row=ranges[rangeIndex]??ranges[0];

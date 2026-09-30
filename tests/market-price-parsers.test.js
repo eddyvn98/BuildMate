@@ -54,3 +54,15 @@ test('monthly source dates normalize to first day of month and preserve period b
   assert.equal(result.observationPatch.min,1_200_000);
   assert.equal(result.observationPatch.dateBasis,'period');
 });
+
+
+test('turnkey parser also accepts Vietnamese "đến" between price endpoints',()=>{
+  const adapter={
+    id:'ngoinhahoanhao-turnkey',type:'observation',code:'turnkey-m2',unit:'VND/m²',
+    extract:{type:'range-near',marker:'Giá xây nhà trọn gói TP.HCM từ',minValue:4_000_000,maxValue:10_000_000},
+  };
+  const html='<p>Giá xây nhà trọn gói TP.HCM từ 5.500.000đ/m² đến 7.000.000đ/m² sàn xây dựng.</p>';
+  const result=parsePriceSource(adapter,html,{checkedAt:'2026-09-30'});
+  assert.equal(result.observationPatch.min,5_500_000);
+  assert.equal(result.observationPatch.max,7_000_000);
+});

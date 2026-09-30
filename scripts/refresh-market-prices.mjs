@@ -90,21 +90,35 @@ const adapters=[
 const previous=await loadPrevious();
 const sourceMap=new Map(previous.sources.map(x=>[x.id,{...x}]));
 const observationMap=new Map(previous.observations.map(x=>[keyOf(x),{...x}]));
-const results=[];
 
-for (const adapter of adapters) {
+const attempts=await Promise.all(adapters.map(async(adapter)=>{
   const base=sourceMap.get(adapter.id)??baseSource(adapter);
   try {
     const html=await fetchText(adapter.url);
     const parsed=parsePriceSource(adapter,html,{checkedAt:today});
-    sourceMap.set(adapter.id,{...base,...sourceFields(adapter),...parsed.sourcePatch});
-    if (parsed.observationPatch) observationMap.set(keyOf(parsed.observationPatch),parsed.observationPatch);
-    results.push({id:adapter.id,ok:true,code:adapter.code??null});
+    return {
+      source:{...base,...sourceFields(adapter),...parsed.sourcePatch},
+      observation:parsed.observationPatch,
+      result:{
+        id:adapter.id,ok:true,code:adapter.code??null,
+        sourceDate:parsed.sourcePatch.sourceDate??null,
+        min:parsed.observationPatch?.min??null,max:parsed.observationPatch?.max??null,
+      },
+    };
   } catch (error) {
-    sourceMap.set(adapter.id,{...base,...sourceFields(adapter),lastCheckedAt:today,lastError:String(error.message??error)});
-    results.push({id:adapter.id,ok:false,error:String(error.message??error),code:adapter.code??null});
+    return {
+      source:{...base,...sourceFields(adapter),lastCheckedAt:today,lastError:String(error.message??error)},
+      observation:null,
+      result:{id:adapter.id,ok:false,error:String(error.message??error),code:adapter.code??null},
+    };
   }
+}));
+
+for (const attempt of attempts) {
+  sourceMap.set(attempt.source.id,attempt.source);
+  if (attempt.observation) observationMap.set(keyOf(attempt.observation),attempt.observation);
 }
+const results=attempts.map(x=>x.result);
 
 const successes=results.filter(x=>x.ok);
 const turnkeySuccesses=successes.filter(x=>x.code==='turnkey-m2');
