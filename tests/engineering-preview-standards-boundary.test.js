@@ -34,6 +34,6 @@ test('sourced dead and live load traces are marked confirmed in preview',()=>{
   p=setField(p,'engineering.deadLoadKnM2',4);
   p=setField(p,'engineering.deadLoadSource','project material takeoff');
   const structure=runPlanningWorkflow(p).results.engineering.modules.structure;
-  assert.equal(structure.result.inputs.find(x=>x.id==='deadLoad').state,'confirmed');
-  assert.equal(structure.result.inputs.find(x=>x.id==='liveLoad').state,'confirmed');
+  assert.equal(structure.result.inputs.find(x=>x.key==='deadLoad').state,'confirmed');
+  assert.equal(structure.result.inputs.find(x=>x.key==='liveLoad').state,'confirmed');
 });

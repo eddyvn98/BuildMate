@@ -1,4 +1,4 @@
-export const ENGINE_VERSION = '0.1.0';
+export const ENGINE_VERSION = '0.6.0';
 
 export function traceResult({
   id,
