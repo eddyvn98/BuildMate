@@ -6,15 +6,16 @@ test('engineering profiles are synchronized with implemented clause coverage and
   for (const profile of ENGINEERING_PROFILES) {
     assert.ok(profile.clauseMap.length>0);
     assert.ok(profile.referenceCases.length>0);
-    assert.ok(profile.pendingGaps.length>0);
+    assert.ok(Array.isArray(profile.pendingGaps));
   }
 });
 
-test('profile blockers now distinguish remaining standard gaps from independent review',()=>{
+test('profile blockers distinguish real remaining standard gaps from independent review',()=>{
   for (const profile of engineeringProfileStatus()) {
     assert.ok(!profile.blockers.includes('clause-map-missing'));
     assert.ok(!profile.blockers.includes('reference-cases-missing'));
-    assert.ok(profile.blockers.includes('standard-coverage-incomplete'));
+    if (profile.pendingGaps.length>0) assert.ok(profile.blockers.includes('standard-coverage-incomplete'));
+    else assert.ok(!profile.blockers.includes('standard-coverage-incomplete'));
     assert.ok(profile.blockers.includes('independent-review-missing'));
     assert.equal(profile.constructionReady,false);
   }
