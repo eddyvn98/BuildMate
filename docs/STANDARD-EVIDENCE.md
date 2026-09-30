@@ -208,3 +208,9 @@ Pile field-test closure:
 Electrical verification closure:
 - TCVN 7447-6:2011 C.61.3.6.2 conservative TN verification Zs(m)<=2/3 Uo/Ia is implemented.
 - When the conservative measured criterion is exceeded, BuildMate supports the standard's detailed path using measured source-loop impedance and measured phase/PE resistances with explicit sourced temperature-correction factors, then checks TCVN 7447-4-41 Zs Ia<=Uo.
+
+
+CPT and pump acceptance closure:
+- TCVN 10304:2025 Table 15 exact beta1/beta2/beta_i lookup is implemented without unsupported interpolation.
+- TCVN 10304:2025 7.3.4.4 Eq.(29)/Table 16 bored-pile CPT uses the standard's explicit linear interpolation for intermediate qc and enforces d=600-1200 mm / embedment >=5 m applicability metadata.
+- TCVN 9222:2012 (ISO 9906:1999) Table 10 Q/H/efficiency acceptance tolerances, equations (20)-(21) hydraulic efficiency, and NPSH/cavitation verification are linked to the TCVN 4513 building-water duty workflow.
