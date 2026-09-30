@@ -19,7 +19,7 @@ test('every conformance catalog test file actually exists',()=>{
   for (const group of STANDARD_CONFORMANCE_MATRIX) {
     assert.ok(group.testFiles.length>0);
     for (const file of group.testFiles) {
-      assert.equal(existsSync(new URL('../'+file,import.meta.url)),true,group.id+' missing '+file);
+      assert.equal(existsSync(new URL('./'+file,import.meta.url)),true,group.id+' missing '+file);
     }
   }
 });
