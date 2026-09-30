@@ -1,3 +1,4 @@
+import { STANDARD_STATUS_SNAPSHOT,standardsSnapshotHealth } from '../engine/standards/status-registry.js';
 import { buildIndependentReviewPacket } from '../engine/review-packet.js';
 import { STANDARD_CLAUSE_COVERAGE } from '../engine/standards/coverage.js';
 import { bearerUser } from './auth.js';
@@ -8,6 +9,7 @@ export function createHandler({service,store,authSecret}) {
       const url=new URL(req.url,'http://localhost');
       if (url.pathname==='/healthz') return json(res,200,{ok:true});
       if (req.method==='GET' && url.pathname==='/api/standards/coverage') return json(res,200,STANDARD_CLAUSE_COVERAGE);
+      if (req.method==='GET' && url.pathname==='/api/standards/status') return json(res,200,{snapshot:STANDARD_STATUS_SNAPSHOT,health:standardsSnapshotHealth()});
       if (req.method==='GET' && url.pathname==='/api/engineering/review-packets') return json(res,200,[4,5,6,7,8].map((issue)=>buildIndependentReviewPacket(issue)));
       const packetMatch=url.pathname.match(/^\/api\/engineering\/review-packets\/(4|5|6|7|8)$/);
       if (req.method==='GET' && packetMatch) return json(res,200,buildIndependentReviewPacket(Number(packetMatch[1])));
