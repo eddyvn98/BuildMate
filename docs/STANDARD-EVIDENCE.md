@@ -173,3 +173,8 @@ Additional completed tables:
 - TCVN 7447-5-52:2010 Tables B.52.3/B.52.5: XLPE/EPR current-carrying capacity for copper and aluminium conductors across A1/A2/B1/B2/C/D1/D2, two/three loaded conductors.
 - TCVN 4513:1988 Table 14(b): DN175-DN400 unit resistance A with q in m3/s.
 - TCVN 4513:1988 6.15/Table 15: low-velocity correction K for steel/cast-iron pipe below 1.2 m/s.
+
+
+Additional completed formula chains:
+- TCVN 5574:2018 Eq.(185)-(188): total curvature for cracked/uncracked sections, curvature M/D and transformed stiffness D=Eb1*Ired; Eq.(191) short-term uncracked Eb1=0.85Eb; Eq.(182) shear strain.
+- TCVN 10304:2025 7.4.3.1 Eq.(36)-(38): pairwise pile interaction coefficient and additional/group settlement from known single-pile settlements, SLS loads and sourced kv/G1/G2.
