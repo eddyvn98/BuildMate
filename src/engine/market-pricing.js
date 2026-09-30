@@ -119,10 +119,10 @@ function decorate(observation,source,asOf) {
 function sourceFreshness(source,asOf) {
   if (!source) return {status:'stale',ageDays:999};
   const date=source.sourceDate??source.verifiedAt??source.observedAt;
+  const max=MAX_AGE_DAYS[source.kind]??30;
   const deltaDays=Math.floor((Date.parse(asOf+'T00:00:00Z')-Date.parse(date+'T00:00:00Z'))/86400000);
   if (deltaDays<0) return {ageDays:deltaDays,status:'future',maxAgeDays:max,dateBasis:source.sourceDate?'source-date':source.verifiedAt?'verified-date':'observed-date'};
   const ageDays=deltaDays;
-  const max=MAX_AGE_DAYS[source.kind]??30;
   return {ageDays,status:ageDays<=Math.min(30,max)?'fresh':ageDays<=max?'aging':'stale',maxAgeDays:max,dateBasis:source.sourceDate?'source-date':source.verifiedAt?'verified-date':'observed-date'};
 }
 
