@@ -2,13 +2,15 @@ import { overviewPanel } from './panel-overview.js';
 import { projectPanel } from './panel-project.js';
 import { engineeringPanel } from './panel-engineering.js';
 import { pricingPanel } from './panel-pricing.js';
+import { technicalPanel } from './panel-technical.js';
 import { reportPanel } from './panel-report.js';
 import { escapeHtml } from './common.js';
 
 const NAV=[
   ['overview','Tổng quan','⌂'],
   ['project','Thông tin nhà','▤'],
-  ['engineering','Kỹ thuật','⌁'],
+  ['engineering','Tính toán','⌁'],
+  ['technical','Hồ sơ kỹ thuật','▦'],
   ['pricing','Giá & ngân sách','₫'],
   ['report','Báo cáo','□'],
 ];
@@ -46,7 +48,7 @@ function topbar(project,projects) {
       <button type="button" id="new-project" class="ghost">Dự án mới</button>
       <details class="menu-pop"><summary aria-label="Thêm tác vụ" title="Thêm tác vụ">•••</summary><div>
         <button id="export-html" class="ghost">Báo cáo HTML</button>
-        <button id="export-csv" class="ghost">BOQ CSV</button>
+        <button id="export-csv" class="ghost">BOQ kỹ thuật CSV</button>
         <button id="export-json" class="ghost">Xuất JSON</button>
         <button id="import-json" class="ghost">Nhập JSON</button>
         <button id="delete-project" class="ghost danger">Xóa dự án</button>
@@ -60,6 +62,7 @@ function viewContent(view,ctx) {
   switch(view){
     case 'project': return projectPanel(ctx.project);
     case 'engineering': return engineeringPanel(ctx.project,ctx.workflow,ctx);
+    case 'technical': return technicalPanel(ctx.project,ctx.workflow);
     case 'pricing': return pricingPanel(ctx.project,ctx.workflow);
     case 'report': return reportPanel(ctx.project,ctx.workflow);
     default: return overviewPanel(ctx.project,ctx.workflow);

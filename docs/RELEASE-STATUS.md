@@ -1,7 +1,11 @@
 # Release Status
 
 Status date: 2026-09-30  
-Application version: 0.8.0
+Application version: 0.9.0
+
+## Technical Package status
+
+v0.9 adds a preliminary full-house technical package: component schedules, material takeoff and BOQ. It is intended for planning, coordination and cost preparation; member sizes/detailing remain preliminary until replaced by project-specific structural/MEP design inputs and calculation evidence.
 
 ## Product status
 

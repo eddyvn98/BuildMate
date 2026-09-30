@@ -18,9 +18,9 @@ export function homeownerNextActions(project,{limit=3}={}) {
   if (!blocked.length) {
     return [{
       id:'review',
-      title:'Rà soát và lưu phiên bản',
-      body:'Tất cả stage đang ready. Lưu checkpoint, xem cách tính và xuất báo cáo trước khi thay đổi phương án.',
-      view:'report',
+      title:'Rà soát hồ sơ kỹ thuật',
+      body:'Các domain chính đã có calculation run. Kiểm tra schedule cấu kiện, bóc vật tư, BOQ và các dòng còn preliminary/unpriced trước khi xuất báo cáo.',
+      view:'technical',
     }];
   }
   return blocked.slice(0,limit).map((stage)=>({

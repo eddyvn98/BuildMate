@@ -1,5 +1,14 @@
 # Roadmap
 
+## Completed — v0.9.0 Technical Package Beta
+
+- Added parametric member model and schedules for the full townhouse frame.
+- Added geometry/detailing-based quantity takeoff instead of relying only on area coefficients.
+- Added rebar split by diameter, concrete/formwork by component and preliminary architecture/MEP quantities.
+- Added technical BOQ with price provenance and explicit unpriced backlog.
+- Added dedicated Technical Package UI plus report/CSV export.
+- Kept all generated member dimensions at preliminary level until project calculations/evidence replace them.
+
 ## Completed — v0.8.0 Homeowner Beta
 
 - Added homeowner-first dashboard/navigation and prioritized next actions.

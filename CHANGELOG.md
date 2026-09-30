@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.9.0 - 2026-09-30
+
+### Technical Package
+
+- Added parametric schedules for slabs, beams, columns, footings, foundation tie beams and stairs.
+- Added reinforcement detailing display for each member type.
+- Added geometry/detailing-based quantity takeoff: concrete, formwork, rebar by diameter, masonry, finishes, electrical cables/points and plumbing fixtures/pipes.
+- Added preliminary technical BOQ using current market rates where supported, with unpriced rows preserved explicitly.
+- Added Technical Package homeowner view and detailed HTML/CSV exports.
+- Bumped calculation provenance defaults to engine version 0.9.0.
+- Preserved legacy planning quantity rows in BOQ CSV for audit/backward compatibility.
+
+
 ## 0.8.1 - 2026-09-30
 
 ### Beta UI QA
