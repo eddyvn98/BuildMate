@@ -1,7 +1,7 @@
 # Implementation Status
 
 Status date: 2026-09-30  
-Application version: 0.8.0
+Application version: 1.0.0
 
 ## Complete and usable now
 
@@ -47,7 +47,7 @@ BuildMate still blocks a project calculation when its governing workflow require
 
 This is a data/evidence requirement of the calculation workflow, not an independent-review requirement.
 
-## v0.8 product objective
+## v1.0 product objective
 
 The product now lets a homeowner navigate one project through:
 

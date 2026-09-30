@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.0 - 2026-09-30
+
+### A-to-Z Planning Package
+
+- Made preliminary technical parameters editable and persistent per project.
+- Added live recalculation from technical member changes through schedule, takeoff and BOQ.
+- Added editable slab, beam, column, footing and wall parameters in the Technical Package UI.
+- Added software-completion, price-coverage and calculation-domain status.
+- Added backwards-compatible hydration so existing projects gain v1 technical defaults safely.
+- Bumped package and calculation provenance to 1.0.0.
+- Defined the v1.0 boundary: software planning package complete; construction design still depends on project-specific engineering evidence and approvals.
+
+
 ## 0.9.0 - 2026-09-30
 
 ### Technical Package
