@@ -12,7 +12,7 @@ export function buildMarketSnapshot({
   const active=observations
     .filter(x=>sameProvince(x.province,province))
     .map(x=>decorate(x,sourceMap.get(x.sourceId),asOf))
-    .filter(x=>x.source&&x.freshness.status!=='stale');
+    .filter(x=>x.source&&['fresh','aging'].includes(x.freshness.status));
 
   const codes=[...new Set(active.map(x=>x.code))];
   const series=Object.fromEntries(codes.map(code=>[code,summarize(code,active.filter(x=>x.code===code))]));
@@ -119,7 +119,9 @@ function decorate(observation,source,asOf) {
 function sourceFreshness(source,asOf) {
   if (!source) return {status:'stale',ageDays:999};
   const date=source.sourceDate??source.verifiedAt??source.observedAt;
-  const ageDays=Math.max(0,Math.floor((Date.parse(asOf+'T00:00:00Z')-Date.parse(date+'T00:00:00Z'))/86400000));
+  const deltaDays=Math.floor((Date.parse(asOf+'T00:00:00Z')-Date.parse(date+'T00:00:00Z'))/86400000);
+  if (deltaDays<0) return {ageDays:deltaDays,status:'future',maxAgeDays:max,dateBasis:source.sourceDate?'source-date':source.verifiedAt?'verified-date':'observed-date'};
+  const ageDays=deltaDays;
   const max=MAX_AGE_DAYS[source.kind]??30;
   return {ageDays,status:ageDays<=Math.min(30,max)?'fresh':ageDays<=max?'aging':'stale',maxAgeDays:max,dateBasis:source.sourceDate?'source-date':source.verifiedAt?'verified-date':'observed-date'};
 }
