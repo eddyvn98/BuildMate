@@ -1,7 +1,8 @@
+import { ENGINEERING_EVIDENCE_TYPES, evidenceDataExample } from './engineering-tools.js';
 import { summarizeActuals } from '../engine/actuals.js';
 import { functionalPlan, money, number, statusBadge } from './render.js';
 
-export function shell({ project, projects, workflow }) {
+export function shell({ project, projects, workflow, calculatorCapabilities=[], calculatorState={}, evidenceState={} }) {
   return `
     <header class="hero">
       <div><span class="eyebrow">BuildMate V2</span><h1>Xây nhà từ nhu cầu đến kiểm soát kỹ thuật</h1><p>AI làm rõ nhu cầu; engine deterministic chịu trách nhiệm con số và trace.</p></div>
@@ -13,6 +14,7 @@ export function shell({ project, projects, workflow }) {
       <section class="card">${projectForm(project)}</section>
       <section class="card wide">${resultsPanel(workflow)}</section>
       <section class="card wide">${engineeringPanel(workflow)}</section>
+      <section class="card wide">${standardsToolsPanel(project,calculatorCapabilities,calculatorState,evidenceState)}</section>
       <section class="card">${assumptionsPanel(workflow)}</section>
       <section class="card">${planPanel(project)}</section>
       <section class="card wide">${pricingPanel(project, workflow)}</section>
@@ -48,16 +50,26 @@ function projectForm(p) {
     <label>Mức hoàn thiện<select data-path="design.finishLevel"><option value="economy" ${selected(p, 'economy')}>Tiết kiệm</option><option value="balanced" ${selected(p, 'balanced')}>Cân bằng</option><option value="comfort" ${selected(p, 'comfort')}>Thoải mái</option></select></label>
     <label class="check"><input data-path="household.hasCar" type="checkbox" ${p.household.hasCar.value ? 'checked' : ''}> Có ô tô</label>
     <label class="check"><input data-path="technical.geotechnicalAvailable" type="checkbox" ${p.technical.geotechnicalAvailable.value ? 'checked' : ''}> Có dữ liệu địa chất</label>
-  </div><details class="advanced"><summary>Thông số kỹ thuật sơ bộ</summary><div class="form-grid">
-    ${input('Tĩnh tải giả định (kN/m²)', 'engineering.deadLoadKnM2', p.engineering.deadLoadKnM2, 'number', '0', '', '0.1')}
-    ${input('Hoạt tải giả định (kN/m²)', 'engineering.liveLoadKnM2', p.engineering.liveLoadKnM2, 'number', '0', '', '0.1')}
-    ${input('Áp lực nền cho phép (kPa)', 'engineering.allowableBearingKpa', p.engineering.allowableBearingKpa, 'number')}
+  </div><details class="advanced"><summary>Đầu vào kỹ thuật có nguồn</summary><div class="form-grid">
+    ${input('Tĩnh tải tổng hợp (kN/m²)', 'engineering.deadLoadKnM2', p.engineering.deadLoadKnM2, 'number', '0', '', '0.1')}
+    ${input('Nguồn tĩnh tải', 'engineering.deadLoadSource', p.engineering.deadLoadSource)}
+    <label>Loại khu vực hoạt tải TCVN 2737<select data-path="engineering.liveLoadClass">
+      ${option(p.engineering.liveLoadClass.value,'A1-floor','A1 · sàn nhà ở 1.5 kN/m²')}
+      ${option(p.engineering.liveLoadClass.value,'A1-balcony','A1 · ban công/lô gia 2.0 kN/m²')}
+      ${option(p.engineering.liveLoadClass.value,'A2-circulation','A2 · giao thông/cầu thang 3.0 kN/m²')}
+      ${option(p.engineering.liveLoadClass.value,'H-roof-maintenance','H · mái chỉ bảo trì 0.3 kN/m²')}
+    </select></label>
+    ${input('Áp lực nền cơ sở (kPa)', 'engineering.allowableBearingKpa', p.engineering.allowableBearingKpa, 'number')}
+    ${input('Nguồn địa kỹ thuật cho áp lực nền', 'engineering.allowableBearingSource', p.engineering.allowableBearingSource)}
     ${input('Sức chịu tải làm việc/cọc (kN)', 'engineering.pileWorkingCapacityKn', p.engineering.pileWorkingCapacityKn, 'number')}
+    ${input('Nguồn sức chịu tải cọc', 'engineering.pileCapacitySource', p.engineering.pileCapacitySource)}
     ${input('Công suất điện kết nối (W)', 'mep.connectedPowerW', p.mep.connectedPowerW, 'number')}
     ${input('Hệ số nhu cầu', 'mep.demandFactor', p.mep.demandFactor, 'number', '0.1', '1', '0.05')}
-    ${input('Nước/người/ngày (L)', 'mep.waterLitersPerPersonDay', p.mep.waterLitersPerPersonDay, 'number')}
-    ${input('Suất lạnh sơ bộ (W/m²)', 'mep.coolingWPerM2', p.mep.coolingWPerM2, 'number')}
-  </div></details>`;
+    ${input('Nguồn hệ số nhu cầu', 'mep.demandFactorSource', p.mep.demandFactorSource)}
+    ${input('Hệ số công suất', 'mep.powerFactor', p.mep.powerFactor, 'number', '0.1', '1', '0.01')}
+    ${input('Tổng đương lượng thiết bị vệ sinh', 'mep.fixtureEquivalentUnits', p.mep.fixtureEquivalentUnits, 'number')}
+    ${input('Mức dùng nước TCVN 4513 (L/người.ngày)', 'mep.waterLitersPerPersonDay', p.mep.waterLitersPerPersonDay, 'number')}
+  </div></details>
 }
 
 function pricingPanel(p, workflow) {
@@ -80,6 +92,10 @@ function input(label, path, obj, type = 'text', min = '', max = '', step = '') {
   return `<label>${label}<input data-path="${path}" type="${type}" value="${obj.value ?? ''}" min="${min}" max="${max}" step="${step}">${statusBadge(obj.state)}</label>`;
 }
 
+function option(current,value,label) {
+  return `<option value="${value}" ${current===value?'selected':''}>${escapeHtml(label)}</option>`;
+}
+
 function selected(project, value) {
   return project.design.finishLevel.value === value ? 'selected' : '';
 }
@@ -96,22 +112,55 @@ function resultsPanel(workflow) {
 
 function engineeringPanel(workflow) {
   const eng = workflow.results?.engineering;
-  if (!eng || eng.status !== 'ready') return '<h2>Kỹ thuật sơ bộ</h2><p class="hint">Cần đủ thông tin quy mô cơ bản.</p>';
+  if (!eng || eng.status !== 'ready') return '<h2>Kỹ thuật</h2><p class="hint">Cần đủ thông tin quy mô cơ bản.</p>';
   const m = eng.modules;
-  return `<h2>Kỹ thuật sơ bộ</h2><p class="hint">Planning/engineering review; không tự động là hồ sơ thi công.</p>
+  return `<h2>Kỹ thuật theo nguồn</h2><p class="hint">Preview chỉ hiển thị phép tính khi đầu vào có nguồn. Calculator TCVN/QCVN đầy đủ nằm ở panel bên dưới.</p>
     <div class="engineering-grid">
-      ${engineeringCard('Kết cấu', m.structure.status, m.structure.gravity ? `${number(m.structure.gravity.value, 'kN')} tải đứng sơ bộ` : '')}
-      ${engineeringCard('Móng nông', m.foundation.status, m.foundation.result ? `${number(m.foundation.result.value, 'm²')} diện tích chịu tải tương đương` : m.foundation.message)}
-      ${engineeringCard('Móng cọc', m.pile.status, m.pile.result ? `${m.pile.result.pileCount} cọc khái niệm` : m.pile.message)}
+      ${engineeringCard('Tải trọng', m.structure.status, m.structure.result ? `${number(m.structure.result.value, 'kN')} tải đứng sơ bộ từ tải có nguồn` : m.structure.message)}
+      ${engineeringCard('Móng nông', m.foundation.status, m.foundation.result ? `${number(m.foundation.result.value, 'm²')} cân bằng áp lực sơ bộ` : m.foundation.message)}
+      ${engineeringCard('Móng cọc', m.pile.status, m.pile.result ? `${m.pile.result.pileCount} cọc từ sức chịu tải đã cung cấp` : m.pile.message)}
       ${engineeringCard('Điện', m.electrical.status, m.electrical.result ? `${number(m.electrical.result.value, 'A')} dòng nhu cầu` : m.electrical.message)}
-      ${engineeringCard('Nước', m.water.status, `${number(m.water.result.daily.value, 'L/day')} · bể ~${number(m.water.result.storage.value, 'L')}`)}
-      ${engineeringCard('Điều hòa', m.hvac.status, `${number(m.hvac.result.value, 'kW')} lạnh sơ bộ`)}
+      ${engineeringCard('Nước', m.water.status, m.water.result ? `${number(m.water.result.value, m.water.result.unit)} lưu lượng thiết kế` : m.water.message)}
+      ${engineeringCard('HVAC', m.hvac.status, m.hvac.message)}
     </div>`;
 }
 
 function engineeringCard(title, status, body) {
   return `<article class="engineering-card"><div><strong>${title}</strong><span class="badge">${status}</span></div><p>${escapeHtml(body || '')}</p></article>`;
 }
+
+function standardsToolsPanel(project,capabilities,state,evidenceState) {
+  const selected=capabilities.find(x=>x.id===state.action) ?? capabilities[0];
+  const evidence=project.engineeringEvidence ?? [];
+  const defaultEvidenceType=ENGINEERING_EVIDENCE_TYPES[0][0];
+  return `<div class="section-head"><div><h2>TCVN / QCVN Calculator</h2><p class="hint">Chạy trực tiếp engine tiêu chuẩn. Action cần hồ sơ sẽ tự block nếu project evidence chưa đủ.</p></div><span class="badge">${escapeHtml(selected?.standard ?? '')}</span></div>
+    <form id="standard-calculator-form" class="standard-tool-grid">
+      <label>Workflow<select id="standard-calculator-action">${capabilities.map(x=>`<option value="${escapeHtml(x.id)}" ${x.id===state.action?'selected':''}>${escapeHtml(x.id)} · #${x.issue}</option>`).join('')}</select></label>
+      <div class="evidence-requirement"><b>Evidence bắt buộc</b><span>${selected?.requiredEvidenceTypes?.length ? selected.requiredEvidenceTypes.map(x=>`<code>${escapeHtml(x)}</code>`).join(' ') : 'Không có evidence ngoài bắt buộc'}</span></div>
+      <label class="wide-field">Input JSON<textarea id="standard-calculator-input" spellcheck="false">${escapeHtml(state.inputText ?? '{}')}</textarea></label>
+      <div><button type="submit">Tính theo tiêu chuẩn</button></div>
+    </form>
+    ${state.error?`<div class="alert">${escapeHtml(state.error)}</div>`:''}
+    ${state.output?`<div class="calc-output ${state.output.status==='blocked'?'blocked':''}"><div><b>Kết quả: ${escapeHtml(state.output.status)}</b><span>${escapeHtml(state.output.standard ?? '')}</span></div><pre>${escapeHtml(JSON.stringify(state.output,null,2))}</pre></div>`:''}
+    <details class="advanced" open><summary>Project engineering evidence (${evidence.length})</summary>
+      ${evidenceState.error?`<div class="alert">${escapeHtml(evidenceState.error)}</div>`:''}
+      <form id="engineering-evidence-form" class="evidence-form">
+        <label>Loại evidence<select id="engineering-evidence-type">${ENGINEERING_EVIDENCE_TYPES.map(([value,label])=>`<option value="${value}">${escapeHtml(label)}</option>`).join('')}</select></label>
+        <label>Nguồn<input id="engineering-evidence-source" required placeholder="Đơn vị khảo sát / hãng / cơ quan"></label>
+        <label>Mã tài liệu<input id="engineering-evidence-document-id" required placeholder="GEO-01 / CB-01 ..."></label>
+        <label>Ngày phát hành<input id="engineering-evidence-issued-at" type="date" required value="${new Date().toISOString().slice(0,10)}"></label>
+        <label>Phương pháp / điều khoản<input id="engineering-evidence-method" required placeholder="TCVN 10304:2025 5.1 ..."></label>
+        <label>Hãng (nếu có)<input id="engineering-evidence-manufacturer"></label>
+        <label>Model (nếu có)<input id="engineering-evidence-model"></label>
+        <label>Thiết bị đo (nếu có)<input id="engineering-evidence-instrument"></label>
+        <label>Ngày hiệu chuẩn<input id="engineering-evidence-calibration" type="date"></label>
+        <label class="wide-field">Data JSON<textarea id="engineering-evidence-data" spellcheck="false">${escapeHtml(JSON.stringify(evidenceDataExample(defaultEvidenceType),null,2))}</textarea></label>
+        <div><button type="submit">Thêm evidence</button></div>
+      </form>
+      <div class="evidence-list">${evidence.length?evidence.map(item=>`<article><div><b>#${item.issue} · ${escapeHtml(item.type)}</b><span>${escapeHtml(item.source)} · ${escapeHtml(item.documentId)}</span><small>${escapeHtml(item.methodRef)}</small></div><button class="ghost danger" data-remove-engineering-evidence="${item.id}">Xóa</button></article>`).join(''):'<p class="hint">Chưa có evidence kỹ thuật dự án.</p>'}</div>
+    </details>`;
+}
+
 
 function assumptionsPanel(workflow) {
   return `<h2>Giả định & cổng kỹ thuật</h2>${workflow.issues.map((i) => `<p class="issue ${i.severity}">${i.message}</p>`).join('')}

@@ -43,3 +43,18 @@ input,select { width:100%; border:1px solid var(--line); background:#fff; border
 .actual-form{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:8px;margin:12px 0}.actual-list>div{display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}.actual-list span{display:flex;flex-direction:column}.actual-list small{color:var(--muted)}
 @media (max-width:800px) { .grid { grid-template-columns:1fr; }.card.wide{grid-column:auto}.hero{flex-direction:column}.hero-actions{justify-content:flex-start}.metrics,.scenario-grid,.engineering-grid,.form-grid,.project-bar,.actual-form{grid-template-columns:1fr 1fr} }
 @media (max-width:520px) { .metrics,.scenario-grid,.engineering-grid,.form-grid,.project-bar,.actual-form,.actual-metrics{grid-template-columns:1fr}.version-list article,.actual-list>div{grid-template-columns:1fr}.grid,.hero{padding-left:14px;padding-right:14px} }
+
+.standard-tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end;margin-top:12px}
+.standard-tool-grid .wide-field,.evidence-form .wide-field{grid-column:1/-1}
+.standard-tool-grid textarea,.evidence-form textarea{min-height:180px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px}
+.evidence-requirement{border:1px solid var(--line);border-radius:10px;padding:10px;display:flex;flex-direction:column;gap:6px;font-size:12px}
+.evidence-requirement span{display:flex;gap:6px;flex-wrap:wrap;color:var(--muted)}
+.evidence-requirement code{background:#eef1f4;border-radius:6px;padding:3px 6px;color:var(--ink)}
+.calc-output{margin-top:14px;border:1px solid #9bd3ae;background:#eefaf2;border-radius:12px;padding:12px}
+.calc-output.blocked{border-color:#f0c36a;background:#fff9eb}
+.calc-output>div{display:flex;justify-content:space-between;gap:12px}
+.calc-output pre{overflow:auto;background:#0f1720;color:#dbeafe;border-radius:10px;padding:12px;font-size:11px;max-height:440px}
+.evidence-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:12px 0}
+.evidence-list article{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;border-top:1px solid var(--line);padding:10px 0}
+.evidence-list article>div{display:flex;flex-direction:column;gap:3px}.evidence-list span,.evidence-list small{color:var(--muted);font-size:11px}
+@media (max-width:800px){.standard-tool-grid,.evidence-form{grid-template-columns:1fr}.standard-tool-grid .wide-field,.evidence-form .wide-field{grid-column:auto}}
