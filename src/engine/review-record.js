@@ -1,8 +1,9 @@
+import { calculationSetDigest } from './engineering-calculation-record.js';
 import { engineeringEvidenceDigest } from './engineering-evidence.js';
 import { sha256Hex,canonicalJson } from './hash.js';
 import { buildIndependentReviewPacket } from './review-packet.js';
 
-export function reviewEvidenceFingerprint(issue,{commitSha=null,evidence=[]}={}) {
+export function reviewEvidenceFingerprint(issue,{commitSha=null,evidence=[],calculations=[]}={}) {
   const packet=buildIndependentReviewPacket(issue,{commitSha});
   const canonical=JSON.stringify({
     issue:packet.issue,
@@ -12,6 +13,7 @@ export function reviewEvidenceFingerprint(issue,{commitSha=null,evidence=[]}={})
     implementedClauses:packet.implementedClauses,
     commitSha:packet.commitSha,
     projectEvidenceDigest:engineeringEvidenceDigest(evidence,issue),
+    projectCalculationDigest:calculationSetDigest(calculations,issue),
   });
   return sha256Hex(canonicalJson(JSON.parse(canonical)));
 }

@@ -1,3 +1,4 @@
+import { createEngineeringCalculationRecord } from '../engine/engineering-calculation-record.js';
 import { runStandardCalculation,standardCalculatorCapabilities } from '../engine/engineering/standards-calculator.js';
 import { createEngineeringEvidenceRecord,assessEngineeringEvidence } from '../engine/engineering-evidence.js';
 import { projectEngineeringReadiness } from '../engine/project-readiness.js';
@@ -71,7 +72,14 @@ export class BuildMateService {
       gates:{projectEvidence:output.evidence ?? null},
       sourceVersions:{standardAction:output.standard,projectEvidenceDigest:output.projectEvidenceDigest ?? output.evidence?.digest ?? null},
     };
-    return this.store.createRun(ownerId,run);
+    const saved=this.store.createRun(ownerId,run);
+    const calculation=createEngineeringCalculationRecord({
+      id:run.id,action:request.action,issue:output.issue,standard:output.standard,
+      input:request.input ?? {},output,engineVersion:run.engineVersion,createdAt:run.createdAt,
+    });
+    project.engineeringCalculations=[...(project.engineeringCalculations ?? []),calculation];
+    this.store.saveProject(ownerId,project);
+    return saved;
   }
 
   calculate(ownerId,id,request={}) {
@@ -126,7 +134,7 @@ export class BuildMateService {
   addEngineeringReview(ownerId,id,input={}) {
     const project=this.store.getProject(ownerId,id);
     const issue=Number(input.issue);
-    const expectedFingerprint=reviewEvidenceFingerprint(issue,{commitSha:input.commitSha ?? null,evidence:project.engineeringEvidence ?? []});
+    const expectedFingerprint=reviewEvidenceFingerprint(issue,{commitSha:input.commitSha ?? null,evidence:project.engineeringEvidence ?? [],calculations:project.engineeringCalculations ?? []});
     if (String(input.evidenceFingerprint ?? '')!==expectedFingerprint) {
       const error=new Error('evidence fingerprint does not match current review packet');
       error.statusCode=409;
@@ -146,14 +154,15 @@ export class BuildMateService {
   listEngineeringReviews(ownerId,id) {
     const project=this.store.getProject(ownerId,id);
     return (project.engineeringReviews ?? []).map((record)=>{
-      const expectedFingerprint=reviewEvidenceFingerprint(record.issue,{commitSha:record.commitSha ?? null,evidence:project.engineeringEvidence ?? []});
+      const expectedFingerprint=reviewEvidenceFingerprint(record.issue,{commitSha:record.commitSha ?? null,evidence:project.engineeringEvidence ?? [],calculations:project.engineeringCalculations ?? []});
       return {...record,assessment:assessEngineeringReviewRecord(record,{expectedFingerprint})};
     });
   }
 
   reviewFingerprint(ownerId,id,issue,commitSha=null) {
     this.store.getProject(ownerId,id);
-    return {issue:Number(issue),commitSha,fingerprint:reviewEvidenceFingerprint(Number(issue),{commitSha,evidence:this.store.getProject(ownerId,id).engineeringEvidence ?? []})};
+    const project=this.store.getProject(ownerId,id);
+    return {issue:Number(issue),commitSha,fingerprint:reviewEvidenceFingerprint(Number(issue),{commitSha,evidence:project.engineeringEvidence ?? [],calculations:project.engineeringCalculations ?? []})};
   }
 
   addEngineeringEvidence(ownerId,id,input={}) {

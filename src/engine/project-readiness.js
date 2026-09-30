@@ -6,7 +6,7 @@ export function projectEngineeringReadiness(project) {
   return [4,5,6,7,8].map((issue)=>{
     const issueReviews=reviews.filter(r=>Number(r.issue)===issue);
     const assessed=issueReviews.map((record)=>{
-      const expectedFingerprint=reviewEvidenceFingerprint(issue,{commitSha:record.commitSha ?? null,evidence:project?.engineeringEvidence ?? []});
+      const expectedFingerprint=reviewEvidenceFingerprint(issue,{commitSha:record.commitSha ?? null,evidence:project?.engineeringEvidence ?? [],calculations:project?.engineeringCalculations ?? []});
       return {...record,assessment:assessEngineeringReviewRecord(record,{expectedFingerprint})};
     });
     const approved=assessed.find(r=>r.assessment.constructionReady) ?? null;
