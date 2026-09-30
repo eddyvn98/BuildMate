@@ -40,8 +40,8 @@ test('technical UI exposes editable preliminary parameters and package completio
     calculatorCapabilities:standardCalculatorCapabilities(),
     calculatorState:{},guidedState:{action:'loads.permanent',values:guidedDefaultValues('loads.permanent')},evidenceState:{}
   });
-  assert.ok(html.includes('Chỉnh phương án cấu kiện preliminary'));
+  assert.ok(html.includes('Tùy chỉnh phương án nâng cao'));
   assert.ok(html.includes('technicalModel.slabThicknessMm'));
   assert.ok(html.includes('technicalModel.footingLengthM'));
-  assert.ok(html.includes('Software package: ready'));
+  assert.ok(html.includes('Trạng thái kỹ thuật & các việc còn thiếu'));
 });

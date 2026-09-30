@@ -145,3 +145,36 @@ input,select{width:100%;border:1px solid var(--line);background:#fff;border-radi
 .technical-table th{position:sticky;top:0;background:#f4f7f5;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.04em}
 .technical-table tr:last-child td{border-bottom:0}
 .blocker-list{display:grid;gap:8px}
+
+.technical-summary-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+.technical-summary-card{border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:6px;background:#fbfdfc}
+.technical-summary-card span{font-size:11px;color:var(--muted)}
+.technical-summary-card strong{font-size:17px}
+.technical-summary-card small{line-height:1.45}
+.material-highlight-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
+.material-highlight{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:4px;background:#fcfdfd}
+.material-highlight span{font-size:11px;color:var(--muted)}
+.material-highlight strong{font-size:16px}
+.technical-details{margin-top:14px;border-top:1px solid var(--line)}
+.technical-details>summary{cursor:pointer;padding:13px 0 2px;font-weight:700;color:var(--accent)}
+.technical-details>summary::marker{color:var(--muted)}
+.details-body{padding-top:12px}
+.technical-total{font-size:22px;color:var(--accent);white-space:nowrap}
+.boq-group-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}
+.boq-group-card{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:4px;background:#fff}
+.boq-group-card span{font-size:11px;color:var(--muted)}
+.boq-group-card strong{font-size:15px}
+.technical-cost-note{margin-top:10px;color:var(--muted);font-size:11px}
+.technical-advanced-zone{box-shadow:none;background:#fafcfa}
+.technical-advanced-zone .technical-details:first-child{margin-top:0;border-top:0}
+.technical-simple-grid>.panel-block{min-width:0}
+@media(max-width:900px){
+  .technical-summary-grid,.boq-group-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:560px){
+  .technical-summary-grid,.boq-group-grid,.material-highlight-grid{grid-template-columns:1fr 1fr}
+  .technical-total{font-size:18px}
+}
+@media(max-width:420px){
+  .technical-summary-grid,.boq-group-grid,.material-highlight-grid{grid-template-columns:1fr}
+}
