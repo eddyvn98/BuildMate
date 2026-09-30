@@ -19,7 +19,8 @@ export function overviewPanel(project,workflow) {
         <h1>${escapeHtml(project.name)}</h1>
         <p>${escapeHtml(project.location?.district?.value||'')} ${project.location?.province?.value?'· '+escapeHtml(project.location.province.value):''} · ${project.land?.widthM?.value||'—'}×${project.land?.lengthM?.value||'—'} m · ${project.design?.storeys?.value||'—'} tầng</p>
       </div>
-      <div class="progress-orb"><strong>${status.progressPercent}%</strong><span>A→Z ready</span></div>
+      <div class="progress-orb" role="status" aria-label="Tiến độ luồng BuildMate ${status.progressPercent} phần trăm"><strong>${status.progressPercent}%</strong><span>Luồng BuildMate</span></div>
+      <p class="workflow-note">Tiến độ phản ánh dữ liệu và calculation run trong BuildMate; không phải phê duyệt hay xác nhận đủ điều kiện thi công.</p>
     </section>
 
     <div class="metrics dashboard-metrics">

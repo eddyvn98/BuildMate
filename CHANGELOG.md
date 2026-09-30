@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.8.1 - 2026-09-30
+
+### Beta UI QA
+
+- Public demo functional plan now follows its sourced floor program instead of the generic room allocator.
+- Renamed the dashboard completion label to "Luồng BuildMate" and clarified that it is not construction approval.
+- Kept the A-to-Z demo action available on mobile instead of hiding it.
+- Added keyboard focus visibility and larger mobile touch targets.
+- Added confirmation before deleting a local project.
+- Added regression tests for demo-plan fidelity, workflow wording and mobile accessibility.
+
+
 ## 0.8.0 - 2026-09-30
 
 ### Homeowner Beta

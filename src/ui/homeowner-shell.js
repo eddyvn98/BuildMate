@@ -22,7 +22,7 @@ export function shell({
       <aside class="sidebar">
         <div class="brand"><span class="brand-mark">B</span><div><b>BuildMate</b><small>Homeowner Beta</small></div></div>
         <nav class="side-nav">${NAV.map(([id,label,icon])=>`
-          <button data-view="${id}" class="${activeView===id?'active':''}"><span>${icon}</span>${label}</button>`).join('')}</nav>
+          <button type="button" data-view="${id}" class="${activeView===id?'active':''}" aria-current="${activeView===id?'page':'false'}"><span>${icon}</span>${label}</button>`).join('')}</nav>
         <div class="sidebar-foot"><small>Standards-backed · VN townhouse</small></div>
       </aside>
       <div class="workspace">
@@ -41,10 +41,10 @@ function topbar(project,projects) {
       <input id="project-name" value="${escapeHtml(project.name)}" aria-label="Tên dự án">
     </div>
     <div class="top-actions">
-      <button id="load-public-demo" class="ghost">Nạp demo 4×16</button>
-      <button id="run-demo-a2z" class="ghost">Chạy demo A→Z</button>
-      <button id="new-project" class="ghost">Dự án mới</button>
-      <details class="menu-pop"><summary>•••</summary><div>
+      <button type="button" id="load-public-demo" class="ghost">Nạp demo 4×16</button>
+      <button type="button" id="run-demo-a2z" class="ghost">Chạy demo A→Z</button>
+      <button type="button" id="new-project" class="ghost">Dự án mới</button>
+      <details class="menu-pop"><summary aria-label="Thêm tác vụ" title="Thêm tác vụ">•••</summary><div>
         <button id="export-html" class="ghost">Báo cáo HTML</button>
         <button id="export-csv" class="ghost">BOQ CSV</button>
         <button id="export-json" class="ghost">Xuất JSON</button>
