@@ -197,3 +197,9 @@ RC material/deformation closure:
 - Table 11 creep phi_b,cr and Eq.(192) long-term modulus Eb/(1+phi_b,cr) are implemented.
 - Table 9 long-term strains include the B70-B100 multiplier (270-B)/210.
 - Eq.(13), Eq.(176), Eq.(193)-(196), Eq.(202)-(204) now close the rectangular cracked-section Eb,red/x/Ired/psi_s stiffness chain.
+
+
+Pile field-test closure:
+- TCVN 10304:2025 Appendix D Eq.(D.1)-(D.6) + Table D.1 row 5: driven/pressed pile SPT capacity from N/Ns/cu with published caps.
+- 7.3.4.2 Eq.(25)-(28): driven-pile CPT capacity is implemented from sourced Table 15 beta coefficients.
+- Appendix G Eq.(G.1)-(G.7), Tables G.1/G.2: alpha=0.95 statistics, outlier rejection, variation, reliability and design-value processing are implemented for exact tabulated degrees of freedom.
