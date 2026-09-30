@@ -1,4 +1,5 @@
 import { ENGINEERING_EVIDENCE_TYPES, evidenceDataExample } from './engineering-tools.js';
+import { a2zPanel } from './a2z-panel.js';
 import { summarizeActuals } from '../engine/actuals.js';
 import { functionalPlan, money, number, statusBadge } from './render.js';
 
@@ -10,6 +11,7 @@ export function shell({ project, projects, workflow, calculatorCapabilities=[], 
     </header>
     <main class="grid">
       <section class="card wide">${projectBar(project, projects)}</section>
+      <section class="card wide">${a2zPanel(project)}</section>
       <section class="card">${chatPanel()}</section>
       <section class="card">${projectForm(project)}</section>
       <section class="card wide">${resultsPanel(workflow)}</section>

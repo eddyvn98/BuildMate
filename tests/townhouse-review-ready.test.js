@@ -21,9 +21,11 @@ test('external pile group settlement is accepted only with TCVN method/model pro
   assert.throws(()=>acceptSourcedPileGroupSettlement({settlementMm:22,allowableMm:80,modelName:'x',inputSetId:'i',methodClause:'7.4.3'}));
 });
 
-test('review packet keeps construction-ready false until independent review',()=>{
+test('review packet is an optional audit and does not block zero-gap standards coverage',()=>{
   const packet=buildIndependentReviewPacket(7,{commitSha:'abc'});
   assert.equal(packet.profile,'electrical');
-  assert.equal(packet.approval.constructionReady,false);
+  assert.equal(packet.reviewRequired,false);
+  assert.equal(packet.approval.constructionReady,true);
+  assert.equal(packet.approval.required,false);
   assert.ok(packet.implementedClauses.length>5);
 });

@@ -74,6 +74,23 @@ export const TOWNHOUSE_CORE_SCOPE=Object.freeze({
         'automatic pump efficiency/NPSH curve processing',
       ],
     },
+    12:{
+      name:'hvac-residential',
+      supported:[
+        'TCVN 5687:2024 residential comfort conditions from Appendix A',
+        'HVAC design classes I/II/III with sourced outdoor design conditions',
+        'residential outdoor-air rates from Appendix E',
+        'mechanical ventilation by Appendix F air-change rates',
+        'Appendix G airflow paths including sensible-heat, ACH, area and people',
+        'source-backed component cooling-load aggregation',
+        'source-backed equipment capacity acceptance at stated rating conditions',
+      ],
+      extensions:[
+        'smoke-control and fire makeup-air design governed by QCVN 06 and project fire strategy',
+        'industrial/process ventilation outside the townhouse residential scope',
+        'automatic climate-table lookup without sourced project locality/design-condition evidence',
+      ],
+    },
   },
 });
 

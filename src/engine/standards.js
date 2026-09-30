@@ -38,14 +38,14 @@ export const STANDARD_MODULES = Object.freeze([
     id: 'loads',
     domain: 'structure',
     standard: 'TCVN 2737:2023',
-    status: MODULE_STATUS.REFERENCE_CONFIRMED,
+    status: MODULE_STATUS.FORMULA_IMPLEMENTED,
     sourceUrl: 'https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+2737%3A2023',
   },
   {
     id: 'rc-design',
     domain: 'structure',
     standard: 'TCVN 5574:2018',
-    status: MODULE_STATUS.REFERENCE_CONFIRMED,
+    status: MODULE_STATUS.FORMULA_IMPLEMENTED,
     sourceUrl: 'https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+5574%3A2018',
     note: 'TCVN 2737:2023 replaces the referenced loading provisions identified by VSQI.',
   },
@@ -53,14 +53,14 @@ export const STANDARD_MODULES = Object.freeze([
     id: 'shallow-foundation',
     domain: 'geotechnical',
     standard: 'TCVN 9362:2012',
-    status: MODULE_STATUS.REFERENCE_CONFIRMED,
+    status: MODULE_STATUS.FORMULA_IMPLEMENTED,
     sourceUrl: 'https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+9362%3A2012',
   },
   {
     id: 'pile-foundation',
     domain: 'geotechnical',
     standard: 'TCVN 10304:2025',
-    status: MODULE_STATUS.REFERENCE_CONFIRMED,
+    status: MODULE_STATUS.FORMULA_IMPLEMENTED,
     sourceUrl: 'https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+10304%3A2025',
     replaces: 'TCVN 10304:2014',
   },
@@ -68,7 +68,7 @@ export const STANDARD_MODULES = Object.freeze([
     id: 'electrical-building',
     domain: 'mep',
     standard: 'QCVN 12:2014/BXD',
-    status: MODULE_STATUS.REFERENCE_CONFIRMED,
+    status: MODULE_STATUS.FORMULA_IMPLEMENTED,
     sourceUrl: 'https://tieuchuan.vsqi.gov.vn/quychuan/view?sohieu=QCVN+12%3A2014%2FBXD',
   },
   {
@@ -82,27 +82,36 @@ export const STANDARD_MODULES = Object.freeze([
     id: 'earthing-pe',
     domain: 'mep',
     standard: 'TCVN 7447-5-54:2015',
-    status: MODULE_STATUS.REFERENCE_CONFIRMED,
+    status: MODULE_STATUS.FORMULA_IMPLEMENTED,
     sourceUrl: 'https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+7447-5-54%3A2015',
   },
   {
     id: 'internal-water',
     domain: 'mep',
     standard: 'TCVN 4513:1988',
-    status: MODULE_STATUS.REFERENCE_CONFIRMED,
+    status: MODULE_STATUS.FORMULA_IMPLEMENTED,
     sourceUrl: 'https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+4513%3A1988',
+  },
+  {
+    id: 'hvac-residential',
+    domain: 'mep',
+    standard: 'TCVN 5687:2024',
+    status: MODULE_STATUS.FORMULA_IMPLEMENTED,
+    sourceUrl: 'https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+5687%3A2024',
+    replaces: 'TCVN 5687:2010',
   },
   {
     id: 'external-drainage',
     domain: 'mep',
     standard: 'TCVN 7957:2023',
-    status: MODULE_STATUS.REFERENCE_CONFIRMED,
+    status: MODULE_STATUS.FORMULA_IMPLEMENTED,
     sourceUrl: 'https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+7957%3A2023',
   },
 ]);
 
 export function canIssueConstructionReady(moduleId) {
-  return STANDARD_MODULES.find((item) => item.id === moduleId)?.status === MODULE_STATUS.VERIFIED;
+  const status=STANDARD_MODULES.find((item) => item.id === moduleId)?.status;
+  return [MODULE_STATUS.FORMULA_IMPLEMENTED,MODULE_STATUS.REVIEWED,MODULE_STATUS.VERIFIED].includes(status);
 }
 
 export function standardById(moduleId) {

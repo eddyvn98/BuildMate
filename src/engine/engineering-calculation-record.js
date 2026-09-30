@@ -1,10 +1,10 @@
 import { sha256Hex,canonicalJson } from './hash.js';
 
 export function createEngineeringCalculationRecord({
-  id=null,action,issue,standard,input,output,engineVersion='0.6.0',createdAt=null
+  id=null,action,issue,standard,input,output,engineVersion='0.7.0',createdAt=null
 }) {
   if (!action||!standard) throw new TypeError('action and standard are required');
-  if (![4,5,6,7,8].includes(Number(issue))) throw new RangeError('issue must be 4..8');
+  if (![4,5,6,7,8,12].includes(Number(issue))) throw new RangeError('unsupported engineering issue');
   const payload={
     action:String(action),issue:Number(issue),standard:String(standard),
     engineVersion:String(engineVersion),input:structuredClone(input ?? {}),

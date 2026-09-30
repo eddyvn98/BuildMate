@@ -12,6 +12,8 @@ const TYPES=Object.freeze({
   'protective-device-curve':7,
   'commissioning-loop-test':7,
   'pump-test-report':8,
+  'hvac-outdoor-design-condition':12,
+  'hvac-equipment-performance':12,
 });
 
 export function createEngineeringEvidenceRecord(input={}) {
@@ -91,6 +93,18 @@ export function validateEngineeringEvidenceRecord(record) {
       if (!(Number(d.loopImpedanceOhm)>0)) blockers.push('measured-loop-impedance-missing');
       if (!record.instrumentId) blockers.push('instrument-id-missing');
       if (!record.calibrationDate) blockers.push('calibration-date-missing');
+      break;
+    case 'hvac-outdoor-design-condition':
+      if (!['I','II','III'].includes(String(d.classId??''))) blockers.push('hvac-design-class-missing');
+      if (!Number.isFinite(Number(d.dryBulbC))) blockers.push('dry-bulb-temperature-missing');
+      if (!Number.isFinite(Number(d.wetBulbC))) blockers.push('wet-bulb-temperature-missing');
+      if (!String(d.location??'').trim()) blockers.push('location-missing');
+      break;
+    case 'hvac-equipment-performance':
+      if (!record.manufacturer) blockers.push('manufacturer-missing');
+      if (!record.model) blockers.push('model-missing');
+      if (!(Number(d.ratedCapacityKw)>0)) blockers.push('rated-capacity-missing');
+      if (!String(d.ratedConditions??'').trim()) blockers.push('rated-conditions-missing');
       break;
     case 'pump-test-report':
       if (!record.manufacturer) blockers.push('manufacturer-missing');
