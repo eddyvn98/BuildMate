@@ -86,6 +86,7 @@ export function createProject(overrides = {}) {
     alternatives: [],
     designVersions: [],
     actuals: { entries: [] },
+    engineeringReviews: [],
     createdAt: now,
     updatedAt: now,
   };

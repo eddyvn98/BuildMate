@@ -75,3 +75,12 @@ A verified standard profile must be explicitly selected. If the profile is not `
 - `GET /api/engineering/review-packets/{issue}` — one packet for issue 4, 5, 6, 7 or 8.
 
 Review packets expose supported townhouse scope, blocked extensions, implemented clause map, reviewer checklist and an explicit `constructionReady: false` approval state until independent review is recorded.
+
+
+### Project engineering review records
+
+- `GET /api/projects/{id}/engineering-reviews/fingerprint?issue=5&commitSha=...` — fingerprint the exact evidence packet a reviewer is about to sign.
+- `POST /api/projects/{id}/engineering-reviews` — record reviewer identity/qualification, independence attestation, outcome, fingerprint and commit.
+- `GET /api/projects/{id}/engineering-reviews` — list review records with current validity assessment.
+
+A review is not sufficient for `constructionReady` merely because it says `approved`. The record must also be independently verified and its evidence fingerprint must still match.

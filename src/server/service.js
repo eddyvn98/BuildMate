@@ -1,3 +1,4 @@
+import { createEngineeringReviewRecord,reviewEvidenceFingerprint,assessEngineeringReviewRecord } from '../engine/review-record.js';
 import { addActual, removeActual } from '../engine/actuals.js';
 import { createDesignVersion, addDesignVersion } from '../engine/design-versions.js';
 import { createProject, hydrateProject, renameProject, setField } from '../engine/project.js';
@@ -93,6 +94,34 @@ export class BuildMateService {
     project.actuals=removeActual(project.actuals ?? {entries:[]},entryId);
     this.store.saveProject(ownerId,project);
     return {deleted:true};
+  }
+
+  addEngineeringReview(ownerId,id,input={}) {
+    const project=this.store.getProject(ownerId,id);
+    const issue=Number(input.issue);
+    const expectedFingerprint=reviewEvidenceFingerprint(issue,{commitSha:input.commitSha ?? null});
+    if (String(input.evidenceFingerprint ?? '')!==expectedFingerprint) {
+      const error=new Error('evidence fingerprint does not match current review packet');
+      error.statusCode=409;
+      throw error;
+    }
+    const record=createEngineeringReviewRecord({...input,issue});
+    project.engineeringReviews=[...(project.engineeringReviews ?? []),record];
+    this.store.saveProject(ownerId,project);
+    return {...record,assessment:assessEngineeringReviewRecord(record,{expectedFingerprint})};
+  }
+
+  listEngineeringReviews(ownerId,id) {
+    const project=this.store.getProject(ownerId,id);
+    return (project.engineeringReviews ?? []).map((record)=>{
+      const expectedFingerprint=reviewEvidenceFingerprint(record.issue,{commitSha:record.commitSha ?? null});
+      return {...record,assessment:assessEngineeringReviewRecord(record,{expectedFingerprint})};
+    });
+  }
+
+  reviewFingerprint(ownerId,id,issue,commitSha=null) {
+    this.store.getProject(ownerId,id);
+    return {issue:Number(issue),commitSha,fingerprint:reviewEvidenceFingerprint(Number(issue),{commitSha})};
   }
 
   addDocument(ownerId,id,input={}) {

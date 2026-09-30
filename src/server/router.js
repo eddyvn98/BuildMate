@@ -34,6 +34,9 @@ export function createHandler({service,store,authSecret}) {
       if (parts[3]==='price-overrides' && req.method==='POST') return json(res,200,service.addPriceOverrides(userId,projectId,body));
       if (parts[3]==='actual-costs' && parts.length===4 && req.method==='POST') return json(res,201,service.addActualCost(userId,projectId,body));
       if (parts[3]==='actual-costs' && parts[4] && req.method==='DELETE') return json(res,200,service.deleteActualCost(userId,projectId,parts[4]));
+      if (parts[3]==='engineering-reviews' && parts[4]==='fingerprint' && req.method==='GET') return json(res,200,service.reviewFingerprint(userId,projectId,url.searchParams.get('issue'),url.searchParams.get('commitSha')));
+      if (parts[3]==='engineering-reviews' && req.method==='POST') return json(res,201,service.addEngineeringReview(userId,projectId,body));
+      if (parts[3]==='engineering-reviews' && req.method==='GET') return json(res,200,service.listEngineeringReviews(userId,projectId));
       if (parts[3]==='documents' && req.method==='POST') return json(res,201,service.addDocument(userId,projectId,body));
       if (parts[3]==='documents' && req.method==='GET') return json(res,200,store.listDocuments(userId,projectId));
       if (parts[3]==='reports' && parts[4] && req.method==='GET') return json(res,200,service.report(userId,projectId,parts[4]));
