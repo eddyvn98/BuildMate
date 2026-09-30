@@ -25,6 +25,8 @@ export function buildProjectReport(project, workflow) {
       floorAreaM2: result.areas.floorArea.value,
       budgetScenarios: result.budgets.map(({ key, label, total }) => ({ key, label, totalVnd: total })),
       preferredScenario: result.preferredScenario,
+      primaryBudget: structuredClone(result.primaryBudget ?? null),
+      marketPricing: structuredClone(result.marketPricing ?? null),
     },
     priceBook: result.priceBook,
     engineering: result.engineering,
@@ -62,8 +64,10 @@ export function reportToHtml(report) {
   <h1>${escapeHtml(report.project.name)}</h1><p>${escapeHtml(report.project.province || '')} ${escapeHtml(report.project.district || '')}</p>
   <p class="warn">BuildMate distinguishes planning outputs from standards-backed calculations. Project-specific evidence required by an applicable standard must still be present; this report is not automatically a construction drawing or signed engineering design.</p>
   <h2>Tổng quan</h2><p>Diện tích đất: <b>${report.overview.landAreaM2} m²</b> · Tổng sàn dự kiến: <b>${report.overview.floorAreaM2} m²</b></p>
-  <h2>Đơn giá</h2><p><b>${escapeHtml(report.priceBook.sourceLabel || '')}</b> · hiệu lực ${escapeHtml(report.priceBook.effectiveDate || '')}</p>
-  <h2>Ngân sách</h2><table><thead><tr><th>Phương án</th><th>Tổng</th></tr></thead><tbody>${budgetRows}</tbody></table>
+  <h2>Giá nhanh hiện tại</h2><p><b>${money(report.overview.primaryBudget?.centerVnd)}</b> · ${escapeHtml(report.overview.primaryBudget?.basis ?? '')} · confidence ${escapeHtml(report.overview.primaryBudget?.confidence ?? '')}</p>
+  <p>Khoảng: ${money(report.overview.primaryBudget?.lowVnd)} – ${money(report.overview.primaryBudget?.highVnd)}</p>
+  <h2>Đơn giá BOQ</h2><p><b>${escapeHtml(report.priceBook.sourceLabel || '')}</b> · hiệu lực ${escapeHtml(report.priceBook.effectiveDate || '')}</p>
+  <h2>Ngân sách BOQ tham khảo</h2><table><thead><tr><th>Phương án</th><th>Tổng</th></tr></thead><tbody>${budgetRows}</tbody></table>
   <h2>Khối lượng sơ bộ</h2><table><thead><tr><th>Hạng mục</th><th>Giá trị</th><th>Đơn vị</th><th>Mức</th></tr></thead><tbody>${quantityRows}</tbody></table>
   <h2>Giả định</h2><ul>${assumptions}</ul>
   <h2>Trạng thái sẵn sàng kỹ thuật</h2><pre>${escapeHtml(JSON.stringify(report.engineeringReviewStatus, null, 2))}</pre>

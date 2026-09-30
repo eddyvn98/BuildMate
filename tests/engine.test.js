@@ -79,6 +79,7 @@ test('price override records provenance', () => {
   const book = overridePriceBook({ id: 'base', items: { rebar: 17000 } }, { rebar: 16500 }, { sourceLabel: 'supplier quote' });
   assert.equal(book.items.rebar, 16500);
   assert.equal(book.overrides.rebar.source, 'supplier quote');
+  assert.equal(book.sourceLabel, 'supplier quote');
 });
 
 test('actual-cost ledger reports variance', () => {

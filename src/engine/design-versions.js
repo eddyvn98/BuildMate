@@ -14,7 +14,7 @@ export function createDesignVersion(project, workflow, label = '') {
     },
     summary: {
       floorAreaM2: workflow.results.areas.floorArea.value,
-      estimatedBudgetVnd: preferred.total,
+      estimatedBudgetVnd: workflow.results.primaryBudget?.centerVnd ?? preferred.total,
       preferredScenario: workflow.results.preferredScenario,
     },
   };

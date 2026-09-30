@@ -9,6 +9,7 @@ import { analyzeBudgetFit } from './optimizer.js';
 import { runEngineeringPreview } from './engineering-preview.js';
 import { buildProjectPriceBook } from './project-price-book.js';
 import { resolvePlanningRules } from './planning-rules.js';
+import { buildProjectMarketPricing } from './market-pricing.js';
 
 export function runPlanningWorkflow(project) {
   const issues = validatePlanningInputs(project);
@@ -22,10 +23,28 @@ export function runPlanningWorkflow(project) {
   const priceBook = buildProjectPriceBook(project);
   const budgets = calculateBudget({ floorAreaM2: areas.floorArea.value, quantities, priceBook });
   const preferred = budgets.find((scenario) => scenario.key === readValue(project, 'design.finishLevel', 'balanced')) ?? budgets[1];
-  const cashflow = buildCashflow(preferred.total);
+  const marketPricing = buildProjectMarketPricing(project,areas);
+  const hasProjectOverrides=Object.keys(priceBook.overrides ?? {}).length>0;
+  const useMarketQuick=!hasProjectOverrides&&marketPricing.quickEstimate?.status==='ready';
+  const primaryBudget=useMarketQuick
+    ? {
+        basis:'market-quick',
+        centerVnd:marketPricing.quickEstimate.centerVnd,
+        lowVnd:marketPricing.quickEstimate.lowVnd,
+        highVnd:marketPricing.quickEstimate.highVnd,
+        confidence:marketPricing.quickEstimate.confidence,
+        sourceCount:marketPricing.quickEstimate.sourceCount,
+      }
+    : {
+        basis:'detailed-price-book',
+        centerVnd:preferred.total,lowVnd:preferred.total,highVnd:preferred.total,
+        confidence:hasProjectOverrides?'project-quoted':'placeholder',
+        sourceCount:hasProjectOverrides?Object.keys(priceBook.overrides ?? {}).length:0,
+      };
+  const cashflow = buildCashflow(primaryBudget.centerVnd);
   const targetVnd = Number(readValue(project, 'budget.totalVnd', 0));
   const alternatives = buildAlternatives(budgets, targetVnd || null);
-  const budgetFit = analyzeBudgetFit({ targetVnd, estimatedVnd: preferred.total });
+  const budgetFit = analyzeBudgetFit({ targetVnd, estimatedVnd: primaryBudget.centerVnd });
   const planningResults = {
     areas,
     quantities,
@@ -41,6 +60,7 @@ export function runPlanningWorkflow(project) {
     budgetFit,
     cashflow,
     preferredScenario: preferred.key,
+    primaryBudget,
   };
   const projectDate = readValue(project, 'context.projectDate', project.createdAt?.slice(0, 10) ?? new Date().toISOString().slice(0, 10));
   const planningRules = resolvePlanningRules({
@@ -59,6 +79,6 @@ export function runPlanningWorkflow(project) {
     status: 'ready',
     issues,
     gates: engineeringGates(project),
-    results: { ...planningResults, planningRules, engineering },
+    results: { ...planningResults, marketPricing, planningRules, engineering },
   };
 }
