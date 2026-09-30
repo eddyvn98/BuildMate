@@ -1,5 +1,7 @@
 import { projectEngineeringReadiness } from './project-readiness.js';
 
+const PRICE_CODES=Object.freeze(['concrete','rebar','masonry','plaster','paint','electrical','plumbing']);
+
 export function projectAtoZStatus(project) {
   const engineering=projectEngineeringReadiness(project);
   const byIssue=new Map(engineering.map(x=>[x.issue,x]));
@@ -8,10 +10,19 @@ export function projectAtoZStatus(project) {
     positive(project?.design?.storeys)&&positive(project?.household?.people)
   );
   const budgetReady=positive(project?.budget?.totalVnd);
-  const pricingReady=Boolean(textValue(project?.pricing?.sourceLabel)&&textValue(project?.pricing?.effectiveDate));
+  const pricingMetaReady=Boolean(textValue(project?.pricing?.sourceLabel)&&textValue(project?.pricing?.effectiveDate));
+  const pricedCodes=PRICE_CODES.filter(code=>positive(project?.pricing?.items?.[code]));
+  const pricingReady=pricingMetaReady&&pricedCodes.length===PRICE_CODES.length;
   const stages=[
     stage('brief','Thông tin đất & nhu cầu',briefReady,briefReady?'Đủ dữ liệu cơ bản':'Thiếu vị trí, kích thước đất, số tầng hoặc số người'),
-    stage('budget','Ngân sách & đơn giá',budgetReady&&pricingReady,budgetReady&&pricingReady?'Có ngân sách và nguồn đơn giá':'Cần ngân sách mục tiêu và nguồn/ngày đơn giá'),
+    stage(
+      'budget','Ngân sách & đơn giá',budgetReady&&pricingReady,
+      budgetReady&&pricingReady
+        ?'Có ngân sách và đủ bộ đơn giá có nguồn'
+        :pricingMetaReady&&pricedCodes.length<PRICE_CODES.length
+          ?'Đã có nguồn/ngày nhưng còn thiếu đơn giá: '+PRICE_CODES.filter(code=>!pricedCodes.includes(code)).join(', ')
+          :'Cần ngân sách mục tiêu, nguồn/ngày và đủ bộ đơn giá dự án'
+    ),
     engineeringStage('loads','Tải trọng',byIssue.get(4)),
     engineeringStage('rc','Kết cấu BTCT',byIssue.get(5)),
     engineeringStage('foundation','Móng',byIssue.get(6)),
