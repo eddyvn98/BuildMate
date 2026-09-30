@@ -1,8 +1,6 @@
 name: Refresh market prices
 
 on:
-  push:
-    branches: ["feat/auto-refresh-market-prices"]
   schedule:
     - cron: "15 0 * * *"
   workflow_dispatch:
