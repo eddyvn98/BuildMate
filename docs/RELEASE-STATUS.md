@@ -1,7 +1,17 @@
 # Release Status
 
 Status date: 2026-09-30  
-Application version: 0.7.0
+Application version: 0.8.0
+
+## Product status
+
+BuildMate v0.8 is the **Homeowner Beta**: the engineering core is unchanged in scope, while the web UI is reorganized around homeowner decisions, guided calculations and traceability.
+
+- Dashboard first screen: budget range, A→Z progress, blockers and next actions.
+- Public sourced 4×16 m / 3-storey / 4-bedroom demo fixture.
+- Guided forms for six primary engineering workflows.
+- Raw JSON/evidence tools retained in Expert mode.
+- Daily market-price history capture and trend UI.
 
 ## Engineering software status
 
