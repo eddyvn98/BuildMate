@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const roots = ['src', 'tests', 'scripts'];
-const files = roots.flatMap(walk).filter((file) => file.endsWith('.js'));
+const files = roots.flatMap(walk).filter((file) => file.endsWith('.js') || file.endsWith('.mjs'));
 let failed = false;
 
 for (const file of files) {

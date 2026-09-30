@@ -11,7 +11,8 @@ The product has one hard boundary:
 - Multi-project homeowner workspace with guided natural-language intake.
 - Confirmed / suggested / assumed / missing / blocked input states.
 - Planning area, indicative quantities, Economy / Balanced / Comfort budgets and stage cash flow.
-- Project-specific price overrides, design versions and actual-cost tracking.
+- Fresh TP.HCM market pricing with source/date provenance, robust price ranges and project-specific overrides.
+- Daily market-price refresh with fail-closed freshness gates, design versions and actual-cost tracking.
 - A-to-Z readiness board from project brief to technical calculations and report.
 - Standards-backed calculation workflows for loads, reinforced concrete, foundations, electrical, water/drainage/pumps and residential HVAC.
 - TCVN/QCVN clause/formula/source/input provenance, executable conformance tests and golden reference benchmarks.
@@ -48,6 +49,16 @@ Open `http://localhost:4173`.
 npm run check
 npm test
 ```
+
+## Refresh market prices
+
+```bash
+npm run refresh:prices
+```
+
+The default-branch GitHub Actions workflow checks the supported TP.HCM pricing sources every day at 00:15 UTC (07:15 Vietnam time). A source is refreshed only when its parser can recover a valid price/date. Failed sources keep their previous value but do not get a new `verifiedAt`; stale data therefore expires naturally. The refresh job refuses to write a snapshot when its minimum source-quality gate is not met.
+
+See `docs/PRICING-REFRESH.md` for source tiers, freshness rules and failure behavior.
 
 ## Backend API
 

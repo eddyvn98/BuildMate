@@ -5,6 +5,7 @@ import { runPlanningWorkflow } from '../src/engine/workflow.js';
 import { runStandardCalculation } from '../src/engine/engineering/standards-calculator.js';
 import { createEngineeringCalculationRecord } from '../src/engine/engineering-calculation-record.js';
 import { projectAtoZStatus } from '../src/engine/a2z-status.js';
+import { MARKET_PRICE_META } from '../src/engine/market-price-seed.js';
 
 function sampleProject() {
   let p=createProject({id:'sample-hcm-4x16',name:'Smoke test - nha pho HCM 4x16'});
@@ -18,7 +19,7 @@ function sampleProject() {
     ['household.people',5],
     ['household.bedrooms',4],
     ['budget.totalVnd',3000000000],
-    ['context.projectDate','2026-09-30'],
+    ['context.projectDate',MARKET_PRICE_META.refreshedAt],
   ]) p=setField(p,path,value);
     return p;
 }
@@ -44,7 +45,10 @@ test('sample HCMC 4x16 townhouse runs end-to-end through all six engineering dom
   assert.equal(planningBefore.results.areas.floorArea.value,163.2);
   assert.equal(planningBefore.results.marketPricing.quickEstimate.status,'ready');
   assert.equal(planningBefore.results.marketPricing.snapshot.turnkeyM2.confidence,'medium');
-  assert.equal(planningBefore.results.marketPricing.quickEstimate.centerVnd,1_262_352_000);
+  assert.equal(
+    planningBefore.results.marketPricing.quickEstimate.centerVnd,
+    Math.round(planningBefore.results.marketPricing.quickEstimate.convertedAreaM2*planningBefore.results.marketPricing.snapshot.turnkeyM2.center)
+  );
 
   const runs=[
     calculationRecord(p,'loads.permanent',{layers:[
@@ -91,6 +95,7 @@ test('sample HCMC 4x16 townhouse runs end-to-end through all six engineering dom
       preferredScenario:planningAfter.results.preferredScenario,
       preferredBudgetVnd:planningAfter.results.budgets.find(x=>x.key===planningAfter.results.preferredScenario)?.total,
       quickMarketEstimateVnd:planningAfter.results.marketPricing.quickEstimate.centerVnd,
+      marketSnapshotRefreshedAt:planningAfter.results.marketPricing.snapshot.refreshedAt,
       quickMarketRangeVnd:[planningAfter.results.marketPricing.quickEstimate.lowVnd,planningAfter.results.marketPricing.quickEstimate.highVnd],
       marketConfidence:planningAfter.results.marketPricing.quickEstimate.confidence,
     },

@@ -1,4 +1,4 @@
-import { HCM_PRICE_OBSERVATIONS,HCM_PRICE_SOURCES } from './market-price-seed.js';
+import { HCM_PRICE_OBSERVATIONS,HCM_PRICE_SOURCES,MARKET_PRICE_META } from './market-price-seed.js';
 import { readValue } from './project.js';
 
 const MAX_AGE_DAYS=Object.freeze({market:30,contractor:45,'official-anchor':60});
@@ -12,7 +12,7 @@ export function buildMarketSnapshot({
   const active=observations
     .filter(x=>sameProvince(x.province,province))
     .map(x=>decorate(x,sourceMap.get(x.sourceId),asOf))
-    .filter(x=>x.source&&x.freshness.status!=='stale');
+    .filter(x=>x.source&&['fresh','aging'].includes(x.freshness.status));
 
   const codes=[...new Set(active.map(x=>x.code))];
   const series=Object.fromEntries(codes.map(code=>[code,summarize(code,active.filter(x=>x.code===code))]));
@@ -26,7 +26,8 @@ export function buildMarketSnapshot({
     materials:Object.fromEntries(Object.entries(series).filter(([code])=>code!=='turnkey-m2')),
     officialAnchors,
     sourceCount:new Set(active.map(x=>x.sourceId)).size,
-    generatedFrom:'curated-market-observations',
+    generatedFrom:'auto-refreshed-market-observations',
+    refreshedAt:MARKET_PRICE_META.refreshedAt??null,
   };
 }
 
@@ -99,26 +100,30 @@ function summarize(code,rows) {
     range:{low:round(robustLow,0),high:round(robustHigh,0)},
     observedRange:{low:Math.min(...rows.map(x=>x.min)),high:Math.max(...rows.map(x=>x.max))},
     sourceCount,confidence,
-    freshestSourceDate:rows.map(x=>x.sourceDate??x.observedAt).sort().at(-1)??null,
+    freshestSourceDate:rows.map(x=>x.sourceDate??x.verifiedAt??x.observedAt).filter(Boolean).sort().at(-1)??null,
     maxAgeDays:maxAge,
     sources:rows.map(x=>({
       sourceId:x.sourceId,name:x.source.name,url:x.source.url,
-      sourceDate:x.sourceDate,observedAt:x.observedAt,dateBasis:x.dateBasis,
+      sourceDate:x.sourceDate,verifiedAt:x.verifiedAt,observedAt:x.observedAt,dateBasis:x.dateBasis,
+      lastCheckedAt:x.source.lastCheckedAt??null,lastError:x.source.lastError??null,
       min:x.min,max:x.max,freshness:x.freshness.status,
+      vatIncluded:x.vatIncluded??null,deliveryIncluded:x.deliveryIncluded??null,
     })),
   };
 }
 
 function decorate(observation,source,asOf) {
-  return {...observation,source,sourceDate:source?.sourceDate??null,observedAt:source?.observedAt??null,freshness:sourceFreshness(source,asOf)};
+  return {...observation,source,sourceDate:source?.sourceDate??null,verifiedAt:source?.verifiedAt??null,observedAt:source?.observedAt??null,freshness:sourceFreshness(source,asOf)};
 }
 
 function sourceFreshness(source,asOf) {
   if (!source) return {status:'stale',ageDays:999};
-  const date=source.sourceDate??source.observedAt;
-  const ageDays=Math.max(0,Math.floor((Date.parse(asOf+'T00:00:00Z')-Date.parse(date+'T00:00:00Z'))/86400000));
+  const date=source.sourceDate??source.verifiedAt??source.observedAt;
   const max=MAX_AGE_DAYS[source.kind]??30;
-  return {ageDays,status:ageDays<=Math.min(30,max)?'fresh':ageDays<=max?'aging':'stale',maxAgeDays:max,dateBasis:source.sourceDate?'source-date':'observed-date'};
+  const deltaDays=Math.floor((Date.parse(asOf+'T00:00:00Z')-Date.parse(date+'T00:00:00Z'))/86400000);
+  if (deltaDays<0) return {ageDays:deltaDays,status:'future',maxAgeDays:max,dateBasis:source.sourceDate?'source-date':source.verifiedAt?'verified-date':'observed-date'};
+  const ageDays=deltaDays;
+  return {ageDays,status:ageDays<=Math.min(30,max)?'fresh':ageDays<=max?'aging':'stale',maxAgeDays:max,dateBasis:source.sourceDate?'source-date':source.verifiedAt?'verified-date':'observed-date'};
 }
 
 function sameProvince(a,b) {
