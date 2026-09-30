@@ -167,3 +167,9 @@ Additional evidence implemented:
 - TCVN 2737:2023 Appendix F Tables F.5a/F.5b: exact pitched-roof external pressure coefficient rows for theta=0/90 degrees; dual-sign cases remain separate load cases.
 - TCVN 5574:2018 8.2.3.2.1 Eq.(177): f <= fu; 8.2.3.2.2 Eq.(179): curvature-based midspan deflection for even segment count n>=6.
 - TCVN 10304:2025 7.4.3.1: preliminary equal pile load Nd,mean=Nd,f/n and final-model force convergence requirement <=10%.
+
+
+Additional completed tables:
+- TCVN 7447-5-52:2010 Tables B.52.3/B.52.5: XLPE/EPR current-carrying capacity for copper and aluminium conductors across A1/A2/B1/B2/C/D1/D2, two/three loaded conductors.
+- TCVN 4513:1988 Table 14(b): DN175-DN400 unit resistance A with q in m3/s.
+- TCVN 4513:1988 6.15/Table 15: low-velocity correction K for steel/cast-iron pipe below 1.2 m/s.
