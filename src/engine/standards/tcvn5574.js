@@ -74,16 +74,25 @@ export function rectangularShearCheck({
 
 
 const CONCRETE=Object.freeze({
-  B15:{Rb:8.5,Rbt:0.75,Eb:24000},
-  B20:{Rb:11.5,Rbt:0.90,Eb:27500},
-  B25:{Rb:14.5,Rbt:1.05,Eb:30000},
-  B30:{Rb:17.0,Rbt:1.15,Eb:32500},
-  B35:{Rb:19.5,Rbt:1.30,Eb:34500},
-  B40:{Rb:22.0,Rbt:1.40,Eb:36000},
-  B45:{Rb:25.0,Rbt:1.50,Eb:37000},
-  B50:{Rb:27.5,Rbt:1.60,Eb:38000},
-  B55:{Rb:30.0,Rbt:1.70,Eb:39000},
-  B60:{Rb:33.0,Rbt:1.80,Eb:39500},
+  B3.5:{Rb:2.1,Rbt:0.26,RbSer:2.7,RbtSer:0.39,Eb:9500},
+  B5:{Rb:2.8,Rbt:0.37,RbSer:3.5,RbtSer:0.55,Eb:13000},
+  B7.5:{Rb:4.5,Rbt:0.48,RbSer:5.5,RbtSer:0.70,Eb:16000},
+  B10:{Rb:6.0,Rbt:0.56,RbSer:7.5,RbtSer:0.85,Eb:19000},
+  B12.5:{Rb:7.5,Rbt:0.66,RbSer:9.5,RbtSer:1.00,Eb:21500},
+  B15:{Rb:8.5,Rbt:0.75,RbSer:11.0,RbtSer:1.10,Eb:24000},
+  B20:{Rb:11.5,Rbt:0.90,RbSer:15.0,RbtSer:1.35,Eb:27500},
+  B25:{Rb:14.5,Rbt:1.05,RbSer:18.5,RbtSer:1.55,Eb:30000},
+  B30:{Rb:17.0,Rbt:1.15,RbSer:22.0,RbtSer:1.75,Eb:32500},
+  B35:{Rb:19.5,Rbt:1.30,RbSer:25.5,RbtSer:1.95,Eb:34500},
+  B40:{Rb:22.0,Rbt:1.40,RbSer:29.0,RbtSer:2.10,Eb:36000},
+  B45:{Rb:25.0,Rbt:1.50,RbSer:32.0,RbtSer:2.25,Eb:37000},
+  B50:{Rb:27.5,Rbt:1.60,RbSer:36.0,RbtSer:2.45,Eb:38000},
+  B55:{Rb:30.0,Rbt:1.70,RbSer:39.5,RbtSer:2.60,Eb:39000},
+  B60:{Rb:33.0,Rbt:1.80,RbSer:43.0,RbtSer:2.75,Eb:39500},
+  B70:{Rb:37.0,Rbt:1.90,RbSer:50.0,RbtSer:3.00,Eb:41000},
+  B80:{Rb:41.0,Rbt:2.10,RbSer:57.0,RbtSer:3.30,Eb:42000},
+  B90:{Rb:44.0,Rbt:2.15,RbSer:64.0,RbtSer:3.60,Eb:42500},
+  B100:{Rb:47.5,Rbt:2.20,RbSer:71.0,RbtSer:3.80,Eb:43000},
 });
 
 const REBAR=Object.freeze({
@@ -96,11 +105,11 @@ const REBAR=Object.freeze({
 
 export function concreteDesignProperties(strengthClass) {
   const row=CONCRETE[strengthClass];
-  if (!row) throw new RangeError('Unsupported concrete class in implemented TCVN 5574 table subset');
+  if (!row) throw new RangeError('Unsupported heavy-concrete strength class in TCVN 5574 Tables 6, 7 and 10');
   return {
     strengthClass,...row,unit:'MPa',level:'engineering-review',
     references:[
-      standardRef({standard:'TCVN 5574:2018',clause:'6.1.4, Table 7',sourceUrl:FULL_TEXT,note:'Design strengths Rb and Rbt for ULS.'}),
+      standardRef({standard:'TCVN 5574:2018',clause:'6.1.4, Table 7',sourceUrl:FULL_TEXT,note:'Design strengths Rb/Rbt for ULS; returned row also contains RbSer/RbtSer from Table 6.'}),
       standardRef({standard:'TCVN 5574:2018',clause:'6.1.5, Table 10',sourceUrl:FULL_TEXT,note:'Initial modulus of elasticity Eb.'}),
     ],
   };

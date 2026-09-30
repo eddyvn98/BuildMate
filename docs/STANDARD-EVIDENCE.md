@@ -189,3 +189,11 @@ Additional closed calculation branches:
 Wind dynamic closure:
 - TCVN 2737:2023 10.2.7.3 Eq.(13)-(24) and Table 10 are implemented for flexible structures T1>1s, including turbulence intensity/length, background response, resonance response, peak factors and aerodynamic admittance functions.
 - Appendix F.12.2 does not prescribe an interpolation rule for 5%<opening ratio<30%; BuildMate explicitly blocks this interval rather than manufacture a coefficient.
+
+
+RC material/deformation closure:
+- TCVN 5574:2018 Table 6/7/10 heavy-concrete properties are implemented from B3.5 through B100.
+- 6.1.2.3 gamma_b1..gamma_b4 working-condition factors are explicit.
+- Table 11 creep phi_b,cr and Eq.(192) long-term modulus Eb/(1+phi_b,cr) are implemented.
+- Table 9 long-term strains include the B70-B100 multiplier (270-B)/210.
+- Eq.(13), Eq.(176), Eq.(193)-(196), Eq.(202)-(204) now close the rectangular cracked-section Eb,red/x/Ired/psi_s stiffness chain.
