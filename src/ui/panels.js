@@ -123,7 +123,7 @@ function engineeringPanel(workflow) {
       ${engineeringCard('Móng cọc', m.pile.status, m.pile.result ? `${m.pile.result.pileCount} cọc từ sức chịu tải đã cung cấp` : m.pile.message)}
       ${engineeringCard('Điện', m.electrical.status, m.electrical.result ? `${number(m.electrical.result.value, 'A')} dòng nhu cầu` : m.electrical.message)}
       ${engineeringCard('Nước', m.water.status, m.water.result ? `${number(m.water.result.value, m.water.result.unit)} lưu lượng thiết kế` : m.water.message)}
-      ${engineeringCard('HVAC', m.hvac.status, m.hvac.message)}
+      ${engineeringCard('HVAC', m.hvac.status, m.hvac.result?.value!==undefined ? `${number(m.hvac.result.value, m.hvac.result.unit ?? '')} · ${m.hvac.message}` : m.hvac.message)}
     </div>`;
 }
 
