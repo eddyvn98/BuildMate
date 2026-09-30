@@ -69,7 +69,7 @@ function projectForm(p) {
     ${input('Hệ số công suất', 'mep.powerFactor', p.mep.powerFactor, 'number', '0.1', '1', '0.01')}
     ${input('Tổng đương lượng thiết bị vệ sinh', 'mep.fixtureEquivalentUnits', p.mep.fixtureEquivalentUnits, 'number')}
     ${input('Mức dùng nước TCVN 4513 (L/người.ngày)', 'mep.waterLitersPerPersonDay', p.mep.waterLitersPerPersonDay, 'number')}
-  </div></details>
+  </div></details>`;
 }
 
 function pricingPanel(p, workflow) {
