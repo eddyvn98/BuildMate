@@ -1,3 +1,4 @@
+import { townhouseCoreScope } from './townhouse-scope.js';
 import { createEngineeringProfile, assessProfileReadiness } from './profile-gate.js';
 import { standardById } from './standards.js';
 import { STANDARD_CLAUSE_COVERAGE } from './standards/coverage.js';
@@ -56,6 +57,8 @@ export function engineeringProfileStatus() {
     implementedClauseCount:profile.clauseMap.length,
     referenceCaseCount:profile.referenceCases.length,
     pendingGaps:structuredClone(profile.pendingGaps),
+    townhouseCore:townhouseCoreScope(issueForProfile(profile.id)),
+    softwareReadyForIndependentReview:Boolean(profile.clauseMap.length && profile.referenceCases.length),
     ...assessProfileReadiness(profile),
   }));
 }
@@ -68,4 +71,18 @@ function officialSourceFallback(issue) {
     7:'https://tieuchuan.vsqi.gov.vn/quychuan/view?sohieu=QCVN+12%3A2014%2FBXD',
     8:'https://tieuchuan.vsqi.gov.vn/tieuchuan/view?sohieu=TCVN+4513%3A1988',
   }[issue] ?? '';
+}
+
+
+function issueForProfile(id) {
+  return {
+    loads:4,
+    'rc-design':5,
+    'shallow-foundation':6,
+    'pile-foundation':6,
+    'electrical-building':7,
+    'earthing-pe':7,
+    'internal-water':8,
+    'external-drainage':8,
+  }[id] ?? null;
 }
