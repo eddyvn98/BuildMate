@@ -1,3 +1,4 @@
+import { createEngineeringCalculationRecord } from '../engine/engineering-calculation-record.js';
 import { calculatorExample, evidenceDataExample } from './engineering-tools.js';
 import { createEngineeringEvidenceRecord } from '../engine/engineering-evidence.js';
 import { standardCalculatorCapabilities, runStandardCalculation } from '../engine/engineering/standards-calculator.js';
@@ -96,6 +97,9 @@ function bindEngineeringTools() {
       const action=el('standard-calculator-action').value;
       const input=JSON.parse(el('standard-calculator-input').value || '{}');
       const output=runStandardCalculation(project,{action,input});
+      const calculation=createEngineeringCalculationRecord({action,issue:output.issue,standard:output.standard,input,output,engineVersion:'0.6.0'});
+      project={...project,engineeringCalculations:[...(project.engineeringCalculations ?? []),calculation],updatedAt:new Date().toISOString()};
+      saveProject(project);
       calculatorState={action,inputText:JSON.stringify(input,null,2),output,error:null};
     } catch (error) {
       calculatorState={...calculatorState,inputText:el('standard-calculator-input').value,error:error.message,output:null};

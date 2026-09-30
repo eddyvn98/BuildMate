@@ -158,6 +158,9 @@ function standardsToolsPanel(project,capabilities,state,evidenceState) {
         <div><button type="submit">Thêm evidence</button></div>
       </form>
       <div class="evidence-list">${evidence.length?evidence.map(item=>`<article><div><b>#${item.issue} · ${escapeHtml(item.type)}</b><span>${escapeHtml(item.source)} · ${escapeHtml(item.documentId)}</span><small>${escapeHtml(item.methodRef)}</small></div><button class="ghost danger" data-remove-engineering-evidence="${item.id}">Xóa</button></article>`).join(''):'<p class="hint">Chưa có evidence kỹ thuật dự án.</p>'}</div>
+    </details>
+    <details class="advanced"><summary>Calculation history (${(project.engineeringCalculations ?? []).length})</summary>
+      <div class="evidence-list">${(project.engineeringCalculations ?? []).length ? project.engineeringCalculations.slice().reverse().map(item=>`<article><div><b>#${item.issue} · ${escapeHtml(item.action)}</b><span>${escapeHtml(item.status)} · ${escapeHtml(item.standard)}</span><small>digest: ${escapeHtml(item.calculationDigest.slice(0,16))}… · ${escapeHtml(item.createdAt)}</small></div></article>`).join('') : '<p class="hint">Chưa có calculation run local.</p>'}</div>
     </details>`;
 }
 

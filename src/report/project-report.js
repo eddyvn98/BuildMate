@@ -30,6 +30,7 @@ export function buildProjectReport(project, workflow) {
     engineering: result.engineering,
     engineeringReviewStatus: projectEngineeringReadiness(project),
     engineeringProjectEvidence: [4,5,6,7,8].map((issue)=>assessEngineeringEvidence(project.engineeringEvidence ?? [],issue)),
+    engineeringCalculations: structuredClone(project.engineeringCalculations ?? []),
     engineeringEvidenceAudit: auditEngineeringEvidence(result.engineering),
     standardCoverage: structuredClone(STANDARD_CLAUSE_COVERAGE),
     standardStatusHealth: standardsSnapshotHealth(),
@@ -67,6 +68,7 @@ export function reportToHtml(report) {
   <h2>Giả định</h2><ul>${assumptions}</ul>
   <h2>Trạng thái review kỹ thuật</h2><pre>${escapeHtml(JSON.stringify(report.engineeringReviewStatus, null, 2))}</pre>
   <h2>Evidence dự án</h2><pre>${escapeHtml(JSON.stringify(report.engineeringProjectEvidence, null, 2))}</pre>
+  <h2>Calculation runs</h2><pre>${escapeHtml(JSON.stringify(report.engineeringCalculations, null, 2))}</pre>
   <h2>Bằng chứng tính toán kỹ thuật</h2><p>Audit evidence: <b>${report.engineeringEvidenceAudit.length === 0 ? 'PASS' : 'CÓ THIẾU SÓT'}</b></p><pre>${escapeHtml(JSON.stringify(report.engineeringEvidenceAudit, null, 2))}</pre>
   <h2>Tình trạng phiên bản tiêu chuẩn</h2><pre>${escapeHtml(JSON.stringify(report.standardStatusHealth, null, 2))}</pre>
   <h2>Phạm vi điều khoản tiêu chuẩn</h2><pre>${escapeHtml(JSON.stringify(report.standardCoverage, null, 2))}</pre>
