@@ -1,5 +1,5 @@
 import { summarizeActuals } from '../engine/actuals.js';
-import { escapeHtml,metric } from './common.js';
+import { escapeHtml,icon,metric } from './common.js';
 import { money } from './render.js';
 
 export function reportPanel(project,workflow) {
@@ -9,7 +9,7 @@ export function reportPanel(project,workflow) {
   const versions=project.designVersions??[];
   return `
     <section class="panel-block report-hero">
-      <div class="section-head"><div><span class="eyebrow">Project output</span><h2>Báo cáo & checkpoint</h2><p class="hint">Lưu phương án trước khi thay đổi lớn, rồi xuất báo cáo HTML/BOQ để rà soát.</p></div><button id="save-version">Lưu phương án hiện tại</button></div>
+      <div class="section-head"><div><span class="eyebrow">Project output</span><h2>Báo cáo & checkpoint</h2><p class="hint">Lưu phương án trước khi thay đổi lớn, rồi xuất báo cáo HTML/BOQ để rà soát.</p></div><button id="save-version" class="icon-button primary-icon" title="Lưu phương án hiện tại" aria-label="Lưu phương án hiện tại">${icon('save')}</button></div>
       <div class="metrics">
         ${metric('Ngân sách hiện tại',money(budgetVnd),results?.primaryBudget?.basis??'')}
         ${metric('Đã thanh toán',money(actual.paidVnd),'actual')}
@@ -26,7 +26,7 @@ export function reportPanel(project,workflow) {
       <section class="panel-block">
         <div class="section-head"><div><h2>Chi phí thực tế</h2><p class="hint">Theo dõi paid/committed so với ngân sách hiện tại.</p></div></div>
         <form id="actual-form" class="actual-form"><input id="actual-description" placeholder="Hạng mục / hóa đơn" required><input id="actual-amount" type="number" min="1" placeholder="Số tiền" required><select id="actual-status"><option value="paid">Đã thanh toán</option><option value="committed">Đã cam kết</option></select><button>Thêm</button></form>
-        <div class="actual-list">${project.actuals.entries.length?project.actuals.entries.map(item=>`<div><span><b>${escapeHtml(item.description||item.category)}</b><small>${escapeHtml(item.date)} · ${escapeHtml(item.status)}</small></span><strong>${money(item.amountVnd)}</strong><button class="ghost danger" data-remove-actual="${item.id}">Xóa</button></div>`).join(''):'<p class="empty-state">Chưa có chi phí thực tế.</p>'}</div>
+        <div class="actual-list">${project.actuals.entries.length?project.actuals.entries.map(item=>`<div><span><b>${escapeHtml(item.description||item.category)}</b><small>${escapeHtml(item.date)} · ${escapeHtml(item.status)}</small></span><strong>${money(item.amountVnd)}</strong><button class="ghost danger icon-button" data-remove-actual="${item.id}" title="Xóa chi phí" aria-label="Xóa chi phí">${icon('trash')}</button></div>`).join(''):'<p class="empty-state">Chưa có chi phí thực tế.</p>'}</div>
       </section>
     </div>
 
