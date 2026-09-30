@@ -21,6 +21,8 @@ test('local UI exposes standards calculator and project evidence panel',()=>{
   assert.ok(html.includes('TCVN / QCVN Calculator'));
   assert.ok(html.includes('water.design-flow'));
   assert.ok(html.includes('Project engineering evidence'));
+  assert.ok(html.includes('Tiến độ A→Z'));
+  assert.ok(html.includes('hvac.cooling-load'));
   assert.ok(!html.includes('Tĩnh tải giả định'));
   assert.ok(html.includes('Loại khu vực hoạt tải TCVN 2737'));
 });

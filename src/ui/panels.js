@@ -143,7 +143,7 @@ function standardsToolsPanel(project,capabilities,state,evidenceState) {
       <div><button type="submit">Tính theo tiêu chuẩn</button></div>
     </form>
     ${state.error?`<div class="alert">${escapeHtml(state.error)}</div>`:''}
-    ${state.output?`<div class="calc-output ${state.output.status==='blocked'?'blocked':''}"><div><b>Kết quả: ${escapeHtml(state.output.status)}</b><span>${escapeHtml(state.output.standard ?? '')}</span></div><pre>${escapeHtml(JSON.stringify(state.output,null,2))}</pre></div>`:''}
+    ${state.output?`<details class="calc-output ${state.output.status==='blocked'?'blocked':''}" open><summary><b>Kết quả: ${escapeHtml(state.output.status)}</b> · ${escapeHtml(state.output.standard ?? '')} · Xem cách tính</summary><pre>${escapeHtml(JSON.stringify(state.output,null,2))}</pre></details>`:''}
     <details class="advanced" open><summary>Project engineering evidence (${evidence.length})</summary>
       ${evidenceState.error?`<div class="alert">${escapeHtml(evidenceState.error)}</div>`:''}
       <form id="engineering-evidence-form" class="evidence-form">
@@ -162,7 +162,7 @@ function standardsToolsPanel(project,capabilities,state,evidenceState) {
       <div class="evidence-list">${evidence.length?evidence.map(item=>`<article><div><b>#${item.issue} · ${escapeHtml(item.type)}</b><span>${escapeHtml(item.source)} · ${escapeHtml(item.documentId)}</span><small>${escapeHtml(item.methodRef)}</small></div><button class="ghost danger" data-remove-engineering-evidence="${item.id}">Xóa</button></article>`).join(''):'<p class="hint">Chưa có evidence kỹ thuật dự án.</p>'}</div>
     </details>
     <details class="advanced"><summary>Calculation history (${(project.engineeringCalculations ?? []).length})</summary>
-      <div class="evidence-list">${(project.engineeringCalculations ?? []).length ? project.engineeringCalculations.slice().reverse().map(item=>`<article><div><b>#${item.issue} · ${escapeHtml(item.action)}</b><span>${escapeHtml(item.status)} · ${escapeHtml(item.standard)}</span><small>digest: ${escapeHtml(item.calculationDigest.slice(0,16))}… · ${escapeHtml(item.createdAt)}</small></div></article>`).join('') : '<p class="hint">Chưa có calculation run local.</p>'}</div>
+      <div class="evidence-list">${(project.engineeringCalculations ?? []).length ? project.engineeringCalculations.slice().reverse().map(item=>`<article><details><summary><b>#${item.issue} · ${escapeHtml(item.action)}</b> · ${escapeHtml(item.status)} · Xem cách tính</summary><span>${escapeHtml(item.standard)}</span><small>digest: ${escapeHtml(item.calculationDigest.slice(0,16))}… · ${escapeHtml(item.createdAt)}</small><pre>${escapeHtml(JSON.stringify({input:item.input,result:item.result,evidenceAudit:item.evidenceAudit,blockers:item.blockers,calculationDigest:item.calculationDigest},null,2))}</pre></details></article>`).join('') : '<p class="hint">Chưa có calculation run local.</p>'}</div>
     </details>`;
 }
 

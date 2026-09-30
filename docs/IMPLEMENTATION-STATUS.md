@@ -1,54 +1,51 @@
 # Implementation Status
 
-Status date: 2026-09-29  
-Application version: 0.4.0
+Status date: 2026-09-30  
+Application version: 0.7.0
 
 ## Complete and usable now
 
-- Multi-project homeowner workspace.
-- Natural-language intake plus editable structured fields.
-- Explicit confirmed/suggested/assumed/missing/blocked states.
-- Deterministic planning area calculations.
-- Indicative quantity takeoff with trace metadata.
-- Economy / balanced / comfort budget scenarios.
-- Safe budget-fit analysis.
-- Project-specific price overrides with provenance.
-- Construction-stage cash-flow view.
-- Engineering preview workspace.
-- Functional block-plan view.
-- Design-version snapshots.
-- Actual construction cost tracking.
-- JSON backup/import.
-- HTML project report and BOQ CSV export.
-- Syntax checking, automated tests and Docker deployment package.
+- Multi-project local-first workspace and authenticated persistent API.
+- Guided natural-language intake plus editable structured fields.
+- Explicit confirmed/suggested/assumed/missing/blocked input states.
+- Deterministic planning area, quantity, budget and cash-flow engines.
+- Project price overrides with source/effective-date provenance.
+- Design-version snapshots and actual construction cost tracking.
+- A-to-Z project readiness board.
+- Standards calculator with immutable calculation records and digests.
+- Project engineering evidence records.
+- HTML report, BOQ CSV and JSON backup/import.
+- Syntax checks, automated tests, Docker and CI.
 
-## Engineering calculations available for planning/review
+## Standards-backed engineering core
 
-- Gravity-load aggregation from explicit area/load assumptions.
-- Simple-beam reaction and moment primitive for a simply supported uniformly loaded model.
-- Equivalent bearing-area estimate from supplied allowable soil pressure.
-- Conceptual pile count from supplied working pile capacity.
-- Electrical demand-current calculation.
-- Cable ampacity comparison from supplied ampacity.
-- Protective-conductor adiabatic-area calculation from supplied fault current, clearing time and material factor.
-- Domestic water/storage estimate.
-- Pump-head arithmetic.
-- HVAC planning-capacity estimate.
-- Productivity-based duration estimate.
+Tracked townhouse engineering coverage now includes:
 
-## Deliberately gated
+- #4 Loads/actions — TCVN 2737:2023 + QCVN 02.
+- #5 Reinforced concrete — TCVN 5574:2018 + applicable QCVN 06 checks.
+- #6 Foundations — TCVN 9362:2012 + TCVN 10304:2025.
+- #7 Electrical — QCVN 12 + TCVN 9206 + TCVN 7447 series.
+- #8 Water/drainage/pumps — TCVN 4513 + TCVN 7957:2023 + TCVN 9222.
+- #12 Residential HVAC/ventilation — TCVN 5687:2024.
 
-The app does not label structural, foundation, electrical, water/drainage, HVAC, fire-safety or parcel-planning outputs construction-ready until a verified standard profile and required project inputs exist.
+Each tracked profile has machine-readable coverage, clause/formula provenance, conformance tests and a golden/reference benchmark. Software readiness does not depend on an independent-review record.
 
-Tracked work: GitHub issues #4 through #10.
+## Required project evidence remains gated
 
-This is a correctness boundary, not an unimplemented fallback: BuildMate must not replace missing geotechnical data, fault current, standard coefficients, local planning approvals or professional review with AI guesses.
+BuildMate still blocks a project calculation when its governing workflow requires evidence that cannot be inferred safely, including examples such as:
 
+- official/locality climate or wind data;
+- geotechnical investigation, SPT/CPT or pile-test data;
+- manufacturer protective-device curves;
+- field commissioning measurements;
+- manufacturer pump/HVAC performance data.
 
-## v0.4.0 implementation update
+This is a data/evidence requirement of the calculation workflow, not an independent-review requirement.
 
-- Authenticated backend API with per-user ownership and immutable calculation runs.
-- Project/date-aware QCVN 01 baseline resolver with locality-specific sourced rules.
-- Engineering profile readiness gates require source/version, applicability, clause mapping, reference cases and independent review.
-- Additional deterministic review primitives for explicit load combinations, RC demand/capacity checks, foundation bearing/eccentricity, voltage drop/protection timing, pipe velocity and Manning flow.
-- No engineering profile is promoted to construction-ready without independent professional review.
+## v0.7 product objective
+
+The product now tracks one project through:
+
+brief → planning → budget/pricing → loads → RC → foundations → electrical → water/drainage → HVAC → report.
+
+The next product-validation step is to run this flow with a real townhouse project dataset and improve input UX around the blockers that appear.

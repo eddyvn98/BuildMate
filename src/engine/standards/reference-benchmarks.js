@@ -47,6 +47,15 @@ export const STANDARD_REFERENCE_BENCHMARKS=Object.freeze([
     expected:{value:1.963,unit:'L/s',tolerance:0.001},
     derivation:'0.2*2.15*sqrt(20)+0.002*20',
   },
+  {
+    id:'hvac-bedroom-outdoor-air',
+    issue:12,
+    standard:'TCVN 5687:2024',
+    clause:'6.1.5 + Appendix E Table E.1 + Appendix G Eq.(G.7)',
+    inputs:{spaceType:'bedroom',people:2,areaM2:18},
+    expected:{value:70,unit:'m³/h',tolerance:0.0001},
+    derivation:'2 people * 35 m³/(h·person)',
+  },
 ]);
 
 export function benchmarksForIssue(issue) {
