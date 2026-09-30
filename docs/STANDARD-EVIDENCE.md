@@ -178,3 +178,9 @@ Additional completed tables:
 Additional completed formula chains:
 - TCVN 5574:2018 Eq.(185)-(188): total curvature for cracked/uncracked sections, curvature M/D and transformed stiffness D=Eb1*Ired; Eq.(191) short-term uncracked Eb1=0.85Eb; Eq.(182) shear strain.
 - TCVN 10304:2025 7.4.3.1 Eq.(36)-(38): pairwise pile interaction coefficient and additional/group settlement from known single-pile settlements, SLS loads and sourced kv/G1/G2.
+
+
+Additional closed calculation branches:
+- TCVN 5574:2018 8.1.2.3.3 Eq.(36)-(38): T/I-section flexural capacity with neutral-axis branch in compression flange or web; 8.1.2.3.5 xiR limiting rule.
+- TCVN 5574:2018 8.1.3.3.1 Eq.(89)-(92): full dangerous inclined-section shear search over h0 <= C <= 2h0, with Eq.(96) transverse-reinforcement eligibility.
+- TCVN 10304:2025 7.4.2.1 Eq.(34)/Table 17: short-pile settlement for 1 < k <= 7.5 using published zeta0 and mv coefficients.
