@@ -19,9 +19,16 @@ export function buildTechnicalModel(project,areas) {
   const footprintArea=positive(areas?.footprint?.value,'footprint area');
   const floorArea=positive(areas?.floorArea?.value,'floor area');
   const cfg=TECHNICAL_MODEL_PROFILE.defaults;
+  const p=(name,fallback)=>numberOr(readValue(project,'technicalModel.'+name,null),fallback);
   const footprintWidth=width;
   const footprintLength=Math.min(landLength,footprintArea/footprintWidth);
-  const floorHeight=numberOr(readValue(project,'design.floorHeightM',null),cfg.floorHeightM);
+  const floorHeight=p('floorHeightM',cfg.floorHeightM);
+  const slabThickness=p('slabThicknessMm',cfg.slabThicknessMm);
+  const slabBarDiameter=p('slabBarDiameterMm',10);
+  const slabBarSpacing=p('slabBarSpacingMm',200);
+  const beamWidth=p('beamWidthMm',200);
+  const beamDepth=p('beamDepthMm',400);
+  const wallThickness=p('wallThicknessMm',cfg.wallThicknessMm);
   const longBays=Math.max(2,Math.ceil(footprintLength/cfg.maxLongitudinalBayM));
   const transBays=Math.max(1,Math.ceil(footprintWidth/cfg.maxTransverseBayM));
   const longSpan=round(footprintLength/longBays,3);
@@ -36,7 +43,7 @@ export function buildTechnicalModel(project,areas) {
   const bedrooms=Math.max(1,Number(readValue(project,'household.bedrooms',3)));
   const people=Math.max(1,Number(readValue(project,'household.people',4)));
   const roomSchedule=buildRoomSchedule(project,storeys,bedrooms);
-  const wall=wallModel({footprintWidth,footprintLength,floorHeight,storeys,floorArea,roomSchedule});
+  const wall=wallModel({footprintWidth,footprintLength,floorHeight,storeys,floorArea,roomSchedule,wallThicknessMm:wallThickness});
   const electrical=electricalModel({storeys,bedrooms,roomSchedule,floorArea});
   const plumbing=plumbingModel({storeys,bathrooms,people});
   const hvac=hvacModel({bedrooms,roomSchedule});
@@ -46,11 +53,11 @@ export function buildTechnicalModel(project,areas) {
     level:index===elevatedLevels-1?'Mái':'Sàn tầng '+(index+2),
     quantity:1,
     areaM2:round(footprintArea,2),
-    thicknessMm:cfg.slabThicknessMm,
+    thicknessMm:slabThickness,
     concreteGrade:'B25',
     reinforcement:{
-      bottom:{diameterMm:10,spacingMm:200,directions:2},
-      supportTop:{diameterMm:10,spacingMm:200,equivalentAreaFactor:0.5},
+      bottom:{diameterMm:slabBarDiameter,spacingMm:slabBarSpacing,directions:2},
+      supportTop:{diameterMm:slabBarDiameter,spacingMm:slabBarSpacing,equivalentAreaFactor:0.5},
     },
     basis:'parametric-preliminary',
   }));
@@ -59,11 +66,11 @@ export function buildTechnicalModel(project,areas) {
     {
       id:'B1',levels:elevatedLevels,quantity:beamSegmentsPerLevel*elevatedLevels,
       totalLengthM:round(beamLengthPerLevel*elevatedLevels,2),
-      bMm:200,hMm:Math.max(400,roundTo50(Math.max(longSpan,transSpan)*1000/10)),
+      bMm:beamWidth,hMm:beamDepth,
       concreteGrade:'B25',
-      mainBars:{count:4,diameterMm:18},
-      extraTop:{count:2,diameterMm:16,lengthFactor:0.35},
-      stirrups:{diameterMm:8,spacingMm:150},
+      mainBars:{count:p('beamMainCount',4),diameterMm:p('beamMainDiameterMm',18)},
+      extraTop:{count:p('beamExtraCount',2),diameterMm:p('beamExtraDiameterMm',16),lengthFactor:0.35},
+      stirrups:{diameterMm:p('beamStirrupDiameterMm',8),spacingMm:p('beamStirrupSpacingMm',150)},
       basis:'parametric-preliminary',
     },
   ];
@@ -71,21 +78,23 @@ export function buildTechnicalModel(project,areas) {
   const columns=[];
   if (lowerStoreys>0) columns.push({
     id:'C1',storeys:lowerStoreys,quantity:columnLines*lowerStoreys,
-    segmentHeightM:floorHeight,bMm:250,hMm:300,concreteGrade:'B25',
-    verticalBars:{count:8,diameterMm:18},ties:{diameterMm:8,spacingMm:150},
+    segmentHeightM:floorHeight,bMm:p('lowerColumnWidthMm',250),hMm:p('lowerColumnDepthMm',300),concreteGrade:'B25',
+    verticalBars:{count:p('lowerColumnBarCount',8),diameterMm:p('lowerColumnBarDiameterMm',18)},
+    ties:{diameterMm:p('columnTieDiameterMm',8),spacingMm:p('columnTieSpacingMm',150)},
     basis:'parametric-preliminary',
   });
   if (upperStoreys>0) columns.push({
     id:'C2',storeys:upperStoreys,quantity:columnLines*upperStoreys,
-    segmentHeightM:floorHeight,bMm:250,hMm:250,concreteGrade:'B25',
-    verticalBars:{count:8,diameterMm:16},ties:{diameterMm:8,spacingMm:150},
+    segmentHeightM:floorHeight,bMm:p('upperColumnWidthMm',250),hMm:p('upperColumnDepthMm',250),concreteGrade:'B25',
+    verticalBars:{count:p('upperColumnBarCount',8),diameterMm:p('upperColumnBarDiameterMm',16)},
+    ties:{diameterMm:p('columnTieDiameterMm',8),spacingMm:p('columnTieSpacingMm',150)},
     basis:'parametric-preliminary',
   });
 
   const foundations=[{
     id:'F1',type:'isolated-footing',quantity:columnLines,
-    lengthM:1.4,widthM:1.4,thicknessM:0.35,concreteGrade:'B20',
-    bottomMesh:{diameterMm:12,spacingMm:150,directions:2},
+    lengthM:p('footingLengthM',1.4),widthM:p('footingWidthM',1.4),thicknessM:p('footingThicknessM',0.35),concreteGrade:'B20',
+    bottomMesh:{diameterMm:p('footingBarDiameterMm',12),spacingMm:p('footingBarSpacingMm',150),directions:2},
     pedestal:{bM:0.3,hM:0.3,heightM:0.5,verticalBars:{count:4,diameterMm:16},ties:{diameterMm:8,spacingMm:150}},
     warning:'Móng F1 chỉ là hình học sơ bộ để bóc khối lượng demo. Kích thước/type móng phải thay bằng kết quả địa kỹ thuật + thiết kế móng.',
     basis:'parametric-preliminary',
@@ -155,7 +164,7 @@ function buildRoomSchedule(project,storeys,bedrooms) {
   return rows;
 }
 
-function wallModel({footprintWidth,footprintLength,floorHeight,storeys,floorArea,roomSchedule}) {
+function wallModel({footprintWidth,footprintLength,floorHeight,storeys,floorArea,roomSchedule,wallThicknessMm}) {
   const perimeter=2*(footprintWidth+footprintLength);
   const internalLengthPerFloor=Math.max(footprintWidth*1.5,Math.sqrt(floorArea/storeys)*2.2);
   const grossLength=(perimeter+internalLengthPerFloor)*storeys;
@@ -165,7 +174,7 @@ function wallModel({footprintWidth,footprintLength,floorHeight,storeys,floorArea
   return {
     externalPerimeterM:round(perimeter,2),internalWallLengthPerFloorM:round(internalLengthPerFloor,2),
     grossWallAreaM2:round(grossArea,2),netWallAreaM2:round(netArea,2),
-    wallThicknessMm:100,openingDeductionRatio:openingFactor,
+    wallThicknessMm,openingDeductionRatio:openingFactor,
     plasterAreaM2:round(netArea*2,2),
     paintAreaM2:round(netArea*2+floorArea,2),
     floorTileAreaM2:round(floorArea*0.82,2),

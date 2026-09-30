@@ -24,7 +24,7 @@ test('4x16 public demo generates explicit member schedules instead of only area 
   const p=demoWithCalculations();
   const w=runPlanningWorkflow(p);
   const pack=w.results.technicalPackage;
-  assert.equal(pack.version,'0.9');
+  assert.equal(pack.version,'1.0');
   assert.equal(pack.model.grid.longitudinalBays,4);
   assert.equal(pack.model.grid.transverseBays,1);
   assert.equal(pack.model.grid.columnGridPoints,10);
@@ -74,7 +74,7 @@ test('technical package appears in homeowner UI, report and BOQ CSV',()=>{
   assert.ok(html.includes('4Ø18'));
   assert.ok(html.includes('đai Ø8a150'));
   const report=buildProjectReport(p,workflow);
-  assert.equal(report.technicalPackage.version,'0.9');
+  assert.equal(report.technicalPackage.version,'1.0');
   const csv=quantitiesToCsv(report);
   assert.ok(csv.includes('unit_price_vnd'));
   assert.ok(csv.includes('Thép Ø18'));
