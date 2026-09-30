@@ -6,9 +6,12 @@ The product has one hard boundary:
 
 > AI interprets and explains. Deterministic, versioned engines produce BuildMate numbers.
 
-## Current v0.8.1 — Homeowner Beta
+## Current v0.9 — Technical Package Beta
 
-- Homeowner dashboard with clear navigation: Overview, Home Info, Engineering, Pricing and Report.
+- Homeowner dashboard with clear navigation: Overview, Home Info, Calculations, Technical Package, Pricing and Report.
+- Preliminary component schedules for slabs, beams, columns, footings, foundation tie beams and stairs.
+- Geometry/detailing-based quantity takeoff for concrete, formwork, rebar by diameter, masonry, finishes, cables and pipes.
+- Detailed technical BOQ with current/sourced prices where available and explicit unpriced rows where rates are missing.
 - Public 4×16 m / 3-storey / 4-bedroom reference fixture with explicit source provenance and demo-only assumptions.
 - Guided engineering forms for loads, RC beam, shallow-foundation settlement, cable sizing, domestic water flow and residential outdoor air; raw JSON remains available in Expert mode.
 - Multi-project homeowner workspace with guided natural-language intake.
