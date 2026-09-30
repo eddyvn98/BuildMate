@@ -4,6 +4,8 @@ import { createPublicReferenceProject } from '../src/demo/public-reference-proje
 import { runPlanningWorkflow } from '../src/engine/workflow.js';
 import { shell } from '../src/ui/panels.js';
 import { icon } from '../src/ui/common.js';
+import { standardCalculatorCapabilities } from '../src/engine/engineering/standards-calculator.js';
+import { guidedDefaultValues } from '../src/ui/guided-calculator.js';
 
 test('shared icon helper renders accessible-safe inline svg',()=>{
   const svg=icon('home');
@@ -31,4 +33,30 @@ test('shell uses svg icons for navigation and compact top actions',()=>{
   assert.ok(!html.includes('⌂'));
   assert.ok(!html.includes('▤'));
   assert.ok(!html.includes('⌁'));
+});
+
+
+test('project, engineering and report primary actions use compact svg controls',()=>{
+  const project=createPublicReferenceProject();
+  const workflow=runPlanningWorkflow(project);
+  const common={
+    project,projects:[project],workflow,
+    calculatorCapabilities:standardCalculatorCapabilities(),
+    calculatorState:{action:'water.design-flow',inputText:'{}'},
+    guidedState:{action:'loads.permanent',values:guidedDefaultValues('loads.permanent')},
+    evidenceState:{},
+  };
+  const projectHtml=shell({...common,activeView:'project'});
+  assert.ok(projectHtml.includes('aria-label="Phân tích thông tin"'));
+  assert.ok(projectHtml.includes('class="icon-button primary-icon"'));
+
+  const engineeringHtml=shell({...common,activeView:'engineering'});
+  for(const label of ['Tính theo tiêu chuẩn','Chạy raw calculator','Thêm evidence']) {
+    assert.ok(engineeringHtml.includes('aria-label="'+label+'"'),label);
+  }
+
+  const reportHtml=shell({...common,activeView:'report'});
+  for(const label of ['Lưu phương án hiện tại','Thêm chi phí']) {
+    assert.ok(reportHtml.includes('aria-label="'+label+'"'),label);
+  }
 });
