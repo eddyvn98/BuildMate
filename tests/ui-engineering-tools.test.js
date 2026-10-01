@@ -25,11 +25,11 @@ function ctx(activeView='overview'){
   };
 }
 
-test('homeowner shell exposes dashboard navigation and primary next action surface',()=>{
+test('homeowner shell exposes journey navigation and prioritized next actions',()=>{
   const {html}=ctx('overview');
-  assert.ok(html.includes('Homeowner Beta'));
-  assert.ok(html.includes('Tổng quan'));
-  assert.ok(html.includes('Việc nên làm tiếp'));
+  assert.ok(html.includes('BuildMate AI'));
+  assert.ok(html.includes('Nhà của tôi'));
+  assert.ok(html.includes('Hôm nay nên làm gì?'));
   assert.ok(html.includes('Nạp demo 4×16'));
 });
 
