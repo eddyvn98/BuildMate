@@ -46,20 +46,20 @@ function topbar(project,projects) {
   return `<header class="topbar journey-topbar">
     <div class="project-switcher journey-project-switcher">
       <span class="project-home-icon">${icon('house')}</span>
-      <div><small>Ngôi nhà của bạn</small>
-      <select id="project-select">${projects.map(item=>`<option value="${item.id}" ${item.id===project.id?'selected':''}>${escapeHtml(item.name)}</option>`).join('')}</select></div>
-      <input id="project-name" value="${escapeHtml(project.name)}" aria-label="Tên dự án">
+      <div class="project-picker"><small>Ngôi nhà của bạn</small>
+      <select id="project-select" aria-label="Chọn dự án">${projects.map(item=>`<option value="${item.id}" ${item.id===project.id?'selected':''}>${escapeHtml(item.name)}</option>`).join('')}</select></div>
+      <input id="project-name" class="project-name-input" value="${escapeHtml(project.name)}" aria-label="Tên dự án" title="Đổi tên dự án" placeholder="Tên dự án">
     </div>
     <div class="top-actions">
-      <button type="button" id="load-public-demo" class="ghost icon-button" title="Nạp demo 4×16" aria-label="Nạp demo 4×16">${icon('flask')}</button>
-      <button type="button" id="run-demo-a2z" class="ghost icon-button" title="Chạy demo A→Z" aria-label="Chạy demo A→Z">${icon('play')}</button>
-      <button type="button" id="new-project" class="ghost icon-button" title="Dự án mới" aria-label="Dự án mới">${icon('plus')}</button>
+      <button type="button" id="new-project" class="ghost top-new-project" title="Dự án mới" aria-label="Dự án mới">${icon('plus')}<span class="top-action-label">Dự án mới</span></button>
       <details class="menu-pop"><summary aria-label="Thêm tác vụ" title="Thêm tác vụ">${icon('more')}</summary><div>
-        <button id="export-html" class="ghost menu-action">${icon('download')}<span>HTML</span></button>
-        <button id="export-csv" class="ghost menu-action">${icon('download')}<span>BOQ CSV</span></button>
-        <button id="export-json" class="ghost menu-action">${icon('download')}<span>JSON</span></button>
-        <button id="import-json" class="ghost menu-action">${icon('upload')}<span>Nhập</span></button>
-        <button id="delete-project" class="ghost danger menu-action">${icon('trash')}<span>Xóa</span></button>
+        <button type="button" id="load-public-demo" class="ghost menu-action" title="Nạp demo 4×16" aria-label="Nạp demo 4×16">${icon('flask')}<span>Nạp demo 4×16</span></button>
+        <button type="button" id="run-demo-a2z" class="ghost menu-action" title="Chạy demo A→Z" aria-label="Chạy demo A→Z">${icon('play')}<span>Chạy demo A→Z</span></button>
+        <button id="export-html" class="ghost menu-action">${icon('download')}<span>Xuất báo cáo HTML</span></button>
+        <button id="export-csv" class="ghost menu-action">${icon('download')}<span>Xuất BOQ CSV</span></button>
+        <button id="export-json" class="ghost menu-action">${icon('download')}<span>Xuất JSON</span></button>
+        <button id="import-json" class="ghost menu-action">${icon('upload')}<span>Nhập JSON</span></button>
+        <button id="delete-project" class="ghost danger menu-action">${icon('trash')}<span>Xóa dự án</span></button>
       </div></details>
       <input id="import-json-file" type="file" accept="application/json" hidden>
     </div>
