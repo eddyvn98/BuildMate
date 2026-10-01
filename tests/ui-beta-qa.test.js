@@ -18,7 +18,7 @@ test('public demo functional plan uses sourced floor program instead of generic 
   assert.ok(plan[2].rooms.includes('Phòng thờ'));
 });
 
-test('overview labels progress as BuildMate workflow and explicitly avoids construction-approval wording',()=>{
+test('overview presents progress as a homeowner journey and keeps approval disclaimer',()=>{
   const p=createPublicReferenceProject();
   const html=shell({
     project:p,projects:[p],workflow:runPlanningWorkflow(p),activeView:'overview',
@@ -27,8 +27,8 @@ test('overview labels progress as BuildMate workflow and explicitly avoids const
     guidedState:{action:'loads.permanent',values:guidedDefaultValues('loads.permanent')},
     evidenceState:{},
   });
-  assert.ok(html.includes('Luồng BuildMate'));
-  assert.ok(html.includes('không phải phê duyệt'));
+  assert.ok(html.includes('Hành trình xây nhà'));
+  assert.ok(html.includes('không thay thế phê duyệt chuyên môn'));
   assert.ok(!html.includes('A→Z ready'));
   assert.ok(html.includes('aria-current="page"'));
   assert.ok(html.includes('aria-label="Thêm tác vụ"'));
