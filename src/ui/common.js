@@ -41,7 +41,8 @@ export function metric(label,value,meta='') {
 
 export function input(label,path,obj,type='text',min='',max='',step='') {
   const value=obj?.value??'';
-  return '<label>'+escapeHtml(label)+'<input data-path="'+escapeHtml(path)+'" type="'+type+'" value="'+escapeHtml(value)+'" min="'+min+'" max="'+max+'" step="'+step+'">'+statusBadge(obj?.state??'missing')+'</label>';
+  const numeric=type==='number'?' numeric-field':'';
+  return '<label class="field-control'+numeric+'"><span class="field-label"><span>'+escapeHtml(label)+'</span>'+statusBadge(obj?.state??'missing')+'</span><input data-path="'+escapeHtml(path)+'" type="'+type+'" value="'+escapeHtml(value)+'" min="'+min+'" max="'+max+'" step="'+step+'"></label>';
 }
 
 export function option(current,value,label) {
