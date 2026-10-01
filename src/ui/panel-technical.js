@@ -93,7 +93,7 @@ export function technicalPanel(project,workflow) {
         <details class="technical-details">
           <summary>Xem điện & nước chi tiết</summary>
           <div class="details-body">
-            ${scheduleTable('Circuit điện',m.mep.electrical.circuits,['id','label','count','cableMm2','breakerA'],['Mã','Nhóm','SL','Cáp mm²','CB A'])}
+            ${scheduleTable('Mạch điện',m.mep.electrical.circuits,['id','label','count','cableMm2','breakerA'],['Mã','Nhóm','SL','Cáp mm²','CB A'])}
             <div class="two-col">
               <div>
                 <h3>Cáp</h3>
@@ -162,7 +162,7 @@ export function technicalPanel(project,workflow) {
       <details class="technical-details">
         <summary>Các dữ liệu còn cần bổ sung</summary>
         <div class="details-body">
-          <p class="hint">Phần mềm đã tạo đủ package để lập kế hoạch. Các mục dưới đây chỉ cần khi muốn tiến gần hơn tới hồ sơ thi công.</p>
+          <p class="hint">BuildMate đã tạo đủ dữ liệu sơ bộ để lập kế hoạch. Các mục dưới đây chỉ cần khi muốn tiến gần hơn tới hồ sơ thi công.</p>
           <div class="blocker-list">${pack.blockers.map(x=>'<div class="alert">'+escapeHtml(x)+'</div>').join('')}</div>
         </div>
       </details>
