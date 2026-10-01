@@ -2,27 +2,27 @@ const NUMBER = '(\\d+(?:[.,]\\d+)?)';
 
 export function interpretHomeownerText(text) {
   const source=String(text??'').trim();
-  const normalized = source.toLowerCase().replace(',', '.');
+  const normalized = source.toLowerCase();
   const updates = [];
   const notes = [];
 
   const size = normalized.match(new RegExp(`${NUMBER}\\s*[x×*]\\s*${NUMBER}`));
   if (size) {
-    updates.push({ path: 'land.widthM', value: Number(size[1]) });
-    updates.push({ path: 'land.lengthM', value: Number(size[2]) });
+    updates.push({ path: 'land.widthM', value: parseNumber(size[1]) });
+    updates.push({ path: 'land.lengthM', value: parseNumber(size[2]) });
   }
 
   const budget = normalized.match(new RegExp(`${NUMBER}\\s*(tỷ|ty)`));
-  if (budget) updates.push({ path: 'budget.totalVnd', value: Math.round(Number(budget[1]) * 1_000_000_000) });
+  if (budget) updates.push({ path: 'budget.totalVnd', value: Math.round(parseNumber(budget[1]) * 1_000_000_000) });
 
   const people = normalized.match(new RegExp(`${NUMBER}\\s*(người|nguoi)`));
-  if (people) updates.push({ path: 'household.people', value: Number(people[1]) });
+  if (people) updates.push({ path: 'household.people', value: parseNumber(people[1]) });
 
   const bedrooms = normalized.match(new RegExp(`${NUMBER}\\s*(phòng ngủ|phong ngu)`));
-  if (bedrooms) updates.push({ path: 'household.bedrooms', value: Number(bedrooms[1]) });
+  if (bedrooms) updates.push({ path: 'household.bedrooms', value: parseNumber(bedrooms[1]) });
 
   const storeys = normalized.match(new RegExp(`${NUMBER}\\s*(tầng|tang)`));
-  if (storeys) updates.push({ path: 'design.storeys', value: Number(storeys[1]) });
+  if (storeys) updates.push({ path: 'design.storeys', value: parseNumber(storeys[1]) });
 
   const province=extractProvince(source);
   if (province) updates.push({ path:'location.province', value:province });
@@ -68,4 +68,9 @@ function extractProvince(text) {
 
 function normalizeVietnamese(value) {
   return String(value??'').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/đ/g,'d').toLowerCase();
+}
+
+
+function parseNumber(value) {
+  return Number(String(value).replace(',','.'));
 }
