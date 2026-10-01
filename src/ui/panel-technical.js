@@ -1,6 +1,7 @@
 import { escapeHtml,metric,input } from './common.js';
 import { money,number } from './render.js';
 import { journeyNextStep } from './journey-next.js';
+import { homeownerNextActions } from '../engine/homeowner-next-actions.js';
 
 export function technicalPanel(project,workflow) {
   const pack=workflow.results?.technicalPackage;
@@ -11,6 +12,7 @@ export function technicalPanel(project,workflow) {
   const footing=m.structural.foundations[0];
   const slab=m.structural.slabs[0];
   const boqGroups=groupBoq(b.rows);
+  const nextDataActions=homeownerNextActions(project,{limit:3});
 
   return `
     <section class="panel-block technical-hero">
@@ -33,6 +35,7 @@ export function technicalPanel(project,workflow) {
         <span class="technical-readiness-count">${pack.blockers.length} mục cần bổ sung</span>
       </div>
       ${pack.blockers.length?'<div class="technical-next-gap"><b>Cần bổ sung tiếp:</b> '+escapeHtml(pack.blockers[0])+(pack.blockers.length>1?' · và '+(pack.blockers.length-1)+' mục khác':'')+'</div>':''}
+      ${supplementActions(nextDataActions)}
     </section>
 
     <section class="panel-block">
@@ -122,8 +125,8 @@ export function technicalPanel(project,workflow) {
       <details class="technical-details">
         <summary>Xem BOQ đầy đủ</summary>
         <div class="details-body">
-          <div class="table-wrap"><table class="technical-table"><thead><tr><th>Nhóm</th><th>Hạng mục</th><th>KL</th><th>ĐVT</th><th>Đơn giá</th><th>Thành tiền</th><th>Nguồn giá</th></tr></thead><tbody>
-          ${b.rows.map(r=>`<tr><td>${escapeHtml(sectionLabel(r.section))}</td><td>${escapeHtml(r.label)}</td><td>${escapeHtml(r.quantity)}</td><td>${escapeHtml(r.unit)}</td><td>${r.unitPriceVnd==null?'—':money(r.unitPriceVnd)}</td><td>${r.amountVnd==null?'—':money(r.amountVnd)}</td><td><small>${escapeHtml(r.priceSource??'')}</small></td></tr>`).join('')}
+          <div class="table-wrap borderless-table-wrap"><table class="technical-table boq-table"><colgroup><col class="col-group"><col class="col-item"><col class="col-qty"><col class="col-unit"><col class="col-price"><col class="col-total"><col class="col-source"></colgroup><thead><tr><th>Nhóm</th><th>Hạng mục</th><th class="numeric-cell">KL</th><th class="center-cell">ĐVT</th><th class="numeric-cell">Đơn giá</th><th class="numeric-cell">Thành tiền</th><th>Nguồn giá</th></tr></thead><tbody>
+          ${b.rows.map(r=>`<tr><td>${escapeHtml(sectionLabel(r.section))}</td><td>${escapeHtml(r.label)}</td><td class="numeric-cell">${escapeHtml(r.quantity)}</td><td class="center-cell">${escapeHtml(r.unit)}</td><td class="numeric-cell">${r.unitPriceVnd==null?'—':money(r.unitPriceVnd)}</td><td class="numeric-cell">${r.amountVnd==null?'—':money(r.amountVnd)}</td><td><small>${escapeHtml(r.priceSource??'')}</small></td></tr>`).join('')}
           </tbody></table></div>
           <details class="advanced"><summary>Dòng chưa có đơn giá (${b.unpricedItems.length})</summary>${simpleRows(b.unpricedItems.map(x=>[x.label,number(x.quantity,x.unit),sectionLabel(x.section)]))}</details>
         </div>
@@ -135,27 +138,35 @@ export function technicalPanel(project,workflow) {
         <summary>Tùy chỉnh phương án nâng cao</summary>
         <div class="details-body">
           <p class="hint">Chỉ cần dùng khi bạn muốn thử thay đổi kích thước cấu kiện. Mỗi thay đổi sẽ tự cập nhật vật tư và BOQ.</p>
-          <div class="form-grid">
-            ${input('Chiều cao tầng (m)','technicalModel.floorHeightM',project.technicalModel.floorHeightM,'number','2.6','5','0.1')}
-            ${input('Sàn dày (mm)','technicalModel.slabThicknessMm',project.technicalModel.slabThicknessMm,'number','80','250','5')}
-            ${input('Thép sàn Ø (mm)','technicalModel.slabBarDiameterMm',project.technicalModel.slabBarDiameterMm,'number','6','20','1')}
-            ${input('Bước thép sàn (mm)','technicalModel.slabBarSpacingMm',project.technicalModel.slabBarSpacingMm,'number','80','300','10')}
-            ${input('Dầm b (mm)','technicalModel.beamWidthMm',project.technicalModel.beamWidthMm,'number','150','500','10')}
-            ${input('Dầm h (mm)','technicalModel.beamDepthMm',project.technicalModel.beamDepthMm,'number','250','900','10')}
-            ${input('Thép dọc dầm - số thanh','technicalModel.beamMainCount',project.technicalModel.beamMainCount,'number','2','12','1')}
-            ${input('Thép dọc dầm Ø (mm)','technicalModel.beamMainDiameterMm',project.technicalModel.beamMainDiameterMm,'number','10','32','1')}
-            ${input('Đai dầm Ø (mm)','technicalModel.beamStirrupDiameterMm',project.technicalModel.beamStirrupDiameterMm,'number','6','14','1')}
-            ${input('Bước đai dầm (mm)','technicalModel.beamStirrupSpacingMm',project.technicalModel.beamStirrupSpacingMm,'number','80','300','10')}
-            ${input('Cột dưới b (mm)','technicalModel.lowerColumnWidthMm',project.technicalModel.lowerColumnWidthMm,'number','180','600','10')}
-            ${input('Cột dưới h (mm)','technicalModel.lowerColumnDepthMm',project.technicalModel.lowerColumnDepthMm,'number','180','600','10')}
-            ${input('Cột trên b (mm)','technicalModel.upperColumnWidthMm',project.technicalModel.upperColumnWidthMm,'number','180','600','10')}
-            ${input('Cột trên h (mm)','technicalModel.upperColumnDepthMm',project.technicalModel.upperColumnDepthMm,'number','180','600','10')}
-            ${input('Móng dài (m)','technicalModel.footingLengthM',project.technicalModel.footingLengthM,'number','0.6','4','0.1')}
-            ${input('Móng rộng (m)','technicalModel.footingWidthM',project.technicalModel.footingWidthM,'number','0.6','4','0.1')}
-            ${input('Móng dày (m)','technicalModel.footingThicknessM',project.technicalModel.footingThicknessM,'number','0.2','1.2','0.05')}
-            ${input('Thép móng Ø (mm)','technicalModel.footingBarDiameterMm',project.technicalModel.footingBarDiameterMm,'number','8','25','1')}
-            ${input('Bước thép móng (mm)','technicalModel.footingBarSpacingMm',project.technicalModel.footingBarSpacingMm,'number','80','300','10')}
-            ${input('Tường dày (mm)','technicalModel.wallThicknessMm',project.technicalModel.wallThicknessMm,'number','80','220','10')}
+          <div class="parameter-groups">
+            <section class="parameter-group"><h3>Chung & sàn</h3><div class="form-grid compact-form technical-parameter-grid">
+              ${input('Chiều cao tầng (m)','technicalModel.floorHeightM',project.technicalModel.floorHeightM,'number','2.6','5','0.1')}
+              ${input('Sàn dày (mm)','technicalModel.slabThicknessMm',project.technicalModel.slabThicknessMm,'number','80','250','5')}
+              ${input('Thép sàn Ø (mm)','technicalModel.slabBarDiameterMm',project.technicalModel.slabBarDiameterMm,'number','6','20','1')}
+              ${input('Bước thép sàn (mm)','technicalModel.slabBarSpacingMm',project.technicalModel.slabBarSpacingMm,'number','80','300','10')}
+            </div></section>
+            <section class="parameter-group"><h3>Dầm</h3><div class="form-grid compact-form technical-parameter-grid">
+              ${input('Dầm b (mm)','technicalModel.beamWidthMm',project.technicalModel.beamWidthMm,'number','150','500','10')}
+              ${input('Dầm h (mm)','technicalModel.beamDepthMm',project.technicalModel.beamDepthMm,'number','250','900','10')}
+              ${input('Thép dọc - số thanh','technicalModel.beamMainCount',project.technicalModel.beamMainCount,'number','2','12','1')}
+              ${input('Thép dọc Ø (mm)','technicalModel.beamMainDiameterMm',project.technicalModel.beamMainDiameterMm,'number','10','32','1')}
+              ${input('Đai Ø (mm)','technicalModel.beamStirrupDiameterMm',project.technicalModel.beamStirrupDiameterMm,'number','6','14','1')}
+              ${input('Bước đai (mm)','technicalModel.beamStirrupSpacingMm',project.technicalModel.beamStirrupSpacingMm,'number','80','300','10')}
+            </div></section>
+            <section class="parameter-group"><h3>Cột</h3><div class="form-grid compact-form technical-parameter-grid">
+              ${input('Cột dưới b (mm)','technicalModel.lowerColumnWidthMm',project.technicalModel.lowerColumnWidthMm,'number','180','600','10')}
+              ${input('Cột dưới h (mm)','technicalModel.lowerColumnDepthMm',project.technicalModel.lowerColumnDepthMm,'number','180','600','10')}
+              ${input('Cột trên b (mm)','technicalModel.upperColumnWidthMm',project.technicalModel.upperColumnWidthMm,'number','180','600','10')}
+              ${input('Cột trên h (mm)','technicalModel.upperColumnDepthMm',project.technicalModel.upperColumnDepthMm,'number','180','600','10')}
+            </div></section>
+            <section class="parameter-group"><h3>Móng & tường</h3><div class="form-grid compact-form technical-parameter-grid">
+              ${input('Móng dài (m)','technicalModel.footingLengthM',project.technicalModel.footingLengthM,'number','0.6','4','0.1')}
+              ${input('Móng rộng (m)','technicalModel.footingWidthM',project.technicalModel.footingWidthM,'number','0.6','4','0.1')}
+              ${input('Móng dày (m)','technicalModel.footingThicknessM',project.technicalModel.footingThicknessM,'number','0.2','1.2','0.05')}
+              ${input('Thép móng Ø (mm)','technicalModel.footingBarDiameterMm',project.technicalModel.footingBarDiameterMm,'number','8','25','1')}
+              ${input('Bước thép móng (mm)','technicalModel.footingBarSpacingMm',project.technicalModel.footingBarSpacingMm,'number','80','300','10')}
+              ${input('Tường dày (mm)','technicalModel.wallThicknessMm',project.technicalModel.wallThicknessMm,'number','80','220','10')}
+            </div></section>
           </div>
         </div>
       </details>
@@ -196,12 +207,13 @@ function sectionLabel(section){
 }
 function scheduleTable(title,rows,keys,labels){
   if(!rows?.length) return '';
-  return `<h3>${escapeHtml(title)}</h3><div class="table-wrap"><table class="technical-table"><thead><tr>${labels.map(x=>'<th>'+escapeHtml(x)+'</th>').join('')}</tr></thead><tbody>${rows.map(row=>'<tr>'+keys.map(k=>'<td>'+escapeHtml(formatValue(row[k]))+'</td>').join('')+'</tr>').join('')}</tbody></table></div>`;
+  const numericKeys=new Set(['count','cableMm2','breakerA']);
+  return `<h3>${escapeHtml(title)}</h3><div class="table-wrap borderless-table-wrap"><table class="technical-table compact-data-table"><thead><tr>${labels.map((x,index)=>'<th class="'+(numericKeys.has(keys[index])?'numeric-cell':'')+'">'+escapeHtml(x)+'</th>').join('')}</tr></thead><tbody>${rows.map(row=>'<tr>'+keys.map(k=>'<td class="'+(numericKeys.has(k)?'numeric-cell':'')+'">'+escapeHtml(formatValue(row[k]))+'</td>').join('')+'</tr>').join('')}</tbody></table></div>`;
 }
 function memberSchedule(title,rows,type){
   if(!rows?.length) return '';
-  const body=rows.map(row=>`<tr><td>${escapeHtml(row.id)}</td><td>${escapeHtml(memberQuantity(row,type))}</td><td>${escapeHtml(memberSize(row,type))}</td><td>${escapeHtml(rebarDetail(row,type))}</td></tr>`).join('');
-  return `<h3>${escapeHtml(title)}</h3><div class="table-wrap"><table class="technical-table"><thead><tr><th>Mã</th><th>SL/Quy mô</th><th>Kích thước</th><th>Cốt thép</th></tr></thead><tbody>${body}</tbody></table></div>`;
+  const body=rows.map(row=>`<tr><td>${escapeHtml(row.id)}</td><td>${escapeHtml(memberQuantity(row,type))}</td><td class="numeric-cell">${escapeHtml(memberSize(row,type))}</td><td>${escapeHtml(rebarDetail(row,type))}</td></tr>`).join('');
+  return `<h3>${escapeHtml(title)}</h3><div class="table-wrap borderless-table-wrap"><table class="technical-table member-schedule-table"><colgroup><col class="member-code"><col class="member-qty"><col class="member-size"><col class="member-rebar"></colgroup><thead><tr><th>Mã</th><th>SL/Quy mô</th><th class="numeric-cell">Kích thước</th><th>Cốt thép</th></tr></thead><tbody>${body}</tbody></table></div>`;
 }
 function memberQuantity(r,type){
   if(type==='slab') return (r.level??'')+' · '+(r.areaM2??'')+' m²';
@@ -227,6 +239,11 @@ function rebarDetail(r,type){
   return '—';
 }
 function simpleRows(rows){
-  return '<div class="material-grid">'+rows.map(r=>'<div class="material-row"><span>'+escapeHtml(r[0])+'</span><b>'+escapeHtml(r[1])+'</b><small>'+escapeHtml(r[2]??'')+'</small></div>').join('')+'</div>';
+  return '<div class="material-grid">'+rows.map(r=>'<div class="material-row"><span>'+escapeHtml(r[0])+'</span><b class="numeric-cell">'+escapeHtml(r[1])+'</b><small>'+escapeHtml(r[2]??'')+'</small></div>').join('')+'</div>';
+}
+
+function supplementActions(actions){
+  if(!actions?.length) return '';
+  return `<div class="data-supplement-bar"><div><strong>Bổ sung dữ liệu</strong><span>Đi thẳng tới nơi nhập dữ liệu đang thiếu.</span></div><div class="data-supplement-actions">${actions.map(action=>`<button type="button" class="ghost" data-go-view="${escapeHtml(action.view)}" ${action.guidedAction?`data-guided-action="${escapeHtml(action.guidedAction)}"`:''}>${escapeHtml(action.title)}</button>`).join('')}</div></div>`;
 }
 function formatValue(v){return v==null?'—':typeof v==='object'?JSON.stringify(v):String(v);}
