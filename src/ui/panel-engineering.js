@@ -10,13 +10,13 @@ export function engineeringPanel(project,workflow,{calculatorCapabilities=[],cal
   const recent=(project.engineeringCalculations??[]).slice().reverse();
   return `
     <section class="panel-block">
-      <div class="section-head"><div><h2>Trạng thái kỹ thuật</h2><p class="hint">Mỗi bộ môn chỉ được ready khi có calculation run và input/evidence phù hợp.</p></div></div>
+      <div class="section-head"><div><h2>Kiểm tra kỹ thuật</h2><p class="hint">Mỗi nhóm chỉ được đánh dấu đã có kết quả khi BuildMate đã tính bằng dữ liệu phù hợp. Mục thiếu dữ liệu sẽ được báo rõ để bạn biết cần bổ sung gì.</p></div></div>
       <div class="engineering-grid">${engineeringCards(engineering)}</div>
     </section>
 
     <section class="panel-block guided-calculator">
       <div class="section-head">
-        <div><span class="eyebrow">Guided calculation</span><h2>Tính mà không cần JSON</h2><p class="hint">${escapeHtml(spec.description)}</p></div>
+        <div><span class="eyebrow">TÍNH THEO TIÊU CHUẨN</span><h2>Chọn phép tính cần kiểm tra</h2><p class="hint">${escapeHtml(spec.description)}</p></div>
         <span class="badge">${escapeHtml(spec.group)}</span>
       </div>
       <div class="guided-tabs">${guidedCalculatorSpecs().map(item=>`
@@ -24,20 +24,20 @@ export function engineeringPanel(project,workflow,{calculatorCapabilities=[],cal
       ${spec.warning?'<div class="alert">'+escapeHtml(spec.warning)+'</div>':''}
       <form id="guided-calculator-form" class="guided-form" data-guided-action="${escapeHtml(spec.id)}">
         ${spec.fields.map(field=>guidedField(field,guidedState.values??{})).join('')}
-        <div class="guided-submit"><button type="submit" class="icon-button primary-icon" title="Tính theo tiêu chuẩn" aria-label="Tính theo tiêu chuẩn">${icon('calculator')}</button><small>Kết quả sẽ được lưu vào lịch sử project.</small></div>
+        <div class="guided-submit"><button type="submit" class="guided-primary-action" title="Tính theo tiêu chuẩn" aria-label="Tính theo tiêu chuẩn">${icon('calculator')}<span>Tính theo tiêu chuẩn</span></button><small>Kết quả sẽ tự lưu vào lịch sử dự án.</small></div>
       </form>
       ${guidedState.error?'<div class="alert">'+escapeHtml(guidedState.error)+'</div>':''}
       ${guidedState.output?guidedResult(guidedState.record??null,guidedState.output):''}
     </section>
 
     <section class="panel-block">
-      <div class="section-head"><div><h2>Xem cách tính</h2><p class="hint">Mỗi calculation run giữ input, standard, kết quả và digest.</p></div><span>${recent.length} run</span></div>
-      <div class="calculation-history">${recent.length?recent.map(calculationCard).join(''):'<p class="empty-state">Chưa có calculation run. Chọn một wizard ở trên để bắt đầu.</p>'}</div>
+      <div class="section-head"><div><h2>Lịch sử tính toán</h2><p class="hint">Mở từng kết quả để xem tiêu chuẩn, dữ liệu đã dùng và cách BuildMate tính.</p></div><span>${recent.length} kết quả</span></div>
+      <div class="calculation-history">${recent.length?recent.map(calculationCard).join(''):'<p class="empty-state">Chưa có kết quả tính toán. Chọn một phép tính ở trên để bắt đầu.</p>'}</div>
     </section>
 
     <section class="panel-block">
       <details class="advanced expert-zone">
-        <summary>Chế độ chuyên gia · JSON + project evidence</summary>
+        <summary>Chế độ chuyên gia · JSON + hồ sơ chứng minh</summary>
         ${expertCalculator(calculatorCapabilities,calculatorState)}
         ${evidencePanel(project,evidenceState)}
       </details>
@@ -59,7 +59,7 @@ function engineeringCards(engineering) {
 function card(label,module) {
   const status=module?.status??'blocked';
   const value=module?.result?.value!==undefined?String(module.result.value)+' '+String(module.result.unit??''):'';
-  return `<article class="engineering-card"><div><strong>${escapeHtml(label)}</strong><span class="badge">${escapeHtml(status)}</span></div><p>${escapeHtml(value||module?.message||'Chưa có kết quả')}</p></article>`;
+  return `<article class="engineering-card"><div><strong>${escapeHtml(label)}</strong><span class="badge engineering-status ${escapeHtml(status)}">${escapeHtml(statusLabel(status))}</span></div><p>${escapeHtml(value||module?.message||'Chưa có kết quả')}</p></article>`;
 }
 
 function guidedField(field,values) {
@@ -73,9 +73,9 @@ function guidedField(field,values) {
 
 function guidedResult(record,output) {
   const explain=record?explainCalculation(record):null;
-  if (output.status==='blocked') return '<div class="alert">Blocked: '+escapeHtml(output.reason??'Thiếu evidence')+'</div>';
+  if (output.status==='blocked') return '<div class="alert">Chưa thể tính: '+escapeHtml(output.reason??'Thiếu dữ liệu chứng minh')+'</div>';
   if (!explain) return '<div class="calc-output"><pre>'+escapeHtml(JSON.stringify(output.result,null,2))+'</pre></div>';
-  return `<div class="explain-box"><div class="section-head"><div><b>Kết quả</b><small>${escapeHtml(explain.standard)}</small></div><span class="badge">standards-backed</span></div>
+  return `<div class="explain-box"><div class="section-head"><div><b>Kết quả</b><small>${escapeHtml(explain.standard)}</small></div><span class="badge">Theo tiêu chuẩn</span></div>
     <div class="explain-metrics">${explain.summary.map(x=>metric(x.label,escapeHtml(x.value)+' '+escapeHtml(x.unit))).join('')}</div>
     ${explain.formula?'<div class="formula">'+escapeHtml(explain.formula)+'</div>':''}
     <ol>${explain.steps.map(x=>'<li>'+escapeHtml(x)+'</li>').join('')}</ol>
@@ -88,8 +88,8 @@ function calculationCard(record) {
     <div class="explain-metrics">${explain.summary.map(x=>metric(x.label,escapeHtml(x.value)+' '+escapeHtml(x.unit))).join('')}</div>
     ${explain.formula?'<div class="formula">'+escapeHtml(explain.formula)+'</div>':''}
     <ol>${explain.steps.map(x=>'<li>'+escapeHtml(x)+'</li>').join('')}</ol>
-    <small>digest: ${escapeHtml(record.calculationDigest?.slice(0,20)??'')}… · ${escapeHtml(record.createdAt)}</small>
-    <details class="raw-detail"><summary>Raw input / result</summary><pre>${escapeHtml(JSON.stringify({input:record.input,result:record.result,evidenceAudit:record.evidenceAudit},null,2))}</pre></details>
+    <small>Ngày tính: ${escapeHtml(record.createdAt)}</small>
+    <details class="raw-detail"><summary>Dữ liệu đầu vào / kết quả thô</summary><pre>${escapeHtml(JSON.stringify({input:record.input,result:record.result,evidenceAudit:record.evidenceAudit,calculationDigest:record.calculationDigest},null,2))}</pre></details>
   </details>`;
 }
 
@@ -128,4 +128,14 @@ function evidencePanel(project,state) {
     </form>
     <div class="evidence-list">${evidence.map(item=>`<article><div><b>#${item.issue} · ${escapeHtml(item.type)}</b><small>${escapeHtml(item.source)} · ${escapeHtml(item.documentId)}</small></div><button class="ghost danger icon-button" data-remove-engineering-evidence="${item.id}" title="Xóa evidence" aria-label="Xóa evidence">${icon('trash')}</button></article>`).join('')}</div>
   </div>`;
+}
+
+
+function statusLabel(status) {
+  return ({
+    ready:'Đã có kết quả',
+    blocked:'Cần dữ liệu',
+    warning:'Cần kiểm tra',
+    complete:'Đã hoàn tất',
+  })[status]??status;
 }
