@@ -7,11 +7,11 @@ import { reportPanel } from './panel-report.js';
 import { escapeHtml,icon } from './common.js';
 
 const NAV=[
-  ['overview','Tổng quan','home'],
+  ['overview','Nhà của tôi','home'],
   ['project','Thông tin nhà','house'],
+  ['pricing','Chi phí','wallet'],
+  ['technical','Hồ sơ','clipboard'],
   ['engineering','Tính toán','calculator'],
-  ['technical','Hồ sơ kỹ thuật','clipboard'],
-  ['pricing','Giá & ngân sách','wallet'],
   ['report','Báo cáo','fileText'],
 ];
 
@@ -20,16 +20,22 @@ export function shell({
   guidedState={},evidenceState={},activeView='overview'
 }) {
   return `
-    <div class="app-shell">
-      <aside class="sidebar">
-        <div class="brand" title="BuildMate · Homeowner Beta" aria-label="BuildMate · Homeowner Beta"><span class="brand-mark">B</span></div>
-        <nav class="side-nav">${NAV.map(([id,label,iconName])=>`
-          <button type="button" data-view="${id}" class="${activeView===id?'active':''}" aria-current="${activeView===id?'page':'false'}" title="${label}" aria-label="${label}"><span class="nav-icon">${icon(iconName)}</span><span class="nav-label">${label}</span></button>`).join('')}</nav>
-        
+    <div class="app-shell journey-shell">
+      <aside class="sidebar journey-sidebar">
+        <div class="brand journey-brand" title="BuildMate" aria-label="BuildMate">
+          <span class="brand-mark">B</span><span class="brand-name">BuildMate</span>
+        </div>
+        <nav class="side-nav journey-nav">${NAV.map(([id,label,iconName])=>`
+          <button type="button" data-view="${id}" class="${activeView===id?'active':''}" aria-current="${activeView===id?'page':'false'}" title="${label}" aria-label="${label}">
+            <span class="nav-icon">${icon(iconName)}</span><span class="nav-label">${label}</span>
+          </button>`).join('')}</nav>
+        <div class="sidebar-guide">
+          <span>✨</span><div><strong>BuildMate AI</strong><small>Trợ lý xây nhà của bạn</small></div>
+        </div>
       </aside>
       <div class="workspace">
         ${topbar(project,projects)}
-        <main class="page-content">
+        <main class="page-content journey-content">
           ${viewContent(activeView,{project,workflow,calculatorCapabilities,calculatorState,guidedState,evidenceState})}
         </main>
       </div>
@@ -37,9 +43,11 @@ export function shell({
 }
 
 function topbar(project,projects) {
-  return `<header class="topbar">
-    <div class="project-switcher">
-      <select id="project-select">${projects.map(item=>`<option value="${item.id}" ${item.id===project.id?'selected':''}>${escapeHtml(item.name)}</option>`).join('')}</select>
+  return `<header class="topbar journey-topbar">
+    <div class="project-switcher journey-project-switcher">
+      <span class="project-home-icon">⌂</span>
+      <div><small>Ngôi nhà của bạn</small>
+      <select id="project-select">${projects.map(item=>`<option value="${item.id}" ${item.id===project.id?'selected':''}>${escapeHtml(item.name)}</option>`).join('')}</select></div>
       <input id="project-name" value="${escapeHtml(project.name)}" aria-label="Tên dự án">
     </div>
     <div class="top-actions">
@@ -47,11 +55,11 @@ function topbar(project,projects) {
       <button type="button" id="run-demo-a2z" class="ghost icon-button" title="Chạy demo A→Z" aria-label="Chạy demo A→Z">${icon('play')}</button>
       <button type="button" id="new-project" class="ghost icon-button" title="Dự án mới" aria-label="Dự án mới">${icon('plus')}</button>
       <details class="menu-pop"><summary aria-label="Thêm tác vụ" title="Thêm tác vụ">${icon('more')}</summary><div>
-        <button id="export-html" class="ghost menu-action" title="Xuất báo cáo HTML" aria-label="Xuất báo cáo HTML">${icon('download')}<span>HTML</span></button>
-        <button id="export-csv" class="ghost menu-action" title="Xuất BOQ kỹ thuật CSV" aria-label="Xuất BOQ kỹ thuật CSV">${icon('download')}<span>BOQ CSV</span></button>
-        <button id="export-json" class="ghost menu-action" title="Xuất JSON" aria-label="Xuất JSON">${icon('download')}<span>JSON</span></button>
-        <button id="import-json" class="ghost menu-action" title="Nhập JSON" aria-label="Nhập JSON">${icon('upload')}<span>Nhập</span></button>
-        <button id="delete-project" class="ghost danger menu-action" title="Xóa dự án" aria-label="Xóa dự án">${icon('trash')}<span>Xóa</span></button>
+        <button id="export-html" class="ghost menu-action">${icon('download')}<span>HTML</span></button>
+        <button id="export-csv" class="ghost menu-action">${icon('download')}<span>BOQ CSV</span></button>
+        <button id="export-json" class="ghost menu-action">${icon('download')}<span>JSON</span></button>
+        <button id="import-json" class="ghost menu-action">${icon('upload')}<span>Nhập</span></button>
+        <button id="delete-project" class="ghost danger menu-action">${icon('trash')}<span>Xóa</span></button>
       </div></details>
       <input id="import-json-file" type="file" accept="application/json" hidden>
     </div>
