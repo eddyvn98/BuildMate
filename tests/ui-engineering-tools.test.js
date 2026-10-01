@@ -37,10 +37,29 @@ test('homeowner shell exposes journey navigation and prioritized next actions',(
 
 test('engineering view exposes guided calculators and keeps raw JSON in expert mode',()=>{
   const {html}=ctx('engineering');
-  assert.ok(html.includes('Tính mà không cần JSON'));
+  assert.ok(html.includes('Chọn phép tính cần kiểm tra'));
   assert.ok(html.includes('Lưu lượng nước thiết kế'));
   assert.ok(html.includes('Chế độ chuyên gia'));
   assert.ok(html.includes('Raw standards calculator'));
   assert.ok(html.includes('water.design-flow'));
   assert.ok(!html.includes('Tĩnh tải giả định'));
+});
+
+
+test('pricing view uses homeowner language and hides internal market terminology',()=>{
+  const {html}=ctx('pricing');
+  assert.ok(html.includes('Chi phí xây nhà dự kiến'));
+  assert.ok(html.includes('Khoảng tham khảo'));
+  assert.ok(html.includes('Tôi đã có báo giá riêng từ nhà thầu'));
+  assert.ok(!html.includes('Quick market price'));
+  assert.ok(!html.includes(' confidence'));
+  assert.ok(!html.includes('snapshot fresh'));
+});
+
+test('technical view distinguishes planning package from construction readiness',()=>{
+  const {html}=ctx('technical');
+  assert.ok(html.includes('Hồ sơ này dùng để lập kế hoạch sơ bộ'));
+  assert.ok(html.includes('Nhóm đã có tính toán'));
+  assert.ok(html.includes('không phải mức sẵn sàng thi công'));
+  assert.ok(html.includes('Các dữ liệu còn cần bổ sung'));
 });

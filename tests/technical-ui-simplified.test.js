@@ -35,15 +35,15 @@ test('expert-density content remains available but behind progressive disclosure
   assert.ok(html.includes('<summary>Xem điện & nước chi tiết</summary>'));
   assert.ok(html.includes('<summary>Xem BOQ đầy đủ</summary>'));
   assert.ok(html.includes('<summary>Tùy chỉnh phương án nâng cao</summary>'));
-  assert.ok(html.includes('<summary>Trạng thái kỹ thuật & các việc còn thiếu</summary>'));
+  assert.ok(html.includes('<summary>Các dữ liệu còn cần bổ sung</summary>'));
   assert.ok(!html.includes('<details class="advanced" open>'));
 });
 
 test('technical UI replaces jargon-heavy section labels with homeowner language',()=>{
   const html=renderTechnical();
   assert.ok(html.includes('Sơ bộ'));
-  assert.ok(html.includes('Phạm vi tính toán'));
-  assert.ok(html.includes('Dòng chưa có đơn giá'));
+  assert.ok(html.includes('Nhóm đã có tính toán'));
+  assert.ok(html.includes('dòng chưa có đơn giá'));
   assert.ok(!html.includes('preliminary-technical-package'));
   assert.ok(!html.includes('Calculation coverage'));
 });

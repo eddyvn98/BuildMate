@@ -300,3 +300,32 @@ label{font-size:13px}
   .top-action-label{display:none}
   .top-new-project{width:44px!important;padding:0;justify-content:center}
 }
+
+
+/* Homeowner UX v1.2: clearer pricing, technical readiness and engineering */
+.quote-details>summary{cursor:pointer;display:flex;flex-direction:column;gap:4px;padding:2px 0;list-style:none}
+.quote-details>summary::-webkit-details-marker{display:none}
+.quote-details>summary strong{font-size:15px;color:var(--ink)}
+.quote-details>summary span{font-size:12px;color:var(--muted)}
+.quote-details[open]>summary{padding-bottom:16px;border-bottom:1px solid var(--line)}
+.quote-details-body{padding-top:18px}
+
+.technical-readiness{margin-top:16px;border:1px solid #cfe2d8;background:#f4faf6;border-radius:14px;padding:14px;display:flex;justify-content:space-between;gap:14px;align-items:center}
+.technical-readiness>div{display:grid;gap:3px}
+.technical-readiness strong{font-size:14px}
+.technical-readiness span{font-size:12px;color:var(--muted);line-height:1.45}
+.technical-readiness-count{white-space:nowrap;background:#fff;border:1px solid #dbe8e1;border-radius:999px;padding:6px 9px;color:var(--accent)!important;font-weight:750}
+.technical-next-gap{margin-top:10px;padding:11px 13px;border-radius:12px;background:var(--warn-bg);color:#72510c;font-size:12px;line-height:1.5}
+
+.guided-primary-action{display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 14px}
+.guided-primary-action span{font-size:13px;font-weight:750}
+.engineering-status.ready{background:var(--good-bg);color:var(--good)}
+.engineering-status.blocked{background:var(--warn-bg);color:#7a5700}
+.engineering-status.warning{background:var(--warn-bg);color:#7a5700}
+.pricing-hero .dashboard-metrics .metric:nth-child(2) strong{font-size:15px;line-height:1.35}
+
+@media(max-width:760px){
+  .technical-readiness{align-items:flex-start;flex-direction:column}
+  .technical-readiness-count{white-space:normal}
+  .guided-submit{align-items:flex-start;flex-direction:column}
+}

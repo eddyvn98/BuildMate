@@ -23,7 +23,7 @@ test('local engineering calculation history renders human explanation and immuta
     guidedState:{action:'water.design-flow',values:guidedDefaultValues('water.design-flow'),output:null,error:null,record:null},
     evidenceState:{error:null},
   });
-  assert.ok(html.includes('Xem cách tính'));
+  assert.ok(html.includes('Lịch sử tính toán'));
   assert.ok(html.includes('Lưu lượng nước thiết kế'));
   assert.ok(html.includes(p.engineeringCalculations[0].calculationDigest.slice(0,20)));
 });

@@ -43,5 +43,5 @@ test('technical UI exposes editable preliminary parameters and package completio
   assert.ok(html.includes('Tùy chỉnh phương án nâng cao'));
   assert.ok(html.includes('technicalModel.slabThicknessMm'));
   assert.ok(html.includes('technicalModel.footingLengthM'));
-  assert.ok(html.includes('Trạng thái kỹ thuật & các việc còn thiếu'));
+  assert.ok(html.includes('Các dữ liệu còn cần bổ sung'));
 });
