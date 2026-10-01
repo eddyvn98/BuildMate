@@ -57,3 +57,12 @@ test('new project action opens intake instead of adding an overview detour',asyn
   const source=await readFile(new URL('../src/ui/app.js',import.meta.url),'utf8');
   assert.ok(source.includes("project=createAndSave(); activeView='project'; render();"));
 });
+
+
+test('project inputs render compact labels with numeric alignment hooks',()=>{
+  const p=createProject();
+  const html=shell({project:p,projects:[p],workflow:runPlanningWorkflow(p),activeView:'project'});
+  assert.ok(html.includes('form-grid compact-form'));
+  assert.ok(html.includes('class="field-label"'));
+  assert.ok(html.includes('numeric-field'));
+});

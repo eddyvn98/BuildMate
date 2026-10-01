@@ -47,3 +47,20 @@ test('technical UI replaces jargon-heavy section labels with homeowner language'
   assert.ok(!html.includes('preliminary-technical-package'));
   assert.ok(!html.includes('Calculation coverage'));
 });
+
+
+test('technical tables use stable columns and right-aligned numeric cells',()=>{
+  const html=renderTechnical();
+  assert.ok(html.includes('member-schedule-table'));
+  assert.ok(html.includes('member-code'));
+  assert.ok(html.includes('member-qty'));
+  assert.ok(html.includes('member-size'));
+  assert.ok(html.includes('boq-table'));
+  assert.ok(html.includes('numeric-cell'));
+});
+
+test('advanced structural parameters are grouped into compact sections',()=>{
+  const html=renderTechnical();
+  assert.ok(html.includes('parameter-groups'));
+  for(const label of ['Chung & sàn','Dầm','Cột','Móng & tường']) assert.ok(html.includes(label));
+});
