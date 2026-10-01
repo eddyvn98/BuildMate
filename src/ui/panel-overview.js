@@ -58,12 +58,18 @@ export function overviewPanel(project,workflow) {
 
       <aside class="assistant-card">
         <div class="assistant-title"><span class="assistant-spark">✦</span><div><span>BuildMate AI</span><small>Trợ lý xây nhà</small></div></div>
-        <h2>Hôm nay nên làm gì?</h2>
-        <p>Tôi đã xem tình trạng dự án và ưu tiên những việc đang cản bước tiếp theo.</p>
-        <div class="assistant-actions">${actions.slice(0,3).map((item,index)=>`
+        <h2>Việc nên làm ngay</h2>
+        <p>Tôi đã xem tình trạng dự án và chọn một việc quan trọng nhất để bạn tiếp tục.</p>
+        ${actions[0]?`
+          <button class="assistant-primary" data-go-view="${escapeHtml(actions[0].view)}" ${actions[0].guidedAction?`data-guided-action="${escapeHtml(actions[0].guidedAction)}"`:''}>
+            <span class="assistant-primary-icon">1</span>
+            <span><small>BƯỚC TIẾP THEO</small><strong>${escapeHtml(actions[0].title)}</strong><em>${escapeHtml(actions[0].body)}</em></span>
+            ${icon('chevronRight')}
+          </button>`:''}
+        ${actions.length>1?`<details class="assistant-more"><summary>Xem thêm ${Math.min(actions.length-1,2)} việc tiếp theo</summary><div class="assistant-actions">${actions.slice(1,3).map((item,index)=>`
           <button data-go-view="${escapeHtml(item.view)}" ${item.guidedAction?`data-guided-action="${escapeHtml(item.guidedAction)}"`:''}>
-            <span>${index+1}</span><div><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.body)}</small></div>${icon('chevronRight')}
-          </button>`).join('')}</div>
+            <span>${index+2}</span><div><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.body)}</small></div>${icon('chevronRight')}
+          </button>`).join('')}</div></details>`:''}
         <small class="assistant-note">Gợi ý dựa trên dữ liệu hiện có trong dự án, không thay thế phê duyệt chuyên môn.</small>
       </aside>
     </div>
