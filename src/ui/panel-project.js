@@ -10,9 +10,9 @@ export function projectPanel(project) {
       <form id="chat-form" class="chat-form"><textarea id="chat-text" placeholder="Ví dụ: đất 4x16 ở TP.HCM, 5 người, 3 tầng, 4 phòng ngủ, ngân sách 1,5 tỷ"></textarea><button class="icon-button primary-icon" title="Phân tích thông tin" aria-label="Phân tích thông tin">${icon('send')}</button></form>
     </section>
 
-    <section class="panel-block">
+    <section class="panel-block compact-panel">
       <div class="section-head"><div><h2>Thông tin cơ bản</h2><p class="hint">Đây là các biến ảnh hưởng trực tiếp tới quy mô và ngân sách.</p></div></div>
-      <div class="form-grid">
+      <div class="form-grid compact-form">
         ${input('Tỉnh/thành','location.province',project.location.province)}
         ${input('Quận/huyện','location.district',project.location.district)}
         ${input('Rộng đất (m)','land.widthM',project.land.widthM,'number')}
@@ -43,10 +43,10 @@ export function projectPanel(project) {
       </section>
     </div>
 
-    <section class="panel-block">
+    <section class="panel-block compact-panel">
       <details class="advanced">
         <summary>Đầu vào kỹ thuật có nguồn</summary>
-        <div class="form-grid">
+        <div class="form-grid compact-form compact-technical-inputs">
           ${input('Tĩnh tải tổng hợp (kN/m²)','engineering.deadLoadKnM2',project.engineering.deadLoadKnM2,'number','0','','0.1')}
           ${input('Nguồn tĩnh tải','engineering.deadLoadSource',project.engineering.deadLoadSource)}
           <label>Loại khu vực hoạt tải<select data-path="engineering.liveLoadClass">
