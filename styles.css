@@ -329,3 +329,63 @@ label{font-size:13px}
   .technical-readiness-count{white-space:normal}
   .guided-submit{align-items:flex-start;flex-direction:column}
 }
+
+
+/* UX v1.3: end-to-end homeowner flow */
+.flow-next-card{
+  border:1px solid #d9e7df;
+  background:linear-gradient(135deg,#f7fbf8,#fffaf3);
+  border-radius:20px;
+  padding:18px 20px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+.flow-next-card.is-current{background:#f8faf8}
+.flow-next-copy{display:grid;gap:4px;max-width:720px}
+.flow-next-copy>span{font-size:10px;letter-spacing:.12em;font-weight:850;color:#a85b33}
+.flow-next-copy>strong{font-size:17px;color:#17352b}
+.flow-next-copy>p{margin:0;color:var(--muted);font-size:12px;line-height:1.5}
+.flow-next-action{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:42px;
+  padding:0 14px;
+  white-space:nowrap;
+  font-weight:750;
+  font-size:13px;
+}
+
+.report-save-action{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  min-height:42px;
+  padding:0 14px;
+  white-space:nowrap;
+}
+.report-save-action span{font-size:13px;font-weight:750}
+.report-export-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+  background:#f8fbf9;
+  border-color:#d7e5de;
+}
+.report-export-card h2{margin-bottom:5px}
+.report-export-card p{margin-bottom:0;max-width:650px}
+.report-export-actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.report-export-actions button{display:inline-flex;align-items:center;gap:8px;min-height:42px}
+.report-export-actions button span{font-size:13px;font-weight:750}
+
+@media(max-width:760px){
+  .flow-next-card,.report-export-card{align-items:stretch;flex-direction:column}
+  .flow-next-action{justify-content:center;width:100%}
+  .report-save-action{width:100%;justify-content:center}
+  .report-export-actions{display:grid;grid-template-columns:1fr}
+  .report-export-actions button{justify-content:center;width:100%}
+}
