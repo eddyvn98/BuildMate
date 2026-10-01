@@ -17,10 +17,10 @@ export function homeownerNextActions(project,{limit=3}={}) {
   const blocked=status.stages.filter(x=>x.status!=='ready');
   if (!blocked.length) {
     return [{
-      id:'review',
-      title:'Rà soát hồ sơ kỹ thuật',
-      body:'Các domain chính đã có calculation run. Kiểm tra schedule cấu kiện, bóc vật tư, BOQ và các dòng còn preliminary/unpriced trước khi xuất báo cáo.',
-      view:'technical',
+      id:'report',
+      title:'Hoàn tất và xuất báo cáo',
+      body:'Các bước chính đã có kết quả. Lưu phương án hiện tại rồi xuất báo cáo HTML và BOQ để rà soát hoặc chia sẻ.',
+      view:'report',
     }];
   }
   return blocked.slice(0,limit).map((stage)=>({
