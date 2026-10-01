@@ -50,24 +50,45 @@ export function nextQuestion(project) {
 }
 
 function extractProvince(text) {
-  const normalized=normalizeVietnamese(text);
-  const aliases=[
-    [/(?:^|\\s)(?:tp\\.?\\s*hcm|tphcm|hcm|ho chi minh|sai gon)(?:$|[\\s,.;])/,'TP.HCM'],
-    [/(?:^|\\s)(?:ha noi|hn)(?:$|[\\s,.;])/,'Hà Nội'],
-  ];
-  for (const [pattern,label] of aliases) if (pattern.test(normalized)) return label;
+  const original=String(text??'');
+  const normalized=normalizeVietnamese(original);
+  const padded=' '+normalized.replaceAll(',',' ').replaceAll(';',' ').replaceAll(':',' ')+' ';
 
-  const match=String(text).match(/(?:^|[\\s,;])(?:ở|tại|o|tai)\\s+([^,;]+)/i);
-  if (!match) return null;
-  const candidate=match[1]
-    .replace(/\\b\\d+(?:[.,]\\d+)?\\s*(?:người|nguoi|tầng|tang|phòng ngủ|phong ngu).*$/i,'')
-    .trim()
-    .replace(/\\s+/g,' ');
-  return candidate||null;
+  if (
+    padded.includes(' tp.hcm ')||padded.includes(' tp hcm ')||padded.includes(' tphcm ')||
+    padded.includes(' hcm ')||padded.includes(' ho chi minh ')||padded.includes(' sai gon ')
+  ) return 'TP.HCM';
+  if (padded.includes(' ha noi ')||padded.includes(' hn ')) return 'Hà Nội';
+
+  const markers=[' o ',' tai '];
+  for (const marker of markers) {
+    const index=normalized.indexOf(marker);
+    if (index<0) continue;
+    let candidate=original.slice(index+marker.length).trim();
+    const cuts=[candidate.indexOf(','),candidate.indexOf(';')].filter(value=>value>=0);
+    if (cuts.length) candidate=candidate.slice(0,Math.min(...cuts));
+    return candidate.trim()||null;
+  }
+  if (normalized.startsWith('o ')||normalized.startsWith('tai ')) {
+    const offset=normalized.startsWith('o ')?2:4;
+    let candidate=original.slice(offset).trim();
+    const cuts=[candidate.indexOf(','),candidate.indexOf(';')].filter(value=>value>=0);
+    if (cuts.length) candidate=candidate.slice(0,Math.min(...cuts));
+    return candidate.trim()||null;
+  }
+  return null;
 }
 
 function normalizeVietnamese(value) {
-  return String(value??'').normalize('NFD').replace(/[\\u0300-\\u036f]/g,'').replace(/đ/g,'d').toLowerCase();
+  return [...String(value??'').normalize('NFD')]
+    .filter(char=>{
+      const code=char.codePointAt(0);
+      return !(code>=0x0300&&code<=0x036f);
+    })
+    .join('')
+    .replaceAll('đ','d')
+    .replaceAll('Đ','D')
+    .toLowerCase();
 }
 
 
