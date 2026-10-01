@@ -52,7 +52,7 @@ function engineeringCards(engineering) {
     card('Móng',m.foundation),
     card('Điện',m.electrical),
     card('Nước',m.water),
-    card('HVAC',m.hvac),
+    card('Thông gió / điều hòa',m.hvac),
   ].join('');
 }
 
@@ -84,7 +84,7 @@ function guidedResult(record,output) {
 
 function calculationCard(record) {
   const explain=explainCalculation(record);
-  return `<details class="calculation-card"><summary><span><b>${escapeHtml(titleFor(record.action))}</b><small>${escapeHtml(record.standard)}</small></span><span class="badge">${escapeHtml(record.status)}</span></summary>
+  return `<details class="calculation-card"><summary><span><b>${escapeHtml(titleFor(record.action))}</b><small>${escapeHtml(record.standard)}</small></span><span class="badge engineering-status ${escapeHtml(record.status)}">${escapeHtml(statusLabel(record.status))}</span></summary>
     <div class="explain-metrics">${explain.summary.map(x=>metric(x.label,escapeHtml(x.value)+' '+escapeHtml(x.unit))).join('')}</div>
     ${explain.formula?'<div class="formula">'+escapeHtml(explain.formula)+'</div>':''}
     <ol>${explain.steps.map(x=>'<li>'+escapeHtml(x)+'</li>').join('')}</ol>
