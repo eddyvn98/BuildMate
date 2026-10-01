@@ -45,7 +45,7 @@ export function shell({
 function topbar(project,projects) {
   return `<header class="topbar journey-topbar">
     <div class="project-switcher journey-project-switcher">
-      <span class="project-home-icon">⌂</span>
+      <span class="project-home-icon">${icon('house')}</span>
       <div><small>Ngôi nhà của bạn</small>
       <select id="project-select">${projects.map(item=>`<option value="${item.id}" ${item.id===project.id?'selected':''}>${escapeHtml(item.name)}</option>`).join('')}</select></div>
       <input id="project-name" value="${escapeHtml(project.name)}" aria-label="Tên dự án">
