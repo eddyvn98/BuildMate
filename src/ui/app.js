@@ -14,9 +14,10 @@ import { buildProjectReport,quantitiesToCsv,reportToHtml } from '../report/proje
 import { activateProject,deleteProject,exportProjectsJson,importProjectsJson,listProjects,loadProject,saveProject } from '../storage.js';
 import { shell } from './panels.js';
 
-let project=loadProject()??createAndSave();
+const storedProject=loadProject();
+let project=storedProject??createAndSave();
 let workflow=runPlanningWorkflow(project);
-let activeView='overview';
+let activeView=storedProject?'overview':'project';
 const calculatorCapabilities=standardCalculatorCapabilities();
 let calculatorState={
   action:'water.design-flow',
@@ -91,7 +92,7 @@ function bindActions() {
     saveProject(project); render();
   });
   el('new-project')?.addEventListener('click',()=>{
-    project=createAndSave(); activeView='overview'; render();
+    project=createAndSave(); activeView='project'; render();
   });
   el('delete-project')?.addEventListener('click',()=>{
     const ok=typeof globalThis.confirm==='function'
@@ -223,15 +224,19 @@ function bindEngineeringTools() {
 }
 
 function bindImportExport() {
-  el('export-json')?.addEventListener('click',()=>downloadText('buildmate-projects.json',exportProjectsJson(),'application/json'));
-  el('export-html')?.addEventListener('click',()=>{
+  const exportHtml=()=>{
     if (!workflow.results) return;
     downloadText(safeName(project.name)+'-buildmate.html',reportToHtml(buildProjectReport(project,workflow)),'text/html;charset=utf-8');
-  });
-  el('export-csv')?.addEventListener('click',()=>{
+  };
+  const exportCsv=()=>{
     if (!workflow.results) return;
     downloadText(safeName(project.name)+'-boq.csv',quantitiesToCsv(buildProjectReport(project,workflow)),'text/csv;charset=utf-8');
-  });
+  };
+  el('export-json')?.addEventListener('click',()=>downloadText('buildmate-projects.json',exportProjectsJson(),'application/json'));
+  el('export-html')?.addEventListener('click',exportHtml);
+  el('export-csv')?.addEventListener('click',exportCsv);
+  document.querySelectorAll('[data-report-export="html"]').forEach(button=>button.addEventListener('click',exportHtml));
+  document.querySelectorAll('[data-report-export="csv"]').forEach(button=>button.addEventListener('click',exportCsv));
   el('import-json')?.addEventListener('click',()=>el('import-json-file')?.click());
   el('import-json-file')?.addEventListener('change',async event=>{
     const file=event.target.files?.[0]; if (!file) return;
