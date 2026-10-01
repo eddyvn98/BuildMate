@@ -38,7 +38,7 @@ export function overviewPanel(project,workflow) {
         <span class="glance-icon">₫</span><span><small>Ngân sách dự kiến</small><strong>${primary?money(primary.centerVnd):'Chưa đủ dữ liệu'}</strong><em>${primary?money(primary.lowVnd)+' – '+money(primary.highVnd):'Bổ sung thông tin để ước tính'}</em></span>
       </button>
       <button class="glance-card" data-go-view="project">
-        <span class="glance-icon">⌂</span><span><small>Quy mô ngôi nhà</small><strong>${results?.areas?number(results.areas.floorArea.value,'m²'):'—'}</strong><em>${project.design?.storeys?.value||'—'} tầng dự kiến</em></span>
+        <span class="glance-icon">${icon('house')}</span><span><small>Quy mô ngôi nhà</small><strong>${results?.areas?number(results.areas.floorArea.value,'m²'):'—'}</strong><em>${project.design?.storeys?.value||'—'} tầng dự kiến</em></span>
       </button>
       <button class="glance-card" data-go-view="pricing">
         <span class="glance-icon">◫</span><span><small>Dữ liệu thị trường</small><strong>${quick?quick.sourceCount:'—'} nguồn giá</strong><em>${quick?'Độ tin cậy '+quick.confidence:'Chưa có ước tính'}</em></span>
