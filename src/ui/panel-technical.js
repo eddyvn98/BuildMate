@@ -35,7 +35,7 @@ export function technicalPanel(project,workflow) {
         <span class="technical-readiness-count">${pack.blockers.length} mục cần bổ sung</span>
       </div>
       ${pack.blockers.length?'<div class="technical-next-gap"><b>Cần bổ sung tiếp:</b> '+escapeHtml(pack.blockers[0])+(pack.blockers.length>1?' · và '+(pack.blockers.length-1)+' mục khác':'')+'</div>':''}
-      ${supplementActions(nextDataActions)}
+      ${pack.blockers.length?supplementActions(nextDataActions):''}
     </section>
 
     <section class="panel-block">
