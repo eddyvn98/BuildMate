@@ -14,7 +14,7 @@ test('shared icon helper renders accessible-safe inline svg',()=>{
   assert.ok(svg.includes('viewBox="0 0 24 24"'));
 });
 
-test('shell uses svg icons for navigation and compact top actions',()=>{
+test('shell uses svg icons for journey navigation and compact top actions',()=>{
   const project=createPublicReferenceProject();
   const html=shell({
     project,
@@ -23,7 +23,7 @@ test('shell uses svg icons for navigation and compact top actions',()=>{
     activeView:'overview',
   });
 
-  for(const label of ['Tổng quan','Thông tin nhà','Tính toán','Hồ sơ kỹ thuật','Giá & ngân sách','Báo cáo']) {
+  for(const label of ['Nhà của tôi','Thông tin nhà','Chi phí','Hồ sơ','Tính toán','Báo cáo']) {
     assert.ok(html.includes('aria-label="'+label+'"'),label);
   }
   for(const action of ['Nạp demo 4×16','Chạy demo A→Z','Dự án mới','Thêm tác vụ']) {
@@ -34,7 +34,6 @@ test('shell uses svg icons for navigation and compact top actions',()=>{
   assert.ok(!html.includes('▤'));
   assert.ok(!html.includes('⌁'));
 });
-
 
 test('project, engineering and report primary actions use compact svg controls',()=>{
   const project=createPublicReferenceProject();
