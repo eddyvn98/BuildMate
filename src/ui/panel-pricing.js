@@ -28,7 +28,7 @@ export function pricingPanel(project,workflow) {
       </section>
       <section class="panel-block">
         <div class="section-head"><div><h2>Vật liệu đang theo dõi</h2><p class="hint">Giúp nhận biết vật liệu nào biến động mạnh; BuildMate không áp một biến động vật liệu cho toàn bộ căn nhà.</p></div></div>
-        <div class="material-grid">${Object.entries(market?.snapshot?.materials??{}).map(([code,row])=>`<div class="material-row"><span>${escapeHtml(MATERIAL_LABELS[code]??code)}</span><b>${number(row.center,row.unit)}</b><small>${row.sourceCount} nguồn · ${row.confidence}</small></div>`).join('')}</div>
+        <div class="material-grid">${Object.entries(market?.snapshot?.materials??{}).map(([code,row])=>`<div class="material-row"><span>${escapeHtml(MATERIAL_LABELS[code]??code)}</span><b>${number(row.center,row.unit)}</b><small>${row.sourceCount} nguồn · ${confidenceLabel(row.confidence)}</small></div>`).join('')}</div>
       </section>
     </div>
 
