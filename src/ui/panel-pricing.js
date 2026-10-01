@@ -1,6 +1,7 @@
 import { marketPriceTrend } from '../engine/price-trend.js';
 import { escapeHtml,input,metric } from './common.js';
 import { money,number } from './render.js';
+import { journeyNextStep } from './journey-next.js';
 
 const MATERIAL_LABELS=Object.freeze({
   rebar:'Thép',
@@ -58,7 +59,7 @@ export function pricingPanel(project,workflow) {
           </div>
         </div>
       </details>
-    </section>`;
+    </section>\n\n    ${journeyNextStep(project,{currentView:'pricing'})}`;
 }
 
 function quickCards(quick) {
