@@ -221,3 +221,82 @@ body{background:var(--warm)}
 @media(max-width:1050px){.journey-shell{grid-template-columns:1fr}.journey-sidebar{padding:9px 12px;align-items:center}.journey-brand,.sidebar-guide{display:none}.journey-nav button{justify-content:center}.journey-nav .nav-label{display:none}.home-main-grid{grid-template-columns:1fr}.assistant-card{position:static}.house-visual{opacity:.8}}
 @media(max-width:760px){.journey-content{padding-top:18px}.home-welcome{padding:25px 22px;grid-template-columns:1fr;min-height:0}.house-visual{position:absolute;right:-40px;top:40px;width:230px;opacity:.22}.welcome-copy{max-width:82%}.journey-progress{grid-template-columns:auto 1fr}.journey-progress>small{display:none}.home-glance{grid-template-columns:1fr}.home-main-grid{display:flex;flex-direction:column}.journey-card,.assistant-card,.home-secondary{width:100%;border-radius:20px;padding:19px}.floor-journey{grid-template-columns:1fr 1fr}.journey-project-switcher>input{display:none}}
 @media(max-width:500px){.welcome-copy{max-width:100%}.welcome-copy h1{font-size:36px}.current-stage-pill{align-items:flex-start;flex-direction:column;gap:2px}.floor-journey{grid-template-columns:1fr}.journey-step{grid-template-columns:34px 1fr}.journey-state{display:none}.friendly-head{align-items:flex-start}.friendly-head .text-action{white-space:nowrap}}
+
+
+/* Homeowner UX v1.1 refinements */
+body{font-size:15px;line-height:1.5}
+small,.hint{font-size:12px;line-height:1.45}
+label{font-size:13px}
+.metric small,.stage-card small,.reference-card p,.engineering-card p,.technical-cost-note{font-size:12px}
+.badge,.technical-table th{font-size:11px}
+
+.journey-project-switcher{gap:10px}
+.project-picker{min-width:170px}
+.journey-project-switcher>div small{font-size:12px}
+.journey-project-switcher select{font-size:14px;max-width:210px}
+.journey-project-switcher>.project-name-input{
+  display:block;
+  min-width:180px;
+  max-width:260px;
+  padding:9px 11px;
+  background:#fff;
+  border:1px solid #e1ddd3;
+  font-weight:700;
+}
+.top-new-project{display:inline-flex;align-items:center;gap:8px;width:auto;height:42px;padding:0 13px}
+.top-action-label{font-size:13px;font-weight:700}
+.menu-pop>div{width:220px}
+
+.sidebar-guide small{font-size:12px}
+.welcome-kicker{font-size:12px}
+.current-stage-pill span{font-size:12px}.current-stage-pill strong{font-size:13px}
+.journey-progress span,.journey-progress small{font-size:12px}
+.glance-card small,.glance-card em{font-size:12px}
+.section-kicker{font-size:11px}
+.route-badge{font-size:12px}
+.journey-step-copy strong{font-size:14px}.journey-step-copy small{font-size:12px}.journey-state{font-size:11px}
+.assistant-title small{font-size:12px}
+.assistant-card>p{font-size:13px}
+.assistant-card h2{margin-bottom:8px}
+.assistant-primary{
+  width:100%;
+  display:grid;
+  grid-template-columns:34px 1fr auto;
+  align-items:center;
+  gap:11px;
+  text-align:left;
+  background:#fff;
+  color:#17352b;
+  border-radius:16px;
+  padding:14px;
+  margin:16px 0 12px;
+}
+.assistant-primary:hover{background:#f7fbf9}
+.assistant-primary-icon{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#f2a85e;font-weight:850}
+.assistant-primary>span:nth-child(2){display:grid;gap:3px}
+.assistant-primary small{font-size:10px;color:#8a5a30;letter-spacing:.08em;font-weight:800}
+.assistant-primary strong{font-size:14px}
+.assistant-primary em{font-size:12px;font-style:normal;color:#60756d;line-height:1.45}
+.assistant-more{margin-top:4px}
+.assistant-more>summary{cursor:pointer;font-size:12px;color:#c5d8d1;padding:8px 2px}
+.assistant-actions{margin:8px 0 14px}
+.assistant-actions strong{font-size:12px}.assistant-actions small{font-size:11px}
+.assistant-note{font-size:11px!important}
+.text-action{font-size:12px}
+.floor-number{font-size:11px}.floor-journey strong{font-size:13px}.floor-journey p{font-size:12px}
+.source-drawer>summary{font-size:12px}
+
+@media(max-width:760px){
+  .journey-project-switcher{display:grid;grid-template-columns:auto minmax(0,1fr);width:100%;align-items:center}
+  .project-home-icon{grid-row:1/3}
+  .project-picker{min-width:0}
+  .journey-project-switcher>.project-name-input{display:block;min-width:0;max-width:none;width:100%;grid-column:2}
+  .top-actions{overflow:visible}
+  .top-new-project{min-height:44px;width:auto!important}
+  .top-action-label{display:inline}
+}
+@media(max-width:500px){
+  body{font-size:14px}
+  .top-action-label{display:none}
+  .top-new-project{width:44px!important;padding:0;justify-content:center}
+}

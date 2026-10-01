@@ -29,8 +29,10 @@ test('homeowner shell exposes journey navigation and prioritized next actions',(
   const {html}=ctx('overview');
   assert.ok(html.includes('BuildMate AI'));
   assert.ok(html.includes('Nhà của tôi'));
-  assert.ok(html.includes('Hôm nay nên làm gì?'));
+  assert.ok(html.includes('Việc nên làm ngay'));
   assert.ok(html.includes('Nạp demo 4×16'));
+  assert.ok(html.includes('class="project-name-input"'));
+  assert.ok(html.includes('BƯỚC TIẾP THEO'));
 });
 
 test('engineering view exposes guided calculators and keeps raw JSON in expert mode',()=>{
