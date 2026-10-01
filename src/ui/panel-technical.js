@@ -1,5 +1,6 @@
 import { escapeHtml,metric,input } from './common.js';
 import { money,number } from './render.js';
+import { journeyNextStep } from './journey-next.js';
 
 export function technicalPanel(project,workflow) {
   const pack=workflow.results?.technicalPackage;
@@ -166,7 +167,7 @@ export function technicalPanel(project,workflow) {
           <div class="blocker-list">${pack.blockers.map(x=>'<div class="alert">'+escapeHtml(x)+'</div>').join('')}</div>
         </div>
       </details>
-    </section>`;
+    </section>\n\n    ${journeyNextStep(project,{currentView:'technical'})}`;
 }
 
 function memberCard(label,size,detail){
