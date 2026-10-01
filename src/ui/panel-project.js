@@ -1,5 +1,6 @@
 import { functionalPlan } from './render.js';
 import { escapeHtml,icon,input,option } from './common.js';
+import { journeyNextStep } from './journey-next.js';
 
 export function projectPanel(project) {
   return `
@@ -64,7 +65,7 @@ export function projectPanel(project) {
           ${input('Mức dùng nước (L/người.ngày)','mep.waterLitersPerPersonDay',project.mep.waterLitersPerPersonDay,'number')}
         </div>
       </details>
-    </section>`;
+    </section>\n\n    ${journeyNextStep(project,{currentView:'project'})}`;
 }
 
 function referenceDetails(reference) {

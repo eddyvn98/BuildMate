@@ -3,6 +3,7 @@ import { guidedCalculatorSpec,guidedCalculatorSpecs } from './guided-calculator.
 import { explainCalculation } from './calculation-explain.js';
 import { escapeHtml,icon,metric } from './common.js';
 import { money,number } from './render.js';
+import { journeyNextStep } from './journey-next.js';
 
 export function engineeringPanel(project,workflow,{calculatorCapabilities=[],calculatorState={},guidedState={},evidenceState={}}={}) {
   const engineering=workflow.results?.engineering;
@@ -41,7 +42,7 @@ export function engineeringPanel(project,workflow,{calculatorCapabilities=[],cal
         ${expertCalculator(calculatorCapabilities,calculatorState)}
         ${evidencePanel(project,evidenceState)}
       </details>
-    </section>`;
+    </section>\n\n    ${journeyNextStep(project,{currentView:'engineering'})}`;
 }
 
 function engineeringCards(engineering) {
