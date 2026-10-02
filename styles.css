@@ -618,3 +618,112 @@ input[type="number"]{text-align:right;font-variant-numeric:tabular-nums}
   .compact-actual-form #actual-amount,
   .compact-actual-form #actual-status{width:100%;flex-basis:100%}
 }
+
+
+/* UX v1.6: compact document-to-data review */
+.document-import-bar{
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px solid #e7ece9;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  max-width:980px;
+}
+.document-import-bar>div{display:grid;gap:1px}
+.document-import-bar strong{font-size:13px}
+.document-import-bar span{font-size:11px;color:var(--muted)}
+.document-import-bar button{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  flex:0 0 auto;
+  min-height:36px;
+  padding:6px 10px;
+}
+.document-import-state,
+.document-import-review{
+  margin-top:9px;
+  max-width:980px;
+  background:#f8faf9;
+  border-radius:10px;
+  padding:10px 12px;
+}
+.import-status-row,
+.document-import-state,
+.import-review-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.import-status-row>span,
+.document-import-state>div>span,
+.import-review-head span{
+  font-size:11px;
+  color:var(--muted);
+}
+.document-import-state>div,
+.import-review-head>div{display:grid;gap:2px}
+.import-progress{
+  height:5px;
+  margin-top:8px;
+  border-radius:99px;
+  overflow:hidden;
+  background:#e4ebe7;
+}
+.import-progress i{
+  display:block;
+  height:100%;
+  border-radius:inherit;
+  background:var(--accent);
+  transition:width .18s ease;
+}
+.import-error{background:#fff6f4}
+.import-success{background:#f1f8f4}
+.import-candidate-list{
+  margin-top:8px;
+  border-top:1px solid #e4eae6;
+}
+.import-candidate-row{
+  display:grid;
+  grid-template-columns:18px minmax(220px,1fr) 190px;
+  align-items:center;
+  gap:10px;
+  padding:7px 0;
+  border-bottom:1px solid #edf0ee;
+}
+.import-candidate-row>input[type="checkbox"]{width:auto}
+.import-candidate-copy{display:grid;gap:1px;min-width:0}
+.import-candidate-copy strong{font-size:12px;color:var(--ink)}
+.import-candidate-copy small{
+  font-size:10px;
+  color:var(--muted);
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.import-candidate-value{
+  min-height:34px;
+  padding:5px 8px;
+  border-radius:7px;
+}
+.import-review-actions{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:9px;
+}
+.import-review-actions button{min-height:36px;padding:6px 11px}
+
+@media(max-width:760px){
+  .document-import-bar{align-items:flex-start}
+  .import-candidate-row{grid-template-columns:18px 1fr}
+  .import-candidate-value{grid-column:2;width:100%}
+}
+@media(max-width:500px){
+  .document-import-bar,
+  .import-review-head,
+  .document-import-state{align-items:stretch;flex-direction:column}
+  .document-import-bar button{justify-content:center;width:100%}
+}
