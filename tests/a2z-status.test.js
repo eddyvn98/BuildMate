@@ -10,7 +10,7 @@ const PRICES={
 
 function baseProject(){
   const p=createProject();
-  p.context.projectDate.value='2026-09-30';
+  p.context.projectDate.value='2026-10-02';
   p.location.province.value='TP.HCM';
   p.land.widthM.value=4;
   p.land.lengthM.value=16;
