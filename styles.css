@@ -727,3 +727,79 @@ input[type="number"]{text-align:right;font-variant-numeric:tabular-nums}
   .document-import-state{align-items:stretch;flex-direction:column}
   .document-import-bar button{justify-content:center;width:100%}
 }
+
+
+/* UX v1.7: borderless resting inputs, clear editing focus */
+.field-control input,
+.field-control select,
+.content-form input,
+.content-form select,
+.content-form textarea,
+.chat-form textarea,
+.project-name-input,
+.import-candidate-value,
+.standard-tool-grid input,
+.standard-tool-grid select,
+.standard-tool-grid textarea,
+.evidence-form input,
+.evidence-form select,
+.evidence-form textarea,
+.actual-form input,
+.actual-form select{
+  border:1px solid transparent !important;
+  background:transparent;
+  box-shadow:none;
+}
+.field-control input:hover,
+.field-control select:hover,
+.content-form input:hover,
+.content-form select:hover,
+.content-form textarea:hover,
+.chat-form textarea:hover,
+.project-name-input:hover,
+.import-candidate-value:hover,
+.standard-tool-grid input:hover,
+.standard-tool-grid select:hover,
+.standard-tool-grid textarea:hover,
+.evidence-form input:hover,
+.evidence-form select:hover,
+.evidence-form textarea:hover,
+.actual-form input:hover,
+.actual-form select:hover{
+  background:#f7f9f8;
+}
+.field-control input:focus,
+.field-control select:focus,
+.content-form input:focus,
+.content-form select:focus,
+.content-form textarea:focus,
+.chat-form textarea:focus,
+.project-name-input:focus,
+.import-candidate-value:focus,
+.standard-tool-grid input:focus,
+.standard-tool-grid select:focus,
+.standard-tool-grid textarea:focus,
+.evidence-form input:focus,
+.evidence-form select:focus,
+.evidence-form textarea:focus,
+.actual-form input:focus,
+.actual-form select:focus{
+  outline:none;
+  border-color:#a9c9bc !important;
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(23,107,85,.08);
+}
+.field-control input,
+.content-form input,
+.actual-form input,
+.import-candidate-value{
+  cursor:text;
+}
+.field-control select,
+.content-form select,
+.actual-form select{
+  cursor:pointer;
+}
+.field-label{margin-bottom:1px}
+.compact-form.content-form{gap:5px 8px}
+.parameter-group .compact-form{gap:5px 8px}
