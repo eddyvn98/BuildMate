@@ -12,7 +12,7 @@ export function projectPanel(project) {
 
     <section class="panel-block compact-panel">
       <div class="section-head"><div><h2>Thông tin cơ bản</h2><p class="hint">Đây là các biến ảnh hưởng trực tiếp tới quy mô và ngân sách.</p></div></div>
-      <div class="form-grid compact-form">
+      <div class="form-grid compact-form content-form">
         ${input('Tỉnh/thành','location.province',project.location.province)}
         ${input('Quận/huyện','location.district',project.location.district)}
         ${input('Rộng đất (m)','land.widthM',project.land.widthM,'number')}
@@ -22,13 +22,15 @@ export function projectPanel(project) {
         ${input('Số người','household.people',project.household.people,'number')}
         ${input('Phòng ngủ','household.bedrooms',project.household.bedrooms,'number')}
         ${input('Ngân sách mục tiêu','budget.totalVnd',project.budget.totalVnd,'number')}
-        <label>Mức hoàn thiện<select data-path="design.finishLevel">
+        <label class="field-control field-select"><span class="field-label"><span>Mức hoàn thiện</span></span><select data-path="design.finishLevel">
           ${option(project.design.finishLevel.value,'economy','Tiết kiệm')}
           ${option(project.design.finishLevel.value,'balanced','Cân bằng')}
           ${option(project.design.finishLevel.value,'comfort','Thoải mái')}
         </select></label>
-        <label class="check"><input data-path="household.hasCar" type="checkbox" ${project.household.hasCar.value?'checked':''}> Có ô tô</label>
-        <label class="check"><input data-path="technical.geotechnicalAvailable" type="checkbox" ${project.technical.geotechnicalAvailable.value?'checked':''}> Đã có dữ liệu địa chất</label>
+        <div class="compact-checks">
+          <label class="check"><input data-path="household.hasCar" type="checkbox" ${project.household.hasCar.value?'checked':''}> Có ô tô</label>
+          <label class="check"><input data-path="technical.geotechnicalAvailable" type="checkbox" ${project.technical.geotechnicalAvailable.value?'checked':''}> Đã có dữ liệu địa chất</label>
+        </div>
       </div>
     </section>
 
@@ -46,10 +48,10 @@ export function projectPanel(project) {
     <section class="panel-block compact-panel">
       <details class="advanced">
         <summary>Đầu vào kỹ thuật có nguồn</summary>
-        <div class="form-grid compact-form compact-technical-inputs">
+        <div class="form-grid compact-form content-form compact-technical-inputs">
           ${input('Tĩnh tải tổng hợp (kN/m²)','engineering.deadLoadKnM2',project.engineering.deadLoadKnM2,'number','0','','0.1')}
           ${input('Nguồn tĩnh tải','engineering.deadLoadSource',project.engineering.deadLoadSource)}
-          <label>Loại khu vực hoạt tải<select data-path="engineering.liveLoadClass">
+          <label class="field-control field-select field-select-wide"><span class="field-label"><span>Loại khu vực hoạt tải</span></span><select data-path="engineering.liveLoadClass">
             ${option(project.engineering.liveLoadClass.value,'A1-floor','A1 · sàn nhà ở 1.5 kN/m²')}
             ${option(project.engineering.liveLoadClass.value,'A1-balcony','A1 · ban công/lô gia 2.0 kN/m²')}
             ${option(project.engineering.liveLoadClass.value,'A2-circulation','A2 · giao thông/cầu thang 3.0 kN/m²')}
