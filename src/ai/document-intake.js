@@ -76,7 +76,7 @@ export function extractDocumentCandidates(text,{fileName='Tài liệu'}={}) {
       if (!aliases.some(alias=>normalized.includes(alias))) continue;
       const numbers=allNumbers(line);
       if (!numbers.length) continue;
-      const value=numbers.length>=2?numbers.at(-2):numbers.at(-1);
+      const value=numbers.at(-1);
       if (Number.isFinite(value)&&value>0) add(candidates,{
         path,value,label:labelForPath(path),kind:'number',confidence:'low',
         reason:'Ước đoán đơn giá từ dòng có tên hạng mục; cần kiểm tra lại',source:fileName,
