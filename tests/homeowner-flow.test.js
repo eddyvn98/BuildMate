@@ -55,7 +55,8 @@ test('report exposes final HTML and BOQ export actions',()=>{
 
 test('new project action opens intake instead of adding an overview detour',async()=>{
   const source=await readFile(new URL('../src/ui/app.js',import.meta.url),'utf8');
-  assert.ok(source.includes("project=createAndSave(); activeView='project'; render();"));
+  assert.ok(source.includes("project=createAndSave();"));
+  assert.ok(source.includes("activeView='project'; render();"));
 });
 
 

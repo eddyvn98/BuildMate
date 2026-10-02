@@ -17,7 +17,7 @@ const NAV=[
 
 export function shell({
   project,projects,workflow,calculatorCapabilities=[],calculatorState={},
-  guidedState={},evidenceState={},activeView='overview'
+  guidedState={},evidenceState={},documentImportState={},activeView='overview'
 }) {
   return `
     <div class="app-shell journey-shell">
@@ -36,7 +36,7 @@ export function shell({
       <div class="workspace">
         ${topbar(project,projects)}
         <main class="page-content journey-content">
-          ${viewContent(activeView,{project,workflow,calculatorCapabilities,calculatorState,guidedState,evidenceState})}
+          ${viewContent(activeView,{project,workflow,calculatorCapabilities,calculatorState,guidedState,evidenceState,documentImportState})}
         </main>
       </div>
     </div>`;
@@ -68,7 +68,7 @@ function topbar(project,projects) {
 
 function viewContent(view,ctx) {
   switch(view){
-    case 'project': return projectPanel(ctx.project);
+    case 'project': return projectPanel(ctx.project,ctx);
     case 'engineering': return engineeringPanel(ctx.project,ctx.workflow,ctx);
     case 'technical': return technicalPanel(ctx.project,ctx.workflow);
     case 'pricing': return pricingPanel(ctx.project,ctx.workflow);

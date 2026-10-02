@@ -5,9 +5,11 @@ import { createEngineeringEvidenceRecord } from '../engine/engineering-evidence.
 import { standardCalculatorCapabilities,runStandardCalculation } from '../engine/engineering/standards-calculator.js';
 import { createPublicReferenceProject,publicReferenceCalculationInputs } from '../demo/public-reference-project.js';
 import { interpretHomeownerText,nextQuestion } from '../ai/intake.js';
+import { extractDocumentCandidates } from '../ai/document-intake.js';
+import { extractFileText } from './file-text-extractor.js';
 import { addActual,removeActual } from '../engine/actuals.js';
 import { addDesignVersion,createDesignVersion } from '../engine/design-versions.js';
-import { createProject,renameProject,setField } from '../engine/project.js';
+import { createProject,renameProject,setField,FIELD_STATES } from '../engine/project.js';
 import { runPlanningWorkflow } from '../engine/workflow.js';
 import { downloadText } from '../report/download.js';
 import { buildProjectReport,quantitiesToCsv,reportToHtml } from '../report/project-report.js';
@@ -26,6 +28,7 @@ let calculatorState={
 };
 let guidedState=initialGuided('loads.permanent');
 let evidenceState={error:null};
+let documentImportState={status:'idle',candidates:[]};
 const el=id=>document.getElementById(id);
 
 function createAndSave() {
@@ -48,7 +51,7 @@ function render() {
   workflow=runPlanningWorkflow(project);
   el('app').innerHTML=shell({
     project,projects:listProjects(),workflow,calculatorCapabilities,
-    calculatorState,guidedState,evidenceState,activeView,
+    calculatorState,guidedState,evidenceState,documentImportState,activeView,
   });
   const question=el('next-question');
   if (question) question.textContent=nextQuestion(project);
@@ -92,7 +95,7 @@ function bindActions() {
     saveProject(project); render();
   });
   el('new-project')?.addEventListener('click',()=>{
-    project=createAndSave(); activeView='project'; render();
+    project=createAndSave(); documentImportState={status:'idle',candidates:[]}; activeView='project'; render();
   });
   el('delete-project')?.addEventListener('click',()=>{
     const ok=typeof globalThis.confirm==='function'
@@ -114,8 +117,84 @@ function bindActions() {
     saveProject(project); render();
   }));
   bindImportExport();
+  bindDocumentImport();
   bindGuidedCalculator();
   bindEngineeringTools();
+}
+
+function bindDocumentImport() {
+  el('pick-document-import')?.addEventListener('click',()=>el('document-import-file')?.click());
+  el('document-import-file')?.addEventListener('change',onDocumentImportFile);
+  el('cancel-document-import')?.addEventListener('click',()=>{
+    documentImportState={status:'idle',candidates:[]};
+    render();
+  });
+  document.querySelectorAll('[data-import-select]').forEach(input=>{
+    input.addEventListener('change',()=>{
+      const index=Number(input.dataset.importSelect);
+      if(documentImportState.candidates?.[index]) documentImportState.candidates[index].selected=input.checked;
+    });
+  });
+  document.querySelectorAll('[data-import-value]').forEach(input=>{
+    input.addEventListener('change',()=>{
+      const index=Number(input.dataset.importValue);
+      const candidate=documentImportState.candidates?.[index];
+      if(!candidate) return;
+      candidate.value=candidate.kind==='number'?Number(input.value):input.value;
+    });
+  });
+  el('apply-document-import')?.addEventListener('click',()=>{
+    const selected=(documentImportState.candidates??[]).filter(item=>item.selected!==false);
+    for(const item of selected) {
+      project=setField(
+        project,item.path,item.value,FIELD_STATES.CONFIRMED,
+        'document:'+String(documentImportState.fileName??'import')
+      );
+    }
+    saveProject(project);
+    documentImportState={
+      status:'success',fileName:documentImportState.fileName,
+      appliedCount:selected.length,candidates:[],
+    };
+    render();
+  });
+}
+
+async function onDocumentImportFile(event) {
+  const file=event.target.files?.[0];
+  if(!file) return;
+  documentImportState={
+    status:'processing',fileName:file.name,candidates:[],
+    progress:0,message:'Đang chuẩn bị đọc tài liệu…',
+  };
+  render();
+  try {
+    const extracted=await extractFileText(file,{onProgress:updateDocumentImportProgress});
+    const candidates=extractDocumentCandidates(extracted.text,{fileName:file.name})
+      .map(item=>({...item,selected:true}));
+    documentImportState={
+      status:'ready',fileName:file.name,candidates,
+      method:extracted.method,progress:1,message:'Đã trích dữ liệu.',
+    };
+  } catch(error) {
+    documentImportState={
+      status:'error',fileName:file.name,candidates:[],
+      error:error?.message??String(error),
+    };
+  }
+  render();
+}
+
+function updateDocumentImportProgress(info={}) {
+  documentImportState={
+    ...documentImportState,
+    progress:Number(info.progress??documentImportState.progress??0),
+    message:info.message??documentImportState.message,
+  };
+  const bar=el('document-import-progress');
+  const message=el('document-import-message');
+  if(bar) bar.style.width=Math.round(documentImportState.progress*100)+'%';
+  if(message) message.textContent=documentImportState.message??'Đang xử lý…';
 }
 
 function bindGuidedCalculator() {
@@ -152,6 +231,7 @@ function persistCalculation(action,input) {
 }
 
 function loadPublicDemo() {
+  documentImportState={status:'idle',candidates:[]};
   project=createPublicReferenceProject();
   saveProject(project);
   activeView='overview';
@@ -263,6 +343,7 @@ function onActual(event) {
 }
 
 function switchProject(id) {
+  documentImportState={status:'idle',candidates:[]};
   activateProject(id);
   project=loadProject();
   activeView='overview';
