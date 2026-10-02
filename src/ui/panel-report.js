@@ -37,7 +37,7 @@ export function reportPanel(project,workflow) {
       </section>
       <section class="panel-block">
         <div class="section-head"><div><h2>Chi phí thực tế</h2><p class="hint">Theo dõi khoản đã thanh toán và khoản đã cam kết so với ngân sách hiện tại.</p></div></div>
-        <form id="actual-form" class="actual-form"><input id="actual-description" placeholder="Hạng mục / hóa đơn" required><input id="actual-amount" type="number" min="1" placeholder="Số tiền" required><select id="actual-status"><option value="paid">Đã thanh toán</option><option value="committed">Đã cam kết</option></select><button class="icon-button primary-icon" title="Thêm chi phí" aria-label="Thêm chi phí">${icon('plus')}</button></form>
+        <form id="actual-form" class="actual-form content-form compact-actual-form"><input id="actual-description" placeholder="Hạng mục / hóa đơn" required><input id="actual-amount" type="number" min="1" placeholder="Số tiền" required><select id="actual-status"><option value="paid">Đã thanh toán</option><option value="committed">Đã cam kết</option></select><button class="icon-button primary-icon" title="Thêm chi phí" aria-label="Thêm chi phí">${icon('plus')}</button></form>
         <div class="actual-list">${project.actuals.entries.length?project.actuals.entries.map(item=>`<div><span><b>${escapeHtml(item.description||item.category)}</b><small>${escapeHtml(item.date)} · ${escapeHtml(actualStatusLabel(item.status))}</small></span><strong>${money(item.amountVnd)}</strong><button class="ghost danger icon-button" data-remove-actual="${item.id}" title="Xóa chi phí" aria-label="Xóa chi phí">${icon('trash')}</button></div>`).join(''):'<p class="empty-state">Chưa có chi phí thực tế.</p>'}</div>
       </section>
     </div>
