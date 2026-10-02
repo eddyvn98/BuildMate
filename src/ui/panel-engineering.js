@@ -23,7 +23,7 @@ export function engineeringPanel(project,workflow,{calculatorCapabilities=[],cal
       <div class="guided-tabs">${guidedCalculatorSpecs().map(item=>`
         <button class="${item.id===spec.id?'active':''}" data-guided-action="${escapeHtml(item.id)}">${escapeHtml(item.label)}</button>`).join('')}</div>
       ${spec.warning?'<div class="alert">'+escapeHtml(spec.warning)+'</div>':''}
-      <form id="guided-calculator-form" class="guided-form" data-guided-action="${escapeHtml(spec.id)}">
+      <form id="guided-calculator-form" class="guided-form content-form" data-guided-action="${escapeHtml(spec.id)}">
         ${spec.fields.map(field=>guidedField(field,guidedState.values??{})).join('')}
         <div class="guided-submit"><button type="submit" class="guided-primary-action" title="Tính theo tiêu chuẩn" aria-label="Tính theo tiêu chuẩn">${icon('calculator')}<span>Tính theo tiêu chuẩn</span></button><small>Kết quả sẽ tự lưu vào lịch sử dự án.</small></div>
       </form>
@@ -66,10 +66,10 @@ function card(label,module) {
 function guidedField(field,values) {
   const value=values[field.key]??field.defaultValue??'';
   if (field.type==='select') {
-    return `<label>${escapeHtml(field.label)}<select data-guided-key="${escapeHtml(field.key)}">${field.options.map(([v,l])=>`<option value="${escapeHtml(v)}" ${String(v)===String(value)?'selected':''}>${escapeHtml(l)}</option>`).join('')}</select></label>`;
+    return `<label class="field-control field-select"><span class="field-label"><span>${escapeHtml(field.label)}</span></span><select data-guided-key="${escapeHtml(field.key)}">${field.options.map(([v,l])=>`<option value="${escapeHtml(v)}" ${String(v)===String(value)?'selected':''}>${escapeHtml(l)}</option>`).join('')}</select></label>`;
   }
   const suffix=field.unit?'<span class="field-unit">'+escapeHtml(field.unit)+'</span>':'';
-  return `<label>${escapeHtml(field.label)}<div class="input-with-unit"><input data-guided-key="${escapeHtml(field.key)}" type="${field.type}" value="${escapeHtml(value)}" ${field.min!==undefined?`min="${field.min}"`:''} ${field.max!==undefined?`max="${field.max}"`:''} ${field.step!==undefined?`step="${field.step}"`:''} placeholder="${escapeHtml(field.placeholder??'')}">${suffix}</div></label>`;
+  return `<label class="field-control ${field.type==='number'?'field-number numeric-field':'field-text'}"><span class="field-label"><span>${escapeHtml(field.label)}</span></span><div class="input-with-unit"><input data-guided-key="${escapeHtml(field.key)}" type="${field.type}" value="${escapeHtml(value)}" ${field.min!==undefined?`min="${field.min}"`:''} ${field.max!==undefined?`max="${field.max}"`:''} ${field.step!==undefined?`step="${field.step}"`:''} placeholder="${escapeHtml(field.placeholder??'')}">${suffix}</div></label>`;
 }
 
 function guidedResult(record,output) {
@@ -117,12 +117,12 @@ function evidencePanel(project,state) {
   const defaultType=ENGINEERING_EVIDENCE_TYPES[0][0];
   return `<div class="expert-block"><h3>Project engineering evidence (${evidence.length})</h3>
     ${state.error?'<div class="alert">'+escapeHtml(state.error)+'</div>':''}
-    <form id="engineering-evidence-form" class="evidence-form">
-      <label>Loại<select id="engineering-evidence-type">${ENGINEERING_EVIDENCE_TYPES.map(([v,l])=>'<option value="'+escapeHtml(v)+'">'+escapeHtml(l)+'</option>').join('')}</select></label>
-      <label>Nguồn<input id="engineering-evidence-source" required></label>
-      <label>Mã tài liệu<input id="engineering-evidence-document-id" required></label>
-      <label>Ngày phát hành<input id="engineering-evidence-issued-at" type="date" required value="${new Date().toISOString().slice(0,10)}"></label>
-      <label>Phương pháp/điều khoản<input id="engineering-evidence-method" required></label>
+    <form id="engineering-evidence-form" class="evidence-form content-form">
+      <label class="field-control field-select"><span class="field-label"><span>Loại</span></span><select id="engineering-evidence-type">${ENGINEERING_EVIDENCE_TYPES.map(([v,l])=>'<option value="'+escapeHtml(v)+'">'+escapeHtml(l)+'</option>').join('')}</select></label>
+      <label class="field-control field-text"><span class="field-label"><span>Nguồn</span></span><input id="engineering-evidence-source" required></label>
+      <label class="field-control field-text"><span class="field-label"><span>Mã tài liệu</span></span><input id="engineering-evidence-document-id" required></label>
+      <label class="field-control field-date"><span class="field-label"><span>Ngày phát hành</span></span><input id="engineering-evidence-issued-at" type="date" required value="${new Date().toISOString().slice(0,10)}"></label>
+      <label class="field-control field-text field-text-wide"><span class="field-label"><span>Phương pháp/điều khoản</span></span><input id="engineering-evidence-method" required></label>
       <label class="wide-field">Data JSON<textarea id="engineering-evidence-data">${escapeHtml(JSON.stringify(evidenceDataExample(defaultType),null,2))}</textarea></label>
       <input id="engineering-evidence-manufacturer" hidden><input id="engineering-evidence-model" hidden><input id="engineering-evidence-instrument" hidden><input id="engineering-evidence-calibration" hidden>
       <div><button type="submit" class="icon-button primary-icon" title="Thêm evidence" aria-label="Thêm evidence">${icon('plus')}</button></div>
