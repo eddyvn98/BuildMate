@@ -66,3 +66,19 @@ test('project inputs render compact labels with numeric alignment hooks',()=>{
   assert.ok(html.includes('class="field-label"'));
   assert.ok(html.includes('numeric-field'));
 });
+
+
+test('data-entry forms size controls by content instead of equal-width columns',()=>{
+  const p=createProject();
+  const projectHtml=shell({project:p,projects:[p],workflow:runPlanningWorkflow(p),activeView:'project'});
+  assert.ok(projectHtml.includes('compact-form content-form'));
+  assert.ok(projectHtml.includes('field-number'));
+  assert.ok(projectHtml.includes('field-select'));
+  assert.ok(projectHtml.includes('compact-checks'));
+
+  const pricingHtml=shell({project:p,projects:[p],workflow:runPlanningWorkflow(p),activeView:'pricing'});
+  assert.ok(pricingHtml.includes('content-form quote-form'));
+
+  const reportHtml=shell({project:p,projects:[p],workflow:runPlanningWorkflow(p),activeView:'report'});
+  assert.ok(reportHtml.includes('compact-actual-form'));
+});

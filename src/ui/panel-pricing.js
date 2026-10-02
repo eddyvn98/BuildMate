@@ -46,7 +46,7 @@ export function pricingPanel(project,workflow) {
         <summary><strong>Tôi đã có báo giá riêng từ nhà thầu</strong><span>Dùng báo giá thật của dự án để thay cho mức tham khảo chung.</span></summary>
         <div class="quote-details-body">
           <div class="section-head"><div><h2>Báo giá riêng của dự án</h2><p class="hint">Các đơn giá bạn nhập ở đây sẽ được ưu tiên khi BuildMate tính chi phí kỹ thuật.</p></div><div class="price-source">${escapeHtml(book?.sourceLabel??'')} ${book?.effectiveDate?'· '+escapeHtml(book.effectiveDate):''}</div></div>
-          <div class="form-grid">
+          <div class="form-grid compact-form content-form quote-form">
             ${input('Nguồn báo giá','pricing.sourceLabel',project.pricing.sourceLabel)}
             ${input('Ngày báo giá','pricing.effectiveDate',project.pricing.effectiveDate,'date')}
             ${input('Bê tông (VND/m³)','pricing.items.concrete',project.pricing.items.concrete,'number')}

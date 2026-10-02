@@ -509,3 +509,112 @@ input[type="number"]{text-align:right;font-variant-numeric:tabular-nums}
   .data-supplement-actions{display:grid;width:100%}
   .data-supplement-actions button{width:100%}
 }
+
+
+/* UX v1.5: content-sized inputs instead of full-width form columns */
+.content-form{
+  display:flex!important;
+  flex-wrap:wrap;
+  align-items:flex-end;
+  align-content:flex-start;
+  justify-content:flex-start;
+  gap:8px 10px;
+}
+.content-form>.field-control,
+.content-form>label{
+  flex:0 0 auto;
+  width:auto;
+  min-width:0;
+}
+.field-control.field-number{width:148px}
+.field-control.field-text{width:210px}
+.field-control.field-text-wide{width:280px}
+.field-control.field-date{width:164px}
+.field-control.field-select{width:190px}
+.field-control.field-select-wide{width:285px}
+.field-control input,
+.field-control select{width:100%}
+.compact-form.content-form{max-width:1080px}
+.compact-checks{
+  display:flex;
+  align-items:center;
+  gap:18px;
+  flex:0 0 auto;
+  min-height:38px;
+  padding:17px 4px 0 2px;
+}
+.compact-checks .check{padding:0;white-space:nowrap;gap:7px}
+
+.quote-form{max-width:1000px}
+.quote-form .field-text:first-child{width:240px}
+
+.guided-form.content-form{max-width:980px;grid-template-columns:none}
+.guided-form.content-form .guided-submit{
+  flex:0 0 100%;
+  padding-top:2px;
+}
+.guided-form .field-control.field-number{width:168px}
+.guided-form .field-control.field-select{width:185px}
+.guided-form .field-control.field-text{width:250px}
+.guided-form .input-with-unit{width:100%}
+
+.evidence-form.content-form{
+  max-width:1120px;
+  grid-template-columns:none;
+}
+.evidence-form.content-form>.wide-field{
+  flex:0 0 100%;
+  width:100%;
+}
+.evidence-form.content-form>.wide-field textarea{
+  min-height:120px;
+}
+.evidence-form.content-form>div:last-child{
+  align-self:flex-end;
+  padding-bottom:1px;
+}
+
+.compact-actual-form{
+  display:flex!important;
+  flex-wrap:wrap;
+  grid-template-columns:none!important;
+  align-items:flex-end;
+  gap:8px;
+}
+.compact-actual-form #actual-description{width:260px;flex:0 0 260px}
+.compact-actual-form #actual-amount{width:165px;flex:0 0 165px;text-align:right;font-variant-numeric:tabular-nums}
+.compact-actual-form #actual-status{width:170px;flex:0 0 170px}
+.compact-actual-form button{flex:0 0 auto}
+
+.technical-parameter-grid.content-form,
+.compact-technical-inputs.content-form{max-width:none}
+.parameter-group .compact-form{display:flex!important;flex-wrap:wrap;gap:7px 9px}
+.parameter-group .field-control.field-number{width:138px}
+
+@media(max-width:760px){
+  .content-form{gap:8px}
+  .field-control.field-number{width:140px}
+  .field-control.field-text{width:190px}
+  .field-control.field-text-wide,
+  .field-control.field-select-wide{width:250px}
+  .compact-checks{flex-basis:100%;padding-top:4px}
+}
+@media(max-width:500px){
+  .content-form>.field-control,
+  .field-control.field-number,
+  .field-control.field-text,
+  .field-control.field-text-wide,
+  .field-control.field-date,
+  .field-control.field-select,
+  .field-control.field-select-wide,
+  .guided-form .field-control.field-number,
+  .guided-form .field-control.field-select,
+  .guided-form .field-control.field-text{
+    width:100%;
+    flex-basis:100%;
+  }
+  .compact-checks{align-items:flex-start;flex-direction:column;gap:8px}
+  .compact-actual-form #actual-description,
+  .compact-actual-form #actual-amount,
+  .compact-actual-form #actual-status{width:100%;flex-basis:100%}
+}
