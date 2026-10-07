@@ -2,8 +2,8 @@
 export const MARKET_PRICE_META=Object.freeze({
   "schema": "buildmate-market-prices-v1",
   "province": "TP.HCM",
-  "refreshedAt": "2026-10-06",
-  "successfulSources": 11,
+  "refreshedAt": "2026-10-07",
+  "successfulSources": 10,
   "totalSources": 11
 });
 
@@ -13,10 +13,10 @@ export const LIVE_PRICE_SOURCES=Object.freeze([
     "kind": "market",
     "name": "Bê Tông Tươi Giá Tốt",
     "url": "https://betongtuoigiatot.com/",
-    "sourceDate": "2026-10-06",
+    "sourceDate": "2026-10-07",
     "observedAt": "2026-09-30",
-    "verifiedAt": "2026-10-06",
-    "lastCheckedAt": "2026-10-06",
+    "verifiedAt": "2026-10-07",
+    "lastCheckedAt": "2026-10-07",
     "lastError": null,
     "note": null
   },
@@ -27,8 +27,8 @@ export const LIVE_PRICE_SOURCES=Object.freeze([
     "url": "https://daiphonggroup.vn/bao-gia-xay-nha-tron-goi-ho-chi-minh/",
     "sourceDate": null,
     "observedAt": "2026-09-30",
-    "verifiedAt": "2026-10-06",
-    "lastCheckedAt": "2026-10-06",
+    "verifiedAt": "2026-10-07",
+    "lastCheckedAt": "2026-10-07",
     "lastError": null,
     "note": null
   },
@@ -39,8 +39,8 @@ export const LIVE_PRICE_SOURCES=Object.freeze([
     "url": "https://kinhtexaydung.gov.vn/tinh-thanh/thanh-pho-ho-chi-minh/",
     "sourceDate": "2026-09-09",
     "observedAt": "2026-09-30",
-    "verifiedAt": "2026-10-06",
-    "lastCheckedAt": "2026-10-06",
+    "verifiedAt": "2026-10-07",
+    "lastCheckedAt": "2026-10-07",
     "lastError": null,
     "note": "Công bố giá VLXD TP.HCM tháng 8/2026; số 32431/TB-SXD-KTVLXD."
   },
@@ -51,8 +51,8 @@ export const LIVE_PRICE_SOURCES=Object.freeze([
     "url": "https://www.ximanghuydong.vn/bao-gia-xi-mang-ha-tien",
     "sourceDate": "2026-09-17",
     "observedAt": "2026-09-30",
-    "verifiedAt": "2026-10-06",
-    "lastCheckedAt": "2026-10-06",
+    "verifiedAt": "2026-10-07",
+    "lastCheckedAt": "2026-10-07",
     "lastError": null,
     "note": null
   },
@@ -63,8 +63,8 @@ export const LIVE_PRICE_SOURCES=Object.freeze([
     "url": "https://khanggiahouse.net/bao-gia-xay-dung-nha-pho/",
     "sourceDate": null,
     "observedAt": "2026-09-30",
-    "verifiedAt": "2026-10-06",
-    "lastCheckedAt": "2026-10-06",
+    "verifiedAt": "2026-10-07",
+    "lastCheckedAt": "2026-10-07",
     "lastError": null,
     "note": null
   },
@@ -75,8 +75,8 @@ export const LIVE_PRICE_SOURCES=Object.freeze([
     "url": "https://mekongthuongtin.com/gia-be-tong-tuoi/",
     "sourceDate": "2026-09-01",
     "observedAt": "2026-09-30",
-    "verifiedAt": "2026-10-06",
-    "lastCheckedAt": "2026-10-06",
+    "verifiedAt": "2026-10-07",
+    "lastCheckedAt": "2026-10-07",
     "lastError": null,
     "note": null
   },
@@ -88,8 +88,8 @@ export const LIVE_PRICE_SOURCES=Object.freeze([
     "sourceDate": "2026-10-06",
     "observedAt": "2026-09-30",
     "verifiedAt": "2026-10-06",
-    "lastCheckedAt": "2026-10-06",
-    "lastError": null,
+    "lastCheckedAt": "2026-10-07",
+    "lastError": "fetch failed",
     "note": null
   },
   {
@@ -99,8 +99,8 @@ export const LIVE_PRICE_SOURCES=Object.freeze([
     "url": "https://xaydungnegeco.vn/ky-thuat-xay-nha-tron-goi-2026/",
     "sourceDate": null,
     "observedAt": "2026-09-30",
-    "verifiedAt": "2026-10-06",
-    "lastCheckedAt": "2026-10-06",
+    "verifiedAt": "2026-10-07",
+    "lastCheckedAt": "2026-10-07",
     "lastError": null,
     "note": null
   },
@@ -111,8 +111,8 @@ export const LIVE_PRICE_SOURCES=Object.freeze([
     "url": "https://ngoinhahoanhao.vn/gia-xay-nha-tron-goi-tphcm-2026/",
     "sourceDate": null,
     "observedAt": "2026-09-30",
-    "verifiedAt": "2026-10-06",
-    "lastCheckedAt": "2026-10-06",
+    "verifiedAt": "2026-10-07",
+    "lastCheckedAt": "2026-10-07",
     "lastError": null,
     "note": null
   },
@@ -121,10 +121,10 @@ export const LIVE_PRICE_SOURCES=Object.freeze([
     "kind": "market",
     "name": "VLXD Song Phương",
     "url": "https://khocatdaxaydung.com/gia-cat-be-tong/",
-    "sourceDate": "2026-10-06",
+    "sourceDate": "2026-10-07",
     "observedAt": "2026-09-30",
-    "verifiedAt": "2026-10-06",
-    "lastCheckedAt": "2026-10-06",
+    "verifiedAt": "2026-10-07",
+    "lastCheckedAt": "2026-10-07",
     "lastError": null,
     "note": null
   },
@@ -133,10 +133,10 @@ export const LIVE_PRICE_SOURCES=Object.freeze([
     "kind": "market",
     "name": "VLXD Song Phương",
     "url": "https://khocatdaxaydung.com/gia-cat-xay-to/",
-    "sourceDate": "2026-10-06",
+    "sourceDate": "2026-10-07",
     "observedAt": "2026-09-30",
-    "verifiedAt": "2026-10-06",
-    "lastCheckedAt": "2026-10-06",
+    "verifiedAt": "2026-10-07",
+    "lastCheckedAt": "2026-10-07",
     "lastError": null,
     "note": null
   }
