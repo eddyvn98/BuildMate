@@ -792,5 +792,34 @@ export const MARKET_PRICE_HISTORY=Object.freeze([
         "unit": "VND/m³"
       }
     }
+  },
+  {
+    "date": "2026-10-26",
+    "province": "TP.HCM",
+    "turnkeyM2": {
+      "center": 5900000,
+      "low": 5690000,
+      "high": 6070000,
+      "confidence": "medium",
+      "sourceCount": 4
+    },
+    "materials": {
+      "concrete-m250": {
+        "center": 1425000,
+        "unit": "VND/m³"
+      },
+      "rebar": {
+        "center": 17100,
+        "unit": "VND/kg"
+      },
+      "sand-concrete": {
+        "center": 360000,
+        "unit": "VND/m³"
+      },
+      "sand-plaster": {
+        "center": 280000,
+        "unit": "VND/m³"
+      }
+    }
   }
 ]);
